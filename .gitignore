@@ -1,0 +1,11 @@
+*aux
+*bbl
+*blg
+*log
+*gz
+*sh
+*.fdb_latexmk
+*.fls
+/auto/
+_region_.tex
+/FABM-NflexPD_1_0_GMD.synctex(busy)
