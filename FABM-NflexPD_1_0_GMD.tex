@@ -85,7 +85,7 @@
 \newcommand{\onur}[1]{\textcolor{blue}{\{Onur: #1\}}}
 
 \begin{document}
-\title{FABM-NflexPD 2.0: An instantenous acclimation approach to model carbon, nitrogen and phosphorus cycles}
+\title{FABM-NflexPD 2.0: An instantenous acclimation approach for modelling carbon, nitrogen and phosphorus cycles}
 
 % \Author[affil]{given_name}{surname}
 
@@ -135,13 +135,20 @@
 %INTRODUCTION
 \introduction%% \introduction[modified heading if necessary]
 
-\subsection{Autotroph Acclimation and Biogeochemical Cycles} 
+%\subsection{Autotroph Acclimation and Biogeochemical Cycles} 
 
-\subsection{FABM-NflexPD 1.0}
-Instantaneous acclimation approach
-Only N, no other elements.
+%\subsection{Instantaneous acclimation approach}
+\subsection{Background and Objectives}
+Recently, \citet{Kerimoglu2021} introduced FABM-NflexPD 1.0, which is the FABM \citep[Framework for Aquatic Biogeochemical Models][]{Bruggeman2014} implementation of an instantaneous acclimation model of phytoplankton growth originally developed by \citet{Smith2016}. That model version can only resolve N in the Dissolved Inorganic Material (DIM) pool, which may be sufficient for some ecological applications, but not for applications that require resolution of multiple nutirents in DIM form.
 
-\subsection{Objectives of this study}
+%\subsection{Objectives of this study}
+Here we introduce FABM-NflexPD 2.0, which can resolve C, N and P in DIM pool. We present:
+\begin{itemize}
+ \item a detailed description of the current, C-based version with reference to the previous, N-based version (see below) 
+ \item comparison of the behavior of the previous and current C- and N- based model versions in a 0D setup
+ \item description of the model extended with P limitation
+ \item application of the C-N-P model to an ocean site in a 1D setup
+\end{itemize}
 
 % \begin{figure}[htb]
 %   \centering
@@ -151,22 +158,101 @@ Only N, no other elements.
 
 %MODEL DESCRIPTION
 \section{Model Description}
+In this section, we will highlight the differences and similarities between the present, `C-based' version of the model from the earlier version of the `N-based' model version presented by \citet{Kerimoglu2021}, K21-N in short hereafter.
 
-\subsection{General Structure}
+\subsection{C and N content of Phytoplankton}
+In this version of the model, C content of phytoplankton ($Phy_\text{C}$) is dynamically tracked (thus, C-based) instead of the N content ($Phy_\text{N}$) as was the case in the earlier (thus, N-based) version. Wherever required, $Phy_\text{N}$ is given by the product of $Phy_\text{C}$ and N quota, $Q_\text{N}$:
+\begin{equation} \label{eq:Q}
+Phy_\text{N} = Phy_\text{C} \cdot Q_\text{N}  
+\end{equation}
+
+$Q_\text{N}$ is assumed to instantaneously adjust to a balanced-growth optimum value, as determined by the nutrient uptake in the protopolast, $\hat{V}_\text{N}$ and net photosynthesis in the chloroplast, $\hat{\mu}_{net}$ (Eq.~10 in K21-N):
+\begin{equation}\label{eq:Qopt}
+ Q_\text{N}^o= \frac{Q_\text{N,0}}{2} \left[1+\sqrt{1+\frac{2}{Q_\text{N,0}{({\hat{\mu}_{\text{net}}}/{\hat{V}_\text{N}}+\zeta_{\text{N}} )}}} \right] \hfill \{\text{IA}\}
+\end{equation}
+where $Q_\text{N,0}$ is the subsistence N quota (K21-N, Table~3). The source term for $Phy_\text{C}$ is given by:
+\begin{equation} \label{eq:sPhyC}
+s(Phy_{\text{C}}) = F_{DIC-Phy_\text{C}} - F_{Phy_{\text{C}}-Det_{\text{C}}}
+\end{equation}
+which is identical to the source term of the `DA' variant (Eq.~1b in K21). Here, $F_{DIC-Phy_\text{C}}$ and $F_{Phy_{\text{C}}-Det_{\text{C}}}$ are the fluxes from Dissolved Inorganic Carbon ($DIC$) to phytoplankton, and from phytoplankton to detrital C ($Det_\text{C}$), respectively. The first term in Eq.~\ref{eq:sPhyC} represents net phytoplankton growth, and as before (Eq.~8 in K21-N), it is given by the product of $Phy_\text{C}$ with net growth rate, $\mu$: 
+\begin{equation} \label{eq:fdicphyc}
+ F_{DIC-Phy_\text{C}} = \mu \cdot Phy_\text{C}
+\end{equation}
+Calculation of $\mu$, in turn, is as described earlier (Eq.~7 in K21-N). The second term in Eq.~\ref{eq:sPhyC}, $F_{Phy_\text{C}-Det_\text{C}}$, representing the mortality of phytoplankton, is the same as in the N-based version, i.e., it is given by the division of N flux from phytoplankton to detritus, $F_{Phy_\text{N}-Det_\text{N}}$ by $Q_N$ (Table 1 in K21-N).
+
+\subsection{Flux of nutrients between DIM and Phytoplankton}
+As in K21-N, the source term for the nutrients in DIM pool are described as the fluxes from the nutrients Dissolved Organic form (e.g., DON), $F_{DON-DIN}$ (Table 1, K21-N), minus the fluxes between the DIM (e.g., DIN) and phytoplankton ($F_{DIN-Phy_\text{N}}$): 
+\begin{equation} \label{eq:sdin}
+  s(DIN) = \frac{\text{d}\text{DIN}}{\text{d}t} = F_{DON-DIN} - F_{DIN-Phy_\text{N}}
+\end{equation}
+
+$F_{DON-DIN}$ is calculated exactly as described in K21-N. $F_{DIN-Phy_\text{N}}$, in other words, change in N-biomass of phytoplankton excluding mortality, i.e., $\frac{\text{d}Phy_\text{N}}{\text{d}t} \big\rvert_G$, can be expressed as:
+\begin{equation} \label{eq:dphyNdt}
+  F_{DIN-Phy_\text{N}} = \frac{\text{d}Phy_\text{N}}{\text{d}t} \bigg\rvert_G=\frac{\text{d}(Phy_\text{C} \cdot Q)}{\text{d}t} \bigg\rvert_G = Q_\text{N} \cdot \frac{\partial Phy_\text{C}}{\partial t} \bigg\rvert_G + Phy_\text{C} \cdot \frac{\partial Q_\text{N}}{\partial t} 
+\end{equation}
+
+Here, $\frac{\partial Phy_\text{C}}{\partial t} \big\rvert_G$ corresponds to change in C-biomass of phytoplankton excluding mortality, i.e., $F_{DIC-Phy_\text{C}}$ in Eq.~\ref{eq:sPhyC}. Substituting therefore Eq.~\ref{eq:fdicphyc} in Eq.~\ref{eq:dphyNdt}:
+\begin{equation} \label{eq:dphyNdt2}
+  \frac{\text{d}Phy_\text{N}}{\text{d}t} \bigg\rvert_G= Q_\text{N} \cdot \mu \cdot Phy_\text{C} + Phy_\text{C} \cdot \frac{\partial Q_\text{N}}{\partial t} 
+\end{equation}
+
+where, assuming balanced growth \citep{Burmaster1979}, i.e., $V_N = Q_N \cdot \mu$  (K21-N, Eq.~6) the first term on the right hand side of Eq.~\ref{eq:dphyNdt2} can be replaced with $V_N \cdot Phy_\text{C}$, i.e., 
+\begin{equation} \label{eq:dphyNdt3}
+  \frac{\text{d}Phy_\text{N}}{\text{d}t}=  Phy_\text{C} \left( V_\text{N} + \frac{\partial Q_\text{N}}{\partial t} \right)
+\end{equation}
+
+\onur{In the N-based version, $F_{DIN-Phy_\text{N}}$ was given by (K21-N, Eq.~5):
+\begin{equation}\label{eq:Fdinphy}
+  F_{DIN-Phy_{\text{N}}} \bigg\rvert_G = V_N \cdot Phy_{\text{C}}
+\end{equation}
+i.e., excluding the $\frac{\partial Q_\text{N}}{\partial t}$ term in Eq.~\ref{eq:dphyNdt3}. Does this make sense? Or what am I missing? We must have discussed this back when I was in Japan, but I cannot recall anymore. 
+}
+
+Given that the terms $\hat{V}_\text{N}$ and $\hat{mu}_net$ used for calculating $Q_\text{N}$ (Eq.~\ref{eq:Qopt}) are respectively functions of DIN (Eq.~16 in K21-N), $\bar{I}$ and daytime average irradiance, $\bar{I}$ (Eqs.~20-22 in K21-N), $\frac{\partial Q_\text{N}}{\partial t}$ in Eq.~\ref{eq:dphyNdt2} :
+\begin{equation} \label{eq:dqdt}
+ \frac{\partial Q_\text{N}}{\partial t} = \frac{\partial Q_\text{N}}{\partial \text{DIN}} \frac{\text{d} \text{DIN}}{\text{d} t} +  \frac{\partial Q_\text{N}}{\partial \bar{I}} \frac{\text{d} \bar{I}}{\text{d} t} 
+\end{equation}
+
+In Eq.~\ref{eq:Qopt}, defining $Z = \frac{2}{Q_\text{N,0}{({\hat{\mu}_{\text{net}}}/{\hat{V}_\text{N}}+\zeta_{\text{N}})}}$ following \citet{Smith2016}, partial derivatives of $Q_\text{N}$ with respect to DIN and $\bar{I}$ can be found as:
+\begin{flalign}
+ \frac{\partial Q_\text{N}}{\partial \text{DIN}} &= \frac{-Q_\text{N,0}}{4 \cdot Z \cdot \sqrt{Z\cdot(1+Z)}} \cdot \frac{\partial Z}{\partial \text{DIN}}\\
+ \frac{\partial Q_\text{N}}{\partial \bar{I}}  &= \frac{-Q_\text{N,0}}{4 \cdot Z \cdot \sqrt{Z\cdot(1+Z)}} \cdot \frac{\partial Z}{\partial \bar{I}}
+\end{flalign}
+and the derivatives of $Z$:
+\begin{flalign}
+ \frac{\partial Z}{\partial \text{DIN}} &= \frac{-\hat{\mu}_{net} \cdot Q_\text{N,0}}{2 \cdot \hat{V}_\text{N} \cdot \text{DIN}} \cdot \left( 1 - \frac{\hat{V}_\text{N}}{\hat{V}_\text{N,0}} - \frac{\hat{V}_\text{N}}{\sqrt{\hat{V}_\text{N,0} \cdot \hat{A}_\text{N,0} \cdot \text{DIN}}} \right) \\
+ \frac{\partial Z}{\partial \bar{I}} &= \frac{Q_\text{N,0} \cdot \alpha \cdot \hat{\Theta}}{\hat{V}_\text{N} \cdot \text{DIN}} \cdot \left ( 1 - L_\text{I} \right) 
+\end{flalign}
+where \onur{check: replacement of $\hat{\mu}_g$ (in S16, $\hat{\mu}^I$) with $\hat{\mu}_{net}$ may require revision of last equation}.
+
+The last two terms required in Eq.~\ref{eq:dqdt} are the changes in $\bar{I}$ and DIN over time. The former, $\frac{\text{d} \bar{I}}{\text{d} t}$ is approximated by the discrete backward difference between the current ($t=i$) and previous ($t=i-1$) value of $\bar{I}$, divided by the size of the integration time step i.e., $\frac{\text{d} \bar{I}}{\text{d} t} \sim \frac{\bar{I}_{i} - \bar{I}_{i-1}}{\Delta t}$.  The latter, $\frac{\text{d} DIN}{\text{d} t}$ is eliminated by first doing the necessary substitutions in Eq.~\ref{eq:sdin}:
+\begin{equation}\label{eq:sdin2}
+ \frac{\text{d}\text{DIN}}{\text{d}t} = F_{DON-DIN} - Phy_{\text{C}} \left(V_N + \frac{\partial Q_\text{N}}{\partial \text{DIN}} \frac{\text{d} \text{DIN}}{\text{d} t} +  \frac{\partial Q_\text{N}}{\partial \bar{I}} \frac{\text{d} \bar{I}}{\text{d} t} \right)
+\end{equation}
+and reorganizing:
+%intermediate step:
+% \begin{equation}\label{eq:sdin2.5}
+%  \frac{\text{d}\text{DIN}}{\text{d}t} \left( 1+Phy_{\text{C}}\frac{\partial Q_\text{N}}{\partial \text{DIN}} \right) = F_{DON-DIN} - Phy_{\text{C}} \left(V_N +  \frac{\partial Q_\text{N}}{\partial \bar{I}} \frac{\text{d} \bar{I}}{\text{d} t} \right)\\
+% \end{equation}
+\begin{equation}\label{eq:sdin3}
+ \frac{\text{d}\text{DIN}}{\text{d}t} = \frac{F_{DON-DIN} - Phy_{\text{C}} \left(V_N +  \frac{\partial Q_\text{N}}{\partial \bar{I}} \frac{\text{d} \bar{I}}{\text{d} t} \right)}{ 1+Phy_{\text{C}}\frac{\partial Q_\text{N}}{\partial \text{DIN}}}
+\end{equation}
+
+Eq.~\ref{eq:sdin3} requires combination of terms, which, in K21-N, used to be calculated by separate abiotic ($F_{DON-DIN}$) and phytoplankton modules (all other terms), therefore in the current implementation, all calculations are done in a single module.
 
 % RESULTS
-\section{Results}
+%\section{Results}
 
 
 % DISCUSSION
-\section{Discussion}
+%\section{Discussion}
 
 
 %CONCLUSION
-\section{Conclusions}
+%\section{Conclusions}
 
 
-\codeavailability{For running the model and reproducing the results presented in this study, FABM and GOTM need to be downloaded and installed. See https://github.com/fabm-model/fabm/wiki/GOTM for the instructions. The FABM-NflexPD is available from the ‘Cbased’ branch of the git repository:\url{https://github.com/OnurKerimoglu/fabm-nflexpd.git}. Instructions for compiling FABM-NflexPD for GOTM-FABM and a 0D setup are provided in README.md. The `src’ folder contains the Fortran codes. The model was implemented as two separate modules: the `phy.F90' module that describes phytoplankton growth and the `abio.F90' module that describes everything other than phytoplankton. The phytoplankton module can reproduce the behavior of all three different variants considered in the manuscript through optional parameters. The `testcases’ folder contains the configuration (yaml) file that was used to produce the results presented in this manuscript, thereby providing examples of how each variant can be initiated.} %% use this section when having only software code available
+%\codeavailability{For running the model and reproducing the results presented in this study, FABM and GOTM need to be downloaded and installed. See https://github.com/fabm-model/fabm/wiki/GOTM for the instructions. The FABM-NflexPD is available from the ‘Cbased’ branch of the git repository:\url{https://github.com/OnurKerimoglu/fabm-nflexpd.git}. Instructions for compiling FABM-NflexPD for GOTM-FABM and a 0D setup are provided in README.md. The `src’ folder contains the Fortran codes. The model was implemented as two separate modules: the `phy.F90' module that describes phytoplankton growth and the `abio.F90' module that describes everything other than phytoplankton. The phytoplankton module can reproduce the behavior of all three different variants considered in the manuscript through optional parameters. The `testcases’ folder contains the configuration (yaml) file that was used to produce the results presented in this manuscript, thereby providing examples of how each variant can be initiated.} %% use this section when having only software code available
 
 
 %\dataavailability{TEXT} %% use this section when having only data sets available
@@ -180,8 +266,8 @@ Only N, no other elements.
 
 %\videosupplement{TEXT} %% use this section when having video supplements available
 
-\appendix
-\section{Details of Derivations}  %% Appendix-A
+%\appendix
+%\section{Details of Derivations}  %% Appendix-A
 
 
 \noappendix%% use this to mark the end of the appendix section. Otherwise the figures might be numbered incorrectly (e.g. 10 instead of 1).
@@ -200,16 +286,15 @@ Only N, no other elements.
 
 %% Please add \clearpage between each table and/or figure. Further guidelines on figures and tables can be found below.
 
-\authorcontribution{} %% this section is mandatory
+%\authorcontribution{} %% this section is mandatory
 
-\competinginterests{No competing interests are present.} %% this section is mandatory even if you declare that no competing interests are present
+%\competinginterests{No competing interests are present.} %% this section is mandatory even if you declare that no competing interests are present
 
 %\disclaimer{TEXT} %% optional section
 
-\begin{acknowledgements}
-OK, SLS and PA were supported through a bilateral research project, funded jointly by the German Research Foundation DFG (grant no. KE 1970/2-1, P.I.: OK) and the Japan Society for the Promotion of Science, JSPS (P.I.: SLS).
-We acknowledge the developers of the open-source software used in this study, foremost FABM and GOTM.
-\end{acknowledgements}
+%\begin{acknowledgements}
+%OK, SLS and PA were supported through a bilateral research project, funded jointly by the German Research Foundation DFG (grant no. KE 1970/2-1, P.I.: OK) and the Japan Society for the Promotion of Science, JSPS (P.I.: SLS).We acknowledge the developers of the open-source software used in this study, foremost FABM and GOTM.
+%\end{acknowledgements}
 
 
 
