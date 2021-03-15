@@ -214,9 +214,9 @@ following \citet{Smith2016}, defining $Z = \frac{2}{Q_\text{N,0}{({\hat{\mu}_{\t
 and the partial derivatives of $Z$ with respect to DIN and $\bar{I}$:
 \begin{flalign}
  \frac{\partial Z}{\partial \text{DIN}} &= \frac{-\hat{\mu}_{net} \cdot Q_\text{N,0}}{2 \cdot \hat{V}_\text{N} \cdot \text{DIN}} \left( 1 - \frac{\hat{V}_\text{N}}{\hat{V}_\text{N,0}} - \frac{\hat{V}_\text{N}}{\sqrt{\hat{V}_\text{N,0} \cdot \hat{A}_\text{N,0} \cdot \text{DIN}}} \right) \\
- \frac{\partial Z}{\partial \bar{I}} &= \frac{Q_\text{N,0} \cdot \alpha \cdot \hat{\theta}}{\hat{V}_\text{N} \cdot \text{DIN}} \left ( 1 - L_\text{I} \right) 
+ \frac{\partial Z}{\partial \bar{I}} &= \frac{Q_\text{N,0} \cdot \alpha \cdot \hat{\theta}}{2 \cdot \hat{V}_\text{N} \cdot \text{DIN} \color{red}{(?)}} \left ( 1 - L_\text{I} \right) 
 \end{flalign}
-\onur{check: replacement of $\hat{\mu}_g$ (in S16, $\hat{\mu}^I$) with $\hat{\mu}_{net}$ may require revision of last equation}\\
+\onur{check: 1) Should we have DIN in the denominotor of $\frac{\partial Z}{\partial \bar{I}}$? I have a note both on the printed appendix and on the code that this should be omitted. 2) replacement of $\hat{\mu}_g$ (in S16, $\hat{\mu}^I$) with $\hat{\mu}_{net}$ may require revision of last equation}\\
 where $\alpha$ is a model parameter (initial Chl-specific slope of P-I curve, Table~3 in K21-N); $\hat{\theta}$ is the optimal chlorophyll density in the chloroplast (Eq.~26 in K21-N) and $L_I$ is light limitation (Eq.~22 in K21-N). 
 
 The last two unknown terms in Eq.~\ref{eq:dqdt} are the changes in $\bar{I}$ and DIN over time. The former, $\frac{\text{d} \bar{I}}{\text{d} t}$ is approximated by the discrete backward difference between the current ($t=i$) and previous ($t=i-1$) value of $\bar{I}$, divided by the size of the integration time step i.e., $\frac{\text{d} \bar{I}}{\text{d} t} \sim \frac{\bar{I}_{i} - \bar{I}_{i-1}}{\Delta t}$.  The latter, $\frac{\text{d} DIN}{\text{d} t}$ is eliminated by expanding Eq.~\ref{eq:sdin} based on Eqs.~\ref{eq:dphyNdt}-\ref{eq:dqdt}: 
