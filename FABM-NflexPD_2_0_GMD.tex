@@ -145,7 +145,7 @@ Recently, \citet{Kerimoglu2021} introduced FABM-NflexPD 1.0, which is the FABM \
 Here we introduce FABM-NflexPD 2.0, which can resolve C, N and P in DIM pool. We present:
 \begin{itemize}
  \item a detailed description of the current, C-based version with reference to the previous, N-based version (see below) 
- \item comparison of the behavior of the previous and current C- and N- based model versions in a 0D setup
+ \item comparison of the behavior of the previous and current C- and N- based model versions in a 0D setup \onur{not sure if needed? Not sure also whether the two versions will produce quantitatively identical results because of the approximations and potential omission of a term in the N-based version (see below)}
  \item description of the model extended with P limitation
  \item application of the C-N-P model to an ocean site in a 1D setup
 \end{itemize}
@@ -170,7 +170,7 @@ $Q_\text{N}$ is assumed to instantaneously adjust to a balanced-growth optimum v
 \begin{equation}\label{eq:Qopt}
  Q_\text{N}^o= \frac{Q_\text{N,0}}{2} \left[1+\sqrt{1+\frac{2}{Q_\text{N,0}{({\hat{\mu}_{\text{net}}}/{\hat{V}_\text{N}}+\zeta_{\text{N}} )}}} \right] \hfill \{\text{IA}\}
 \end{equation}
-where $Q_\text{N,0}$ is the subsistence N quota (K21-N, Table~3). The source term for $Phy_\text{C}$ is given by:
+where $Q_\text{N,0}$ is a model parameter (subsistence N quota, Table~3 in K21-N). The source term for $Phy_\text{C}$ is given by:
 \begin{equation} \label{eq:sPhyC}
 s(Phy_{\text{C}}) = F_{DIC-Phy_\text{C}} - F_{Phy_{\text{C}}-Det_{\text{C}}}
 \end{equation}
@@ -186,35 +186,27 @@ As in K21-N, the source term for the nutrients in DIM pool are described as the 
 \begin{equation} \label{eq:sdin}
   s(DIN) = \frac{\text{d}\text{DIN}}{\text{d}t} = F_{DON-DIN} - F_{DIN-Phy_\text{N}}
 \end{equation}
-
 $F_{DON-DIN}$ is calculated exactly as described in K21-N. $F_{DIN-Phy_\text{N}}$, in other words, change in N-biomass of phytoplankton excluding mortality, i.e., $\frac{\text{d}Phy_\text{N}}{\text{d}t} \big\rvert_G$, can be expressed as:
 \begin{equation} \label{eq:dphyNdt}
   F_{DIN-Phy_\text{N}} = \frac{\text{d}Phy_\text{N}}{\text{d}t} \bigg\rvert_G=\frac{\text{d}(Phy_\text{C} \cdot Q)}{\text{d}t} \bigg\rvert_G = Q_\text{N} \frac{\text{d} Phy_\text{C}}{\text{d} t} \bigg\rvert_G + Phy_\text{C} \frac{\text{d} Q_\text{N}}{\text{d} t} 
 \end{equation}
-
 Here, $\frac{\text{d} Phy_\text{C}}{\text{d} t} \big\rvert_G$ corresponds to change in C-biomass of phytoplankton excluding mortality, i.e., $F_{DIC-Phy_\text{C}}$ in Eq.~\ref{eq:sPhyC}. Substituting therefore Eq.~\ref{eq:fdicphyc} in Eq.~\ref{eq:dphyNdt}:
 \begin{equation} \label{eq:dphyNdt2}
   \frac{\text{d}Phy_\text{N}}{\text{d}t} \bigg\rvert_G= Q_\text{N} \cdot \mu \cdot Phy_\text{C} + Phy_\text{C} \frac{\text{d} Q_\text{N}}{\text{d} t} 
 \end{equation}
-
 where, assuming balanced growth \citep{Burmaster1979}, i.e., $V_N = Q_N \cdot \mu$  (K21-N, Eq.~6) the first term on the right hand side of Eq.~\ref{eq:dphyNdt2} can be replaced with $V_N \cdot Phy_\text{C}$, i.e., 
 \begin{equation} \label{eq:dphyNdt3}
   \frac{\text{d}Phy_\text{N}}{\text{d}t} \bigg\rvert_G=  Phy_\text{C} \left( V_\text{N} + \frac{\text{d} Q_\text{N}}{\text{d} t} \right)
 \end{equation}
 
-\onur{In the N-based version, we had (K21-N, Eq.~5):
-\begin{equation}\label{eq:Fdinphy}
-  F_{DIN-Phy_{\text{N}}} = V_N \cdot Phy_{\text{C}}
-\end{equation}
-i.e., excluding the $\frac{\text{d} Q_\text{N}}{\text{d} t}$ term in Eq.~\ref{eq:dphyNdt3}. As we discussed, this doesn't violate the internal consistency of the N-based version, but it is still a curious why we have this different here in this version, so it would be great if we could explain the reasons for the difference.
+\onur{In the N-based version, we had (K21-N, Eq.~5): $F_{DIN-Phy_{\text{N}}} = V_N \cdot Phy_{\text{C}}$. i.e., excluding the $\frac{\text{d} Q_\text{N}}{\text{d} t}$ term in Eq.~\ref{eq:dphyNdt3}. As we discussed, this apparent difference (apparent, because maybe there is a mistake in the notation?) doesn't violate the internal consistency of the N-based version, but it would be great if we could explain what this really is. For instance, is this a `real deviation' in model formulations that contributes (among other sources) to quantitative differences in results?
 }
 
-Given that the terms $\hat{V}_\text{N}$ and $\hat{mu}_net$ used for calculating $Q_\text{N}$ (Eq.~\ref{eq:Qopt}) are respectively functions of DIN (Eq.~16 in K21-N), $\bar{I}$ and daytime average irradiance, $\bar{I}$ (Eqs.~20-22 in K21-N), $\frac{\text{d} Q_\text{N}}{\text{d} t}$ in Eq.~\ref{eq:dphyNdt2} :
+Given that the terms $\hat{V}_\text{N}$ and $\hat{\mu}_{net}$ used for calculating $Q_\text{N}$ (Eq.~\ref{eq:Qopt}) are respectively functions of DIN (Eq.~16 in K21-N) and daytime average irradiance, $\bar{I}$ (Eqs.~20-22 in K21-N), the total time derivative of $Q_\text{N}$ in Eq.~\ref{eq:dphyNdt3} can be computed as the sum of partial derivatives with respect to DIN and $\bar{I}$ using chain rule: 
 \begin{equation} \label{eq:dqdt}
  \frac{\text{d} Q_\text{N}}{\text{d} t} = \frac{\partial Q_\text{N}}{\partial \text{DIN}} \frac{\text{d} \text{DIN}}{\text{d} t} +  \frac{\partial Q_\text{N}}{\partial \bar{I}} \frac{\text{d} \bar{I}}{\text{d} t} 
 \end{equation}
-
-following \citet{Smith2016}, defining $Z = \frac{2}{Q_\text{N,0}{({\hat{\mu}_{\text{net}}}/{\hat{V}_\text{N}}+\zeta_{\text{N}})}}$ in Eq.~\ref{eq:Qopt}, partial derivatives of $Q_\text{N}$ with respect to DIN and $\bar{I}$ can be found as:
+following \citet{Smith2016}, defining $Z = \frac{2}{Q_\text{N,0}{({\hat{\mu}_{\text{net}}}/{\hat{V}_\text{N}}+\zeta_{\text{N}})}}$ in Eq.~\ref{eq:Qopt}, partial derivatives of $Q_\text{N}$ with respect to DIN and $\bar{I}$ are found as:
 \begin{flalign}
  \frac{\partial Q_\text{N}}{\partial \text{DIN}} &= \frac{-Q_\text{N,0}}{4 \cdot Z \cdot \sqrt{Z\cdot(1+Z)}} \frac{\partial Z}{\partial \text{DIN}}\\
  \frac{\partial Q_\text{N}}{\partial \bar{I}}  &= \frac{-Q_\text{N,0}}{4 \cdot Z \cdot \sqrt{Z\cdot(1+Z)}}  \frac{\partial Z}{\partial \bar{I}}
@@ -222,11 +214,12 @@ following \citet{Smith2016}, defining $Z = \frac{2}{Q_\text{N,0}{({\hat{\mu}_{\t
 and the partial derivatives of $Z$ with respect to DIN and $\bar{I}$:
 \begin{flalign}
  \frac{\partial Z}{\partial \text{DIN}} &= \frac{-\hat{\mu}_{net} \cdot Q_\text{N,0}}{2 \cdot \hat{V}_\text{N} \cdot \text{DIN}} \left( 1 - \frac{\hat{V}_\text{N}}{\hat{V}_\text{N,0}} - \frac{\hat{V}_\text{N}}{\sqrt{\hat{V}_\text{N,0} \cdot \hat{A}_\text{N,0} \cdot \text{DIN}}} \right) \\
- \frac{\partial Z}{\partial \bar{I}} &= \frac{Q_\text{N,0} \cdot \alpha \cdot \hat{\Theta}}{\hat{V}_\text{N} \cdot \text{DIN}} \left ( 1 - L_\text{I} \right) 
+ \frac{\partial Z}{\partial \bar{I}} &= \frac{Q_\text{N,0} \cdot \alpha \cdot \hat{\theta}}{\hat{V}_\text{N} \cdot \text{DIN}} \left ( 1 - L_\text{I} \right) 
 \end{flalign}
-where \onur{check: replacement of $\hat{\mu}_g$ (in S16, $\hat{\mu}^I$) with $\hat{\mu}_{net}$ may require revision of last equation}.
+\onur{check: replacement of $\hat{\mu}_g$ (in S16, $\hat{\mu}^I$) with $\hat{\mu}_{net}$ may require revision of last equation}\\
+where $\alpha$ is a model parameter (initial Chl-specific slope of P-I curve, Table~3 in K21-N); $\hat{\theta}$ is the optimal chlorophyll density in the chloroplast (Eq.~26 in K21-N) and $L_I$ is light limitation (Eq.~22 in K21-N). 
 
-The last two terms required in Eq.~\ref{eq:dqdt} are the changes in $\bar{I}$ and DIN over time. The former, $\frac{\text{d} \bar{I}}{\text{d} t}$ is approximated by the discrete backward difference between the current ($t=i$) and previous ($t=i-1$) value of $\bar{I}$, divided by the size of the integration time step i.e., $\frac{\text{d} \bar{I}}{\text{d} t} \sim \frac{\bar{I}_{i} - \bar{I}_{i-1}}{\Delta t}$.  The latter, $\frac{\text{d} DIN}{\text{d} t}$ is eliminated by expanding Eq.~\ref{eq:sdin} based on Eqs.~\ref{eq:dphyNdt}-\ref{eq:dqdt}: 
+The last two unknown terms in Eq.~\ref{eq:dqdt} are the changes in $\bar{I}$ and DIN over time. The former, $\frac{\text{d} \bar{I}}{\text{d} t}$ is approximated by the discrete backward difference between the current ($t=i$) and previous ($t=i-1$) value of $\bar{I}$, divided by the size of the integration time step i.e., $\frac{\text{d} \bar{I}}{\text{d} t} \sim \frac{\bar{I}_{i} - \bar{I}_{i-1}}{\Delta t}$.  The latter, $\frac{\text{d} DIN}{\text{d} t}$ is eliminated by expanding Eq.~\ref{eq:sdin} based on Eqs.~\ref{eq:dphyNdt}-\ref{eq:dqdt}: 
 \begin{equation}\label{eq:sdin2}
  \frac{\text{d}\text{DIN}}{\text{d}t} = F_{DON-DIN} - Phy_{\text{C}} \left(V_N + \frac{\partial Q_\text{N}}{\partial \text{DIN}} \frac{\text{d} \text{DIN}}{\text{d} t} +  \frac{\partial Q_\text{N}}{\partial \bar{I}} \frac{\text{d} \bar{I}}{\text{d} t} \right)
 \end{equation}
@@ -238,7 +231,6 @@ and reorganizing:
 \begin{equation}\label{eq:sdin3}
  \frac{\text{d}\text{DIN}}{\text{d}t} = \frac{F_{DON-DIN} - Phy_{\text{C}} \left(V_N +  \frac{\partial Q_\text{N}}{\partial \bar{I}} \frac{\text{d} \bar{I}}{\text{d} t} \right)}{ 1+Phy_{\text{C}}\frac{\partial Q_\text{N}}{\partial \text{DIN}}}
 \end{equation}
-
 Eq.~\ref{eq:sdin3} requires combination of terms, which, in K21-N, used to be calculated by separate abiotic ($F_{DON-DIN}$) and phytoplankton modules (all other terms), therefore in the current implementation, all calculations are done in a single module.
 
 % RESULTS
