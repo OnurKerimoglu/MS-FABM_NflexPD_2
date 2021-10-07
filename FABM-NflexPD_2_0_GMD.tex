@@ -199,8 +199,8 @@ where, assuming balanced growth \citep{Burmaster1979}, i.e., $V_N = Q_N \cdot \m
   \frac{\text{d}Phy_\text{N}}{\text{d}t} \bigg\rvert_G=  Phy_\text{C} \left( V_\text{N} + \frac{\text{d} Q_\text{N}}{\text{d} t} \right)
 \end{equation}
 
-\onur{In the N-based version, we had (K21-N, Eq.~5): $F_{DIN-Phy_{\text{N}}} = V_N \cdot Phy_{\text{C}}$. i.e., excluding the $\frac{\text{d} Q_\text{N}}{\text{d} t}$ term in Eq.~\ref{eq:dphyNdt3}. As we discussed, this apparent difference (apparent, because maybe there is a mistake in the notation? Also note that $F_{DIN-Phy_{\text{N}}}$ is not used anywhere, and in the C-based version of the model it is only saved as a diagnostic quantity) doesn't violate the internal consistency of the N-based version, but it would be great if we could explain what this really is. For instance, is this a `real deviation' in model formulations that contributes (among other sources) to quantitative differences in results?
-}
+%\onur{In the N-based version, we had (K21-N, Eq.~5): $F_{DIN-%Phy_{\text{N}}} = V_N \cdot Phy_{\text{C}}$. i.e., excluding the $%\frac{\text{d} Q_\text{N}}{\text{d} t}$ term in Eq.~\ref{eq:dphyNdt3}. %As we discussed, this apparent difference %(apparent, because maybe there is a mistake in the notation? Also note that $F_{DIN-Phy_{\text{N}}}$ is not used anywhere, and in the C-based version of the model it is only saved as a diagnostic quantity) 
+%doesn't violate the internal consistency of the N-based version, but it would be great if we could explain what this really is. For instance, is this a `real deviation' in model formulations that contributes (among other sources) to quantitative differences in results?}
 
 Given that the terms $\hat{V}_\text{N}$ and $\hat{\mu}_{net}$ required for calculating $Q_\text{N}$ (Eq.~\ref{eq:Qopt}) are respectively functions of DIN (Eq.~16 in K21-N) and daytime average irradiance, $\bar{I}$ (Eqs.~20-22 in K21-N), the total time derivative of $Q_\text{N}$ in Eq.~\ref{eq:dphyNdt3} can be computed as the sum of partial derivatives with respect to DIN and $\bar{I}$ using chain rule: 
 \begin{equation} \label{eq:dqdt}
