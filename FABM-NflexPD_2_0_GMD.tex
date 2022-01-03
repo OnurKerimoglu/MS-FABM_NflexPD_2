@@ -161,7 +161,7 @@ Here we introduce FABM-NflexPD 2.0, which can resolve C, N and P in DIM pool. We
 
 %MODEL DESCRIPTION
 \section{Model Description}
-In this section, we will highlight the differences and similarities between the present, `C-based' version of the model from the earlier version of the `N-based' model version presented by \citet{Kerimoglu2021}, K21-N in short hereafter. 
+In this section, we will highlight the differences and similarities between the present, `C-based' version of the model from the earlier version of the `N-based' model version presented by \citet{Kerimoglu2021}, K21 in short hereafter. 
 
 \subsection{Model setup and operation}
 The model is operated in a spatially homogeneous `box' setup, using the 0d driver of FABM \citep{Bruggeman2014}. In order to downscale the complexity, we assume constant temperature of 10$\degree$C and ignore light attenuation and albedo effects. See the end of Section~\ref{S:DescFlux} for the description of irradiance. Numerical solutions are obtained using 4$^{th}$ order Runge-Kutta method with a time step of 60 seconds. 
@@ -172,15 +172,15 @@ In this version of the model, C content of phytoplankton ($Phy_\text{C}$) is dyn
 Phy_\text{N} = Phy_\text{C} \cdot Q_\text{N}  
 \end{equation}
 
-$Q_\text{N}$ is assumed to instantaneously adjust to a balanced-growth optimum value, as determined by the nutrient uptake in the protopolast, $\hat{V}_\text{N}$ and net photosynthesis in the chloroplast, $\hat{\mu}_{net}$ (Eq.~10 in K21-N):
+$Q_\text{N}$ is assumed to instantaneously adjust to a balanced-growth optimum value, as determined by the nutrient uptake in the protopolast, $\hat{V}_\text{N}$ and net photosynthesis in the chloroplast, $\hat{\mu}_{net}$ (Eq.~10 in K21):
 \begin{equation}\label{eq:Qopt}
  Q_\text{N}^o= \frac{Q_\text{N,0}}{2} \left[1+\sqrt{1+\frac{2}{Q_\text{N,0}{({\hat{\mu}_{\text{net}}}/{\hat{V}_\text{N}}+\zeta_\text{N} )}}} \right] \hfill \{\text{IA}\}
 \end{equation}
-where $Q_\text{N,0}$ is a model parameter (subsistence N quota, Table~3 in K21-N). The source term for $Phy_\text{C}$ is given by:
+where $Q_\text{N,0}$ is a model parameter (subsistence N quota, Table~3 in K21). The source term for $Phy_\text{C}$ is given by:
 \begin{equation} \label{eq:sPhyC}
 s(Phy_{\text{C}}) = F_{DIC-Phy_\text{C}} - F_{Phy_{\text{C}}-Det_{\text{C}}}
 \end{equation}
-which is identical to the source term of the `DA' variant (Eq.~1b in K21). Here, $F_{DIC-Phy_\text{C}}$ and $F_{Phy_{\text{C}}-Det_{\text{C}}}$ are the fluxes from Dissolved Inorganic Carbon ($DIC$) to phytoplankton, and from phytoplankton to detrital C ($Det_\text{C}$), respectively. The first term in Eq.~\ref{eq:sPhyC} represents net phytoplankton growth, and as before (Eq.~8 in K21-N), it is given by the product of $Phy_\text{C}$ with net growth rate, $\mu$: 
+which is identical to the source term of the `DA' variant (Eq.~1b in K21). Here, $F_{DIC-Phy_\text{C}}$ and $F_{Phy_{\text{C}}-Det_{\text{C}}}$ are the fluxes from Dissolved Inorganic Carbon ($DIC$) to phytoplankton, and from phytoplankton to detrital C ($Det_\text{C}$), respectively. The first term in Eq.~\ref{eq:sPhyC} represents net phytoplankton growth, and as before (Eq.~8 in K21), it is given by the product of $Phy_\text{C}$ with net growth rate, $\mu$: 
 \begin{equation} \label{eq:fdicphyc}
  F_{DIC-Phy_\text{C}} = \mu \cdot Phy_\text{C}
 \end{equation}
@@ -188,12 +188,12 @@ This term is used in this updated model version also to track the DIC concentrat
 \begin{equation} \label{eq:dic}
   s(\text{DIC}) = \underbrace{F_{DOC-DIC}}_\textrm{Remineralization} - \underbrace{F_{DIC-Phy_{\text{C}}}}_\textrm{Net C uptake}
 \end{equation}
-Note that representing the C uptake and respiration terms with a lumped term $F_{DIC-Phy_{\text{C}}}$ in Eq.~\ref{eq:dic} is based on the assumption that the respiration terms (see Eq.~7 in K21-N) are added back to DIC, and would have to be seperated if CO2 was explicitly resolved. Remineralization flux, $F_{DOC-DIC}$ is calculated as a order reaction as in K-21, which was previously only to trace the DOC (K-21).
+Note that representing the C uptake and respiration terms with a lumped term $F_{DIC-Phy_{\text{C}}}$ in Eq.~\ref{eq:dic} is based on the assumption that the respiration terms (see Eq.~7 in K21) are added back to DIC, and would have to be seperated if CO2 was explicitly resolved. Remineralization flux, $F_{DOC-DIC}$ is calculated as a order reaction as in K21, which was previously only to trace the DOC (K21).
 
-The second term in Eq.~\ref{eq:sPhyC}, $F_{Phy_\text{C}-Det_\text{C}}$, representing the mortality of phytoplankton, is the same as in the N-based version, i.e., it is given by the division of N flux from phytoplankton to detritus, $F_{Phy_\text{N}-Det_\text{N}}$ by $Q_N$ (Table 1 in K21-N).
+The second term in Eq.~\ref{eq:sPhyC}, $F_{Phy_\text{C}-Det_\text{C}}$, representing the mortality of phytoplankton, is the same as in the N-based version, i.e., it is given by the division of N flux from phytoplankton to detritus, $F_{Phy_\text{N}-Det_\text{N}}$ by $Q_N$ (Table 1 in K21).
 
 \subsection{Flux of nutrients between DIM and Phytoplankton}\label{S:DescFlux}
-As in K21-N, the source term for the nutrients in DIM pool are described as the remineralization fluxes from the nutrients in dissolved Organic form (e.g., DON), $F_{DON-DIN}$ (Table 1, K21-N), minus the fluxes between the DIM (e.g., DIN) and phytoplankton ($F_{DIN-Phy_\text{N}}$): 
+As in K21, the source term for the nutrients in DIM pool are described as the remineralization fluxes from the nutrients in dissolved Organic form (e.g., DON), $F_{DON-DIN}$ (Table 1, K21), minus the fluxes between the DIM (e.g., DIN) and phytoplankton ($F_{DIN-Phy_\text{N}}$): 
 \begin{equation} \label{eq:sdin}
   s(\text{DIN}) = \frac{\text{d}\text{DIN}}{\text{d}t} = F_{DON-DIN} - F_{DIN-Phy_\text{N}}
 \end{equation}
@@ -205,17 +205,17 @@ Here, $\frac{\text{d} Phy_\text{C}}{\text{d} t} \big\rvert_G$ corresponds to gro
 \begin{equation} \label{eq:dphyNdt2}
   \frac{\text{d}Phy_\text{N}}{\text{d}t} \bigg\rvert_G= Q_\text{N} \cdot \mu \cdot Phy_\text{C} + Phy_\text{C} \frac{\text{d} Q_\text{N}}{\text{d} t} 
 \end{equation}
-where, assuming balanced growth \citep{Burmaster1979}, i.e., $V_N = Q_N \cdot \mu$  (K21-N, Eq.~6) the first term on the right hand side of Eq.~\ref{eq:dphyNdt2} can be replaced with $V_N \cdot Phy_\text{C}$, i.e., 
+where, assuming balanced growth \citep{Burmaster1979}, i.e., $V_N = Q_N \cdot \mu$  (K21, Eq.~6) the first term on the right hand side of Eq.~\ref{eq:dphyNdt2} can be replaced with $V_N \cdot Phy_\text{C}$, i.e., 
 \begin{equation} \label{eq:dphyNdt3}
   \frac{\text{d}Phy_\text{N}}{\text{d}t} \bigg\rvert_G=  Phy_\text{C} \left( V_\text{N} + \frac{\text{d} Q_\text{N}}{\text{d} t} \right)
 \end{equation}
 
-%\onur{In the N-based version, we had (K21-N, Eq.~5): $F_{DIN-%Phy_{\text{N}}} = V_N \cdot Phy_{\text{C}}$. i.e., excluding the $%\frac{\text{d} Q_\text{N}}{\text{d} t}$ term in Eq.~\ref{eq:dphyNdt3}. %As we discussed, this apparent difference %(apparent, because maybe there is a mistake in the notation? Also note that $F_{DIN-Phy_{\text{N}}}$ is not used anywhere, and in the C-based version of the model it is only saved as a diagnostic quantity) 
+%\onur{In the N-based version, we had (K21, Eq.~5): $F_{DIN-%Phy_{\text{N}}} = V_N \cdot Phy_{\text{C}}$. i.e., excluding the $%\frac{\text{d} Q_\text{N}}{\text{d} t}$ term in Eq.~\ref{eq:dphyNdt3}. %As we discussed, this apparent difference %(apparent, because maybe there is a mistake in the notation? Also note that $F_{DIN-Phy_{\text{N}}}$ is not used anywhere, and in the C-based version of the model it is only saved as a diagnostic quantity) 
 %doesn't violate the internal consistency of the N-based version, but it would be great if we could explain what this really is. For instance, is this a `real deviation' in model formulations that contributes (among other sources) to quantitative differences in results?}
 
 According to Eq.~\ref{eq:dphyNdt3}, the N flux between the DIM pool and phytoplankton can be intuitively understood as the sum of uptake due to growth of C biomass, and the change in the N quota. % It should be noted that this cumulative change can become negative. (?)
 
-Given that the terms $\hat{V}_\text{N}$ and $\hat{\mu}_{net}$ required for calculating $Q_\text{N}$ (Eq.~\ref{eq:Qopt}) are respectively functions of DIN (Eq.~16 in K21-N) and daytime average irradiance, $\bar{I}$ (Eqs.~20-22 in K21-N), the total time derivative of $Q_\text{N}$ in Eq.~\ref{eq:dphyNdt3} can be computed as the sum of partial derivatives with respect to DIN and $\bar{I}$ using chain rule: 
+Given that the terms $\hat{V}_\text{N}$ and $\hat{\mu}_{net}$ required for calculating $Q_\text{N}$ (Eq.~\ref{eq:Qopt}) are respectively functions of DIN (Eq.~16 in K21) and daytime average irradiance, $\bar{I}$ (Eqs.~20-22 in K21), the total time derivative of $Q_\text{N}$ in Eq.~\ref{eq:dphyNdt3} can be computed as the sum of partial derivatives with respect to DIN and $\bar{I}$ using chain rule: 
 \begin{equation} \label{eq:dqdt}
  \frac{\text{d} Q_\text{N}}{\text{d} t} = \frac{\partial Q_\text{N}}{\partial \text{DIN}} \frac{\text{d} \text{DIN}}{\text{d} t} +  \frac{\partial Q_\text{N}}{\partial \bar{I}} \frac{\text{d} \bar{I}}{\text{d} t} 
 \end{equation}
@@ -231,7 +231,7 @@ and reorganizing:
 \begin{equation}\label{eq:sdin3}
  s(\text{DIN}) = \frac{\text{d}\text{DIN}}{\text{d}t} = \frac{F_{DON-DIN} - Phy_{\text{C}} \left(V_N +  \frac{\partial Q_\text{N}}{\partial \bar{I}} \frac{\text{d} \bar{I}}{\text{d} t} \right)}{ 1+Phy_{\text{C}}\frac{\partial Q_\text{N}}{\partial \text{DIN}}}
 \end{equation}
-As a technical remark regarding the FABM implementation of the model: Eq.~\ref{eq:sdin3} requires combination of terms, which, in K21-N, used to be calculated by separate abiotic ($F_{DON-DIN}$) and phytoplankton modules (all other terms), therefore in the current implementation, in order to avoid a `circular dependency' error, an intermediate module collects the necessary terms from the two modules, and sets the right hand sides for the DIN at once.
+As a technical remark regarding the FABM implementation of the model: Eq.~\ref{eq:sdin3} requires combination of terms, which, in K21, used to be calculated by separate abiotic ($F_{DON-DIN}$) and phytoplankton modules (all other terms), therefore in the current implementation, in order to avoid a `circular dependency' error, an intermediate module collects the necessary terms from the two modules, and sets the right hand sides for the DIN at once.
 
 In Eq.~\ref{eq:sdin3}, partial derivatives of $Q_\text{N}$ with respect to DIN and $\bar{I}$ are obtained by canonical application of the chain rule. As in \citet{Smith2016}, defining $Z = (Q_\text{N,0}/2)\left(\hat{\mu}_\text{net}/\hat{V}_\text{N}+\zeta_\text{N} \right)$ in Eq.~\ref{eq:Qopt}:
 \begin{flalign}\label{eq.delQdelN}
@@ -244,7 +244,7 @@ where, according to S16 \onur{I could not find this solution myself}:
 \begin{equation} \label{eq:delQdelZ}
  \frac{\partial Q_\text{N}}{\partial Z} = \frac{-Q_\text{N,0}}{4 \cdot Z \cdot \sqrt{Z\cdot(1+Z)}}
 \end{equation}
-Recalling $\hat{V}_\text{N}$ from K-21 (Eq.~17):
+Recalling $\hat{V}_\text{N}$ from K21, Eq.~17:
 \begin{flalign}
  \hat{V}_\text{N} &= \frac{(1-f_A)\hat{V}_0 f_A \hat{A}_0 \text{DIN}}{(1-f_A)\hat{V}_0 + f_A \hat{A}_0 \text{DIN}}
 \end{flalign}
@@ -254,7 +254,7 @@ the partial derivative of $Z$ with respect to DIN can found to be similar to tha
  \frac{\partial Z}{\partial \hat{V}_\text{N}} \frac{\partial \hat{V}_\text{N}}{\partial \text{DIN}} &= 
  \frac{-\hat{\mu}_{net} \cdot Q_\text{N,0}}{2 \cdot \hat{V}_\text{N} \cdot \text{DIN}} \left( 1 - \frac{\hat{V}_\text{N}}{\hat{V}_\text{N,0}} - \frac{\hat{V}_\text{N}}{\sqrt{\hat{V}_\text{N,0} \cdot \hat{A}_\text{N,0} \cdot \text{DIN}}} \right)
 \end{flalign}
-For calculating the partial derivative of $Z$ with respect to $\bar{I}$, $\frac{\partial Z}{\partial \bar{I}}$, we first make the simplifying assumption that the chlorophyll density in the chloroplasts, $\hat{\theta}$ is constant, such that a complicated (see Eq.~26 in K21) $\frac{\partial \hat{\theta}}{\partial \bar{I}}$ does not have to be taken into account \onur{which seems to have been ignored in S16}. Recalling $\hat{\mu}_{net}$ and $L_I$ from K-21 (Eqs.~20-23):
+For calculating the partial derivative of $Z$ with respect to $\bar{I}$, $\frac{\partial Z}{\partial \bar{I}}$, we first make the simplifying assumption that the chlorophyll density in the chloroplasts, $\hat{\theta}$ is constant, such that a complicated (see Eq.~26 in K21) $\frac{\partial \hat{\theta}}{\partial \bar{I}}$ does not have to be taken into account \onur{which seems to have been ignored in S16}. Recalling $\hat{\mu}_{net}$ and $L_I$ from K21, Eqs.~20-23:
 \begin{flalign}
  %\hat{\mu}_{net} &= \hat{\mu}_g (1-\zeta_{Chl}\hat{\theta})- R^{Chl}_\text{M} \zeta_{Chl}\hat{\theta}\\
  \hat{\mu}_{net} &= L_\text{D}\hat{\mu}_0 L_{I} (1-\zeta_{Chl}\hat{\theta})- R^{Chl}_\text{M} \zeta_{Chl}\hat{\theta}\\
@@ -267,9 +267,9 @@ $\frac{\partial Z}{\partial \bar{I}}$ can be then derived as:
  \frac{\partial Z}{\partial \hat{\mu}_{net}} \frac{\partial \hat{\mu}_{net}}{\partial L_I} \frac{\partial L_I}{\partial\bar{I}}=
  \frac{Q_\text{N,0}}{2 \cdot \hat{V}_\text{N}} \left(L_\text{D} \cdot (1-\hat{\theta} \cdot \zeta_\text{Chl}) \right) \left ( -\alpha \cdot \hat{\theta} \cdot (L_\text{I}-1) \right) 
 \end{flalign}
-where $\alpha$ and $\zeta_\text{Chl}$ are model parameters (initial Chl-specific slope of P-I curve and cost of chlorophyll synthesis, respectively, Table~3 in K21-N) and $L_\text{D}$ is fractional day length (Eq.~21 in K21-N). %  $\hat{\theta}$ is the optimal chlorophyll density in the chloroplast.\\
-\onur{Notes: 1) No DIN in the denominotor of $\frac{\partial Z}{\partial \bar{I}}$ (apparent typo in S16). 2) replacement of $\hat{\mu}_g$ (in S16, $\hat{\mu}^I$) with $\hat{\mu}_{net}$ results in appearance of $(1-\hat{\theta} \cdot \zeta_\text{Chl})$ when computing $\frac{\hat{\mu}_{net}}{\partial L_I}$. 3) Probably $L_\text{D}$ used to be implicit earlier, now it's explicit (K21-N eq. 21) therefore it appears for $\frac{\hat{\mu}_{net}}{\partial L_I}$ unlike in S16}\\ 
-%4)Probably we should have considered $\frac{\partial{\hat{\theta}}}{\partial{\bar{I}}}$ as well, since $\hat{\theta} = f(\bar{I}$ (Eq.~26 in K21-N), but it appears as if it wasn't in S16 either (Eq.~A-4)}\\
+where $\alpha$ and $\zeta_\text{Chl}$ are model parameters (initial Chl-specific slope of P-I curve and cost of chlorophyll synthesis, respectively, Table~3 in K21) and $L_\text{D}$ is fractional day length (Eq.~21 in K21). %  $\hat{\theta}$ is the optimal chlorophyll density in the chloroplast.\\
+\onur{Notes: 1) No DIN in the denominotor of $\frac{\partial Z}{\partial \bar{I}}$ (apparent typo in S16). 2) replacement of $\hat{\mu}_g$ (in S16, $\hat{\mu}^I$) with $\hat{\mu}_{net}$ results in appearance of $(1-\hat{\theta} \cdot \zeta_\text{Chl})$ when computing $\frac{\hat{\mu}_{net}}{\partial L_I}$. 3) Probably $L_\text{D}$ used to be implicit earlier, now it's explicit (K21 eq. 21) therefore it appears for $\frac{\hat{\mu}_{net}}{\partial L_I}$ unlike in S16}\\ 
+%4)Probably we should have considered $\frac{\partial{\hat{\theta}}}{\partial{\bar{I}}}$ as well, since $\hat{\theta} = f(\bar{I}$ (Eq.~26 in K21), but it appears as if it wasn't in S16 either (Eq.~A-4)}\\
 %\onur{Note that in the code, $\frac{\text{DIN}_{i} - \text{DIN}_{i-1}}{\Delta t}$ are still calculated, but are not required in right hand sides, and only saved as diagnostic quantities}
 
 The final term required in Eq.~\ref{eq:sdin3} is the change in $\bar{I}$ over time, i.e., $\frac{\text{d}\bar{I}}{\text{d}t}$.
