@@ -150,7 +150,7 @@ Here we introduce FABM-NflexPD 2.0, which can resolve C, N and P in DIM pool. We
  \item description of the model extended with limitation by other elements, exemplified for P
  \item an assessment of the conservation of C and nutrients by the model
  \item comparison of the behavior of the previous and current C- and N- based model versions in a 0D setup \onur{not sure if really needed} % Not sure also whether the two versions will produce quantitatively identical results because of the approximations and potential omission of a term in the N-based version (see below)}
- \item application of the C-N-P model to an ocean site in a 1D setup \onur{This would be very cool but I'm not sure if we can go that far}
+ \item application of the C-N-P model in an idealisitc 1D setup and formal assessment of model behavior (e.g., mass conservation)
 \end{itemize}
 
 % \begin{figure}[htb]
@@ -163,11 +163,11 @@ Here we introduce FABM-NflexPD 2.0, which can resolve C, N and P in DIM pool. We
 \section{Model Description}
 In this section, we will highlight the differences and similarities between the present, `C-based' version of the model from the earlier version of the `N-based' model version presented by \citet{Kerimoglu2021}, K21 in short hereafter. 
 
-\subsection{Model setup and operation}
-The model is operated in a spatially homogeneous `box' setup, using the 0d driver of FABM \citep{Bruggeman2014}. In order to downscale the complexity, we assume constant temperature of 10$\degree$C and ignore light attenuation and albedo effects. See the end of Section~\ref{S:DescFlux} for the description of irradiance. Numerical solutions are obtained using 4$^{th}$ order Runge-Kutta method with a time step of 60 seconds. 
+\subsection{Model setup and operation}\label{S:DescSetup}
+The model is operated in a spatially homogeneous `box' setup, using the 0d driver of FABM \citep{Bruggeman2014}. In order to downscale the complexity, we assume that temperature is fixed at 10$\degree$C, fractional day length, $L_D$ is unity, and ignore light attenuation and albedo effects. See the end of Section~\ref{S:DescFlux} for the description of irradiance. Numerical solutions are obtained using 4$^\text{th}$ order Runge-Kutta method with a time step of 60 seconds. 
 
 \subsection{C and N content of Phytoplankton}
-In this version of the model, C content of phytoplankton ($Phy_\text{C}$) is dynamically tracked (thus, C-based) instead of the N content ($Phy_\text{N}$) as was the case in the earlier (thus, N-based) version. Wherever required, $Phy_\text{N}$ is calculated by:
+In this version of the model, C content of phytoplankton (Phy$_\text{C}$) is dynamically tracked (thus, C-based) instead of the N content (Phy$_\text{N}$) as was the case in the earlier (thus, N-based) version. Wherever required, Phy$_\text{N}$ is calculated as:
 \begin{equation} \label{eq:Q}
 Phy_\text{N} = Phy_\text{C} \cdot Q_\text{N}  
 \end{equation}
@@ -176,11 +176,11 @@ $Q_\text{N}$ is assumed to instantaneously adjust to a balanced-growth optimum v
 \begin{equation}\label{eq:Qopt}
  Q_\text{N}^o= \frac{Q_\text{N,0}}{2} \left[1+\sqrt{1+\frac{2}{Q_\text{N,0}{({\hat{\mu}_{\text{net}}}/{\hat{V}_\text{N}}+\zeta_\text{N} )}}} \right] \hfill \{\text{IA}\}
 \end{equation}
-where $Q_\text{N,0}$ is a model parameter (subsistence N quota, Table~3 in K21). The source term for $Phy_\text{C}$ is given by:
+where $Q_\text{N,0}$ and $\zeta_\text{N}$ are model parameters (subsistence N quota, and cost of N uptake, respectively, see Table~3 in K21). The source term for $Phy_\text{C}$ is given by:
 \begin{equation} \label{eq:sPhyC}
 s(Phy_{\text{C}}) = F_{DIC-Phy_\text{C}} - F_{Phy_{\text{C}}-Det_{\text{C}}}
 \end{equation}
-which is identical to the source term of the `DA' variant (Eq.~1b in K21). Here, $F_{DIC-Phy_\text{C}}$ and $F_{Phy_{\text{C}}-Det_{\text{C}}}$ are the fluxes from Dissolved Inorganic Carbon ($DIC$) to phytoplankton, and from phytoplankton to detrital C ($Det_\text{C}$), respectively. The first term in Eq.~\ref{eq:sPhyC} represents net phytoplankton growth, and as before (Eq.~8 in K21), it is given by the product of $Phy_\text{C}$ with net growth rate, $\mu$: 
+which is identical to the source term of the `DA' variant (Eq.~1b in K21). Here, $F_{DIC-Phy_\text{C}}$ and $F_{Phy_{\text{C}}-Det_{\text{C}}}$ are the fluxes from Dissolved Inorganic Carbon (DIC) to phytoplankton, and from phytoplankton to detrital C (Det$_\text{C}$), respectively. The first term in Eq.~\ref{eq:sPhyC} represents net phytoplankton growth, and as before (Eq.~8 in K21), it is given by the product of Phy$_\text{C}$ with net growth rate, $\mu$: 
 \begin{equation} \label{eq:fdicphyc}
  F_{DIC-Phy_\text{C}} = \mu \cdot Phy_\text{C}
 \end{equation}
@@ -190,7 +190,7 @@ This term is used in this updated model version also to track the DIC concentrat
 \end{equation}
 Note that representing the C uptake and respiration terms with a lumped term $F_{DIC-Phy_{\text{C}}}$ in Eq.~\ref{eq:dic} is based on the assumption that the respiration terms (see Eq.~7 in K21) are added back to DIC, and would have to be seperated if CO2 was explicitly resolved. Remineralization flux, $F_{DOC-DIC}$ is calculated as a order reaction as in K21, which was previously only to trace the DOC (K21).
 
-The second term in Eq.~\ref{eq:sPhyC}, $F_{Phy_\text{C}-Det_\text{C}}$, representing the mortality of phytoplankton, is the same as in the N-based version, i.e., it is given by the division of N flux from phytoplankton to detritus, $F_{Phy_\text{N}-Det_\text{N}}$ by $Q_N$ (Table 1 in K21).
+The second term in Eq.~\ref{eq:sPhyC}, $F_{Phy_\text{C}-Det_\text{C}}$, representing the mortality of phytoplankton, is the same as in the N-based version, i.e., it is given by the division of N flux from phytoplankton to detritus, $F_{Phy_\text{N}-Det_\text{N}}$ by $Q_\text{N}$ (Table 1 in K21).
 
 \subsection{Flux of nutrients between DIM and Phytoplankton}\label{S:DescFlux}
 As in K21, the source term for the nutrients in DIM pool are described as the remineralization fluxes from the nutrients in dissolved Organic form (e.g., DON), $F_{DON-DIN}$ (Table 1, K21), minus the fluxes between the DIM (e.g., DIN) and phytoplankton ($F_{DIN-Phy_\text{N}}$): 
@@ -240,7 +240,7 @@ In Eq.~\ref{eq:sdin3}, partial derivatives of $Q_\text{N}$ with respect to DIN a
 \begin{flalign}\label{eq.delQdelI} 
  \frac{\partial Q_\text{N}}{\partial \bar{I}}  &= \frac{\partial Q_\text{N}}{\partial Z} \frac{\partial Z}{\partial \bar{I}}
 \end{flalign}
-where, according to S16 \onur{I could not find this solution myself}:
+In Eqs.~\ref{eq.delQdelN}-\ref{eq.delQdelI}, the common term $\frac{\partial Q_\text{N}}{\partial Z}$, as in S16, yields \onur{I verified this}:
 \begin{equation} \label{eq:delQdelZ}
  \frac{\partial Q_\text{N}}{\partial Z} = \frac{-Q_\text{N,0}}{4 \cdot Z \cdot \sqrt{Z\cdot(1+Z)}}
 \end{equation}
@@ -248,13 +248,13 @@ Recalling $\hat{V}_\text{N}$ from K21, Eq.~17:
 \begin{flalign}
  \hat{V}_\text{N} &= \frac{(1-f_A)\hat{V}_0 f_A \hat{A}_0 \text{DIN}}{(1-f_A)\hat{V}_0 + f_A \hat{A}_0 \text{DIN}}
 \end{flalign}
-the partial derivative of $Z$ with respect to DIN can found to be similar to that in S16, with the only exception that their $\hat{\mu}^I$ is replaced by our $\hat{\mu}_{net}$:
+the partial derivative of $Z$ with respect to DIN can found to be similar to that in S16, with the only exception that their $\hat{\mu}^I$ is replaced by our $\hat{\mu}_{net}$ \onur{I could not reproduce this solution}:
 \begin{flalign}
  \frac{\partial Z}{\partial \text{DIN}} =
  \frac{\partial Z}{\partial \hat{V}_\text{N}} \frac{\partial \hat{V}_\text{N}}{\partial \text{DIN}} &= 
  \frac{-\hat{\mu}_{net} \cdot Q_\text{N,0}}{2 \cdot \hat{V}_\text{N} \cdot \text{DIN}} \left( 1 - \frac{\hat{V}_\text{N}}{\hat{V}_\text{N,0}} - \frac{\hat{V}_\text{N}}{\sqrt{\hat{V}_\text{N,0} \cdot \hat{A}_\text{N,0} \cdot \text{DIN}}} \right)
 \end{flalign}
-For calculating the partial derivative of $Z$ with respect to $\bar{I}$, $\frac{\partial Z}{\partial \bar{I}}$, we first make the simplifying assumption that the chlorophyll density in the chloroplasts, $\hat{\theta}$ is constant, such that a complicated (see Eq.~26 in K21) $\frac{\partial \hat{\theta}}{\partial \bar{I}}$ does not have to be taken into account \onur{which seems to have been ignored in S16}. Recalling $\hat{\mu}_{net}$ and $L_I$ from K21, Eqs.~20-23:
+For calculating the partial derivative of $Z$ with respect to $\bar{I}$, $\frac{\partial Z}{\partial \bar{I}}$, we first make the simplifying assumption that the chlorophyll density in the chloroplasts, $\hat{\theta}$ is constant, such that a complicated (see Eq.~26 in K21) $\frac{\partial \hat{\theta}}{\partial \bar{I}}$ does not have to be taken into account \onur{which seems to have been ignored in S16?}. Recalling $\hat{\mu}_{net}$ and $L_I$ from K21, Eqs.~20-23:
 \begin{flalign}
  %\hat{\mu}_{net} &= \hat{\mu}_g (1-\zeta_{Chl}\hat{\theta})- R^{Chl}_\text{M} \zeta_{Chl}\hat{\theta}\\
  \hat{\mu}_{net} &= L_\text{D}\hat{\mu}_0 L_{I} (1-\zeta_{Chl}\hat{\theta})- R^{Chl}_\text{M} \zeta_{Chl}\hat{\theta}\\
@@ -268,7 +268,7 @@ $\frac{\partial Z}{\partial \bar{I}}$ can be then derived as:
  \frac{Q_\text{N,0}}{2 \cdot \hat{V}_\text{N}} \left(L_\text{D} \cdot (1-\hat{\theta} \cdot \zeta_\text{Chl}) \right) \left ( -\alpha \cdot \hat{\theta} \cdot (L_\text{I}-1) \right) 
 \end{flalign}
 where $\alpha$ and $\zeta_\text{Chl}$ are model parameters (initial Chl-specific slope of P-I curve and cost of chlorophyll synthesis, respectively, Table~3 in K21) and $L_\text{D}$ is fractional day length (Eq.~21 in K21). %  $\hat{\theta}$ is the optimal chlorophyll density in the chloroplast.\\
-\onur{Notes: 1) No DIN in the denominotor of $\frac{\partial Z}{\partial \bar{I}}$ (apparent typo in S16). 2) replacement of $\hat{\mu}_g$ (in S16, $\hat{\mu}^I$) with $\hat{\mu}_{net}$ results in appearance of $(1-\hat{\theta} \cdot \zeta_\text{Chl})$ when computing $\frac{\hat{\mu}_{net}}{\partial L_I}$. 3) Probably $L_\text{D}$ used to be implicit earlier, now it's explicit (K21 eq. 21) therefore it appears for $\frac{\hat{\mu}_{net}}{\partial L_I}$ unlike in S16}\\ 
+\onur{Notes: 1) No DIN in the denominotor of $\frac{\partial Z}{\partial \bar{I}}$ (apparent typo in S16). 2) replacement of $\hat{\mu}_g$ (in S16, $\hat{\mu}^I$) with $\hat{\mu}_{net}$ results in appearance of $(1-\hat{\theta} \cdot \zeta_\text{Chl})$ when computing $\frac{\hat{\mu}_{net}}{\partial L_I}$. 3) Probably $L_\text{D}$ used to be implicit earlier, now it's explicit (K21 eq. 21) therefore it appears for $\frac{\hat{\mu}_{net}}{\partial L_I}$ unlike in S16, but since $L_D$ is set to 1, (Section~\ref{S:DescSetup}), this should not matter.}\\ 
 %4)Probably we should have considered $\frac{\partial{\hat{\theta}}}{\partial{\bar{I}}}$ as well, since $\hat{\theta} = f(\bar{I}$ (Eq.~26 in K21), but it appears as if it wasn't in S16 either (Eq.~A-4)}\\
 %\onur{Note that in the code, $\frac{\text{DIN}_{i} - \text{DIN}_{i-1}}{\Delta t}$ are still calculated, but are not required in right hand sides, and only saved as diagnostic quantities}
 
@@ -304,7 +304,7 @@ We consider two cases with regard to the handling of this term:
 \section{Results}
 Both the irradiance, and its temporal derivative, as found by both the numerical and analytical approaches seem to be identical (Fig.~\ref{f.I}).
 \begin{figure}[ht!]
-\includegraphics[width=14cm,trim=0cm 0mm 0.0cm 0mm, clip]{figures/2022-01-03_T10_TheHat03_PARint_vs_PARext/0D-Highlat_wconst_T10_lext_CbasedIA_TheHat03_dm_vs_0D-Highlat_wconst_T10_lint_CbasedIA_TheHat03_dm_cont_abio0_2y.png}
+\includegraphics[width=14cm,trim=0cm 0mm 0.0cm 0mm, clip]{figures/2022-01-05_T10_TheHat03_Ld1_PARint_vs_PARext/0D-Highlat_wconst_T10_lext_CbasedIA_TheHat03_Ld1_dm_vs_0D-Highlat_wconst_T10_lint_CbasedIA_TheHat03_Ld1_dm_cont_abio0_2y.png}
 \caption{Daily average irradiance and its temporal derivative, as extracted from the simulation outputs. PAR:N (solid blue line) is the model version where irradiance is externally supplied, and its derivative is numerically approximated; PAR:A (dashed orange line): both irradiance and its temporal derivative are analytically calculated inside the model . \label{f.I}}
 \end{figure}
 
@@ -314,7 +314,7 @@ The estimated concentrations of individual pools, and the non-conserved total N 
 %The most likely flaw is the oversight of the fact that $\hat{\theta}=f(\bar{I})$, which therefore requires consideration of $\frac{\partial \hat{\theta}}{\bar{I}}$.
 
 \begin{figure}[ht!]
-\includegraphics[width=14cm,trim=0cm 9mm 0.0cm 5mm, clip]{figures/2022-01-03_T10_TheHat03_PARint_vs_PARext/0D-Highlat_wconst_T10_lext_CbasedIA_TheHat03_dm_vs_0D-Highlat_wconst_T10_lint_CbasedIA_TheHat03_dm_cont_abio1_2y.png}
+\includegraphics[width=14cm,trim=0cm 9mm 0.0cm 5mm, clip]{figures/2022-01-05_T10_TheHat03_Ld1_PARint_vs_PARext/0D-Highlat_wconst_T10_lext_CbasedIA_TheHat03_Ld1_dm_vs_0D-Highlat_wconst_T10_lint_CbasedIA_TheHat03_Ld1_dm_cont_abio1_2y.png}
 \caption{Carbon (left) and nitrogen (right) pools according to the PAR:N (solid blue line), and PAR:A (dashed orange line) approaches. \label{f.CNvars}}
 \end{figure}
 
