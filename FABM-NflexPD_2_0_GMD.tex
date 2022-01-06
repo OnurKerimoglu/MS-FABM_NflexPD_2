@@ -9,8 +9,8 @@
 %% Please use the following documentclass and journal abbreviations for preprints and final revised papers.
 
 %% 2-column papers and preprints
-%\documentclass[gmd, manuscript]{copernicus}
-\documentclass[gmd, manuscript, draft]{copernicus}
+\documentclass[gmd, manuscript]{copernicus}
+%\documentclass[gmd, manuscript, draft]{copernicus}
 
 %% Journal abbreviations (please use the same for preprints and final revised papers)
 
@@ -74,6 +74,7 @@
 
 %Additional packages: 
 \usepackage{mathrsfs} %provides calligraphic Fonts
+\usepackage{placeins}
 \allowdisplaybreaks
 
 \graphicspath{
@@ -190,7 +191,13 @@ This term is used in this updated model version also to track the DIC concentrat
 \end{equation}
 Note that representing the C uptake and respiration terms with a lumped term $F_{DIC-Phy_{\text{C}}}$ in Eq.~\ref{eq:dic} is based on the assumption that the respiration terms (see Eq.~7 in K21) are added back to DIC, and would have to be seperated if CO2 was explicitly resolved. Remineralization flux, $F_{DOC-DIC}$ is calculated as a order reaction as in K21, which was previously only to trace the DOC (K21).
 
-The second term in Eq.~\ref{eq:sPhyC}, $F_{Phy_\text{C}-Det_\text{C}}$, representing the mortality of phytoplankton, is the same as in the N-based version, i.e., it is given by the division of N flux from phytoplankton to detritus, $F_{Phy_\text{N}-Det_\text{N}}$ by $Q_\text{N}$ (Table 1 in K21).
+The second term in Eq.~\ref{eq:sPhyC}, $F_{Phy_\text{C}-Det_\text{C}}$, representing the mortality of phytoplankton, is calculated as a quadratic rate like in K21 (Table 1), but now it is directly based on $\text{Phy}_\text{C}$ concentration, i.e.,  
+\begin{flalign}\label{eq:mortC}
+F_{Phy_\text{C}-Det_\text{C}} &= m_\text{C} \cdot \text{Phy}_\text{C}^2
+\end{flalign}
+with $m_\text{C}$ [\unit{m^3\ mmolC^{-1}\ d^{-1}}] being the C-based specific mortality rate. Then the N counterpart, $F_{Phy_\text{N}-Det_\text{N}}$ is found by multiplying this term by $Q_\text{N}$ (see also Appendix~\ref{S:Q4loss}).
+
+%given by the division of N flux from phytoplankton to detritus, $F_{Phy_\text{N}-Det_\text{N}}$ by $Q_\text{N}$
 
 \subsection{Flux of nutrients between DIM and Phytoplankton}\label{S:DescFlux}
 As in K21, the source term for the nutrients in DIM pool are described as the remineralization fluxes from the nutrients in dissolved Organic form (e.g., DON), $F_{DON-DIN}$ (Table 1, K21), minus the fluxes between the DIM (e.g., DIN) and phytoplankton ($F_{DIN-Phy_\text{N}}$): 
@@ -305,13 +312,13 @@ We consider two cases with regard to the handling of this term:
 
 %and $\frac{\text{d} \text{DIN}}{\text{d} t} \approx \frac{\text{DIN}_{i} - \text{DIN}_{i-1}}{\Delta t}$.  
 
-\newpage
+%\newpage
 
 % RESULTS
 \section{Results}
 Both the irradiance, and its temporal derivative, as found by both the numerical and analytical approaches seem to be identical (Fig.~\ref{f.I}).
 \begin{figure}[ht!]
-\includegraphics[width=14cm,trim=0cm 0mm 0.0cm 0mm, clip]{figures/2022-01-05_T10_TheHat03_Ld1_PARint_vs_PARext/0D-Highlat_wconst_T10_lext_CbasedIA_TheHat03_Ld1_dm_vs_0D-Highlat_wconst_T10_lint_CbasedIA_TheHat03_Ld1_dm_cont_abio0_2y.png}
+\includegraphics[width=14cm,trim=0cm 0mm 0.0cm 0mm, clip]{figures/2022-01-05_T10_TheHat03_Ld1_PARint_vs_PARext/0D-Highlat_wconst_T10_lext_CbasedIA_TheHat03_Ld1_newdelZdelN_mortC_dm_vs_0D-Highlat_wconst_T10_lint_CbasedIA_TheHat03_Ld1_newdelZdelN_mortC_dm_cont_abio0_2y.png}
 \caption{Daily average irradiance and its temporal derivative, as extracted from the simulation outputs. PAR:N (solid blue line) is the model version where irradiance is externally supplied, and its derivative is numerically approximated; PAR:A (dashed orange line): both irradiance and its temporal derivative are analytically calculated inside the model . \label{f.I}}
 \end{figure}
 
@@ -319,7 +326,7 @@ As shown in Fig.~\ref{f.CNvars}, the model is fully conservative with respect to
 %The most likely flaw is the oversight of the fact that $\hat{\theta}=f(\bar{I})$, which therefore requires consideration of $\frac{\partial \hat{\theta}}{\bar{I}}$.
 
 \begin{figure}[ht!]
-\includegraphics[width=14cm,trim=0cm 9mm 0.0cm 5mm, clip]{figures/2022-01-05_T10_TheHat03_Ld1_PARint_vs_PARext/0D-Highlat_wconst_T10_lext_CbasedIA_TheHat03_Ld1_dm_vs_0D-Highlat_wconst_T10_lint_CbasedIA_TheHat03_Ld1_dm_cont_abio1_2y.png}
+\includegraphics[width=14cm,trim=0cm 9mm 0.0cm 5mm, clip]{figures/2022-01-05_T10_TheHat03_Ld1_PARint_vs_PARext/0D-Highlat_wconst_T10_lext_CbasedIA_TheHat03_Ld1_newdelZdelN_mortC_dm_vs_0D-Highlat_wconst_T10_lint_CbasedIA_TheHat03_Ld1_newdelZdelN_mortC_dm_cont_abio1_2y.png}
 \caption{Carbon (left) and nitrogen (right) pools according to the PAR:N (solid blue line), and PAR:A (dashed orange line) approaches. \label{f.CNvars}}
 \end{figure}
 
@@ -347,9 +354,28 @@ As shown in Fig.~\ref{f.CNvars}, the model is fully conservative with respect to
 
 %\videosupplement{TEXT} %% use this section when having video supplements available
 
-%\appendix
-%\section{Details of Derivations}  %% Appendix-A
+\clearpage
 
+\appendix
+\section{Relevance of changes in quota for the loss processes}\label{S:Q4loss}  %% Appendix-A
+%In our model, we considered a single loss process for phytoplankton. 
+%Recalling from K21 (Table 1) that the associated N flux term was expressed as 
+%\begin{flalign}
+% F_{\text{Phy}_\text{N}-\text{Det}_\text{N}} &= m \cdot \text{Phy}_\text{N}^2 &&
+%\end{flalign}
+%and considering that $\text{Phy}_\text{N}=\text{Phy}_\text{C} \cdot Q_\text{N}$, it can be thought that the changes in $Q_\text{N}$ needs to be taken into account for calculating the flux between phytoplankton and detrital N due to mortality. 
+Potential links between cellular quotas and loss processes can be assessed by analyzing the components of the changes in $\text{Phy}_\text{N}$ occurring due to loss terms, as was previously done for the case of growth (Eq.~\ref{eq:dphyNdt}). Observing that the only loss process we considered here is mortality:
+\begin{flalign}
+\frac{\text{d}\text{Phy}_\text{N}}{\text{d}t} \bigg\rvert_L
+&=\frac{\text{d}\text{Phy}_\text{C} Q_\text{N}}{\text{d}t} \bigg\rvert_M
+= Q_\text{N} \frac{\text{d}\text{Phy}_\text{C}}{\text{d}t} \bigg\rvert_M + \text{Phy}_\text{N}\frac{\text{d}\text{Q}_\text{N}}{\text{d}t} \bigg\rvert_M
+\end{flalign}
+Here, in the first term, $\frac{\text{d}\text{Phy}_\text{C}}{\text{d}t} \rvert_M$ represents the C-based mortality rate ($=m \cdot \text{Phy}_\text{C}^2$, Eq.~\ref{eq:mortC}). In the second term, $\frac{\text{d}\text{Q}_\text{N}}{\text{d}t} \rvert_M$ represents the changes occurring in $Q_\text{N}$, however, due to mortality only. As in our model, we did not consider any effect of mortality on quota (assuming that when a cell dies, it dies altogether and all of its contents become detritus), this term collapses to 0, therefore reducing the associated flux term to:
+\begin{flalign}
+F_{\text{Phy}_\text{N}-\text{Det}_\text{N}} &=
+Q_\text{N} \frac{\text{d}\text{Phy}_\text{C}}{\text{d}t} \bigg\rvert_M = Q_\text{N} \cdot m \cdot \text{Phy}_\text{C}^2 
+\end{flalign}
+However, in any other model that may consider processes that may affect the cellular quotas, such as excretion of C-rich, N-poor substances, associated consequences on various elemental fluxes can be taken into account following this framework.
 
 \noappendix%% use this to mark the end of the appendix section. Otherwise the figures might be numbered incorrectly (e.g. 10 instead of 1).
 
