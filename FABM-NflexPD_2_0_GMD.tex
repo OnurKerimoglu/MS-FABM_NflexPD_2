@@ -268,29 +268,34 @@ the partial derivative of $Z$ with respect to DIN can found to be similar to tha
 \end{flalign} 
 But it delivers exactly the same results. I am just wondering how the original solution was found :-)}\\
 
-For calculating the partial derivative of $Z$ with respect to $\bar{I}$, $\frac{\partial Z}{\partial \bar{I}}$, we first make the simplifying assumption that the chlorophyll density in the chloroplasts, $\hat{\theta}$ is constant, such that a complicated (see Eq.~26 in K21) $\frac{\partial \hat{\theta}}{\partial \bar{I}}$ does not have to be taken into account \onur{which seems to have been ignored in S16?}. Recalling $\hat{\mu}_{net}$ and $L_I$ from K21, Eqs.~20-23:
+For calculating the partial derivative of $Z$ with respect to $\bar{I}$, $\frac{\partial Z}{\partial \bar{I}}$, 
+%we first make the simplifying assumption that the chlorophyll density in the chloroplasts, $\hat{\theta}$ is constant, such that a complicated (see Eq.~26 in K21) $\frac{\partial \hat{\theta}}{\partial \bar{I}}$ does not have to be taken into account \onur{which seems to have been ignored in S16?}. 
+recalling $\hat{\mu}_{net}$, $L_I$ and $\hat{\theta}$ from K21, Eqs.~20-23 \& 26:
 \begin{flalign}
  %\hat{\mu}_{net} &= \hat{\mu}_g (1-\zeta_{Chl}\hat{\theta})- R^{Chl}_{\text{M}} \zeta_{Chl}\hat{\theta}\\
  \hat{\mu}_{net} &= L_{\text{D}}\hat{\mu}_0 L_{I} (1-\zeta_{Chl}\hat{\theta})- R^{Chl}_{\text{M}} \zeta_{Chl}\hat{\theta}\\
-  L_I &= 1 - \exp \left( \frac{-\alpha \hat{\theta} \bar{I}}{\hat{\mu}_0} \right)
-\end{flalign}
-$\frac{\mathrm{d}\, Z}{\mathrm{d}\, \bar{I}}$ can be then derived as:
-\begin{flalign}
- \frac{\mathrm{d}\, Z}{\mathrm{d}\, \bar{I}} &=
- \frac{\mathrm{d}\, Z}{\mathrm{d}\, \hat{\mu}_{net}} \frac{\mathrm{d}\, \hat{\mu}_{net}}{\mathrm{d}\, \bar{I}} =
- \frac{Q_{\text{N,0}}}{2 \cdot \hat{V}_{\text{N}}} \left( \frac{\partial \hat{\mu}_{net}}{\partial\bar{I}}
-   + \frac{\partial \hat{\mu}_{net}}{\partial\hat{\theta}} \frac{\mathrm{d}\, \hat{\theta}}{\mathrm{d}\,\bar{I}} \right) \\
- \frac{\partial \hat{\mu}_{net}}{\partial\bar{I}} &= L_{\text{D}} \cdot (1-\hat{\theta} \cdot \zeta_{\text{Chl}})  \cdot \alpha \cdot \hat{\theta} \cdot (1-L_{\text{I}}) \\
- \frac{\partial \hat{\mu}_{net}}{\partial\hat{\theta}} &= L_{\text{D}} \cdot [ \alpha \cdot \bar{I} \cdot ( 1 - L_{\text{I}} ) \cdot (1 - \zeta_{\text{Chl}} \cdot \hat{\theta})
- - L_{\text{I}} \cdot \zeta_{\text{Chl}} \cdot \hat{\mu}_{0} ] - R_{\text{M}}^{\text{Chl}} \cdot \zeta_{\text{Chl}} \\
- \frac{\mathrm{d}\, \hat{\theta}}{\mathrm{d}\, \bar{I}} &= -\frac{\hat{\mu}_{0}}{\alpha\cdot \bar{I}^{2}} (1 - W) - \frac{W}{1 + W} \frac{1}{\bar{I}\cdot \zeta_{\text{Chl}}} \\
- \intertext{where}
- \hat{\theta} &= \frac{1}{\zeta_{\text{Chl}}} + \frac{\hat{\mu}_{0}}{\alpha\cdot \bar{I}} \cdot (1 - W), \qquad
+  L_I &= 1 - \exp \left( \frac{-\alpha \hat{\theta} \bar{I}}{\hat{\mu}_0} \right)\\
+  \hat{\theta} &= \frac{1}{\zeta_{\text{Chl}}} + \frac{\hat{\mu}_{0}}{\alpha\cdot \bar{I}} \cdot (1 - W), \qquad
  W = \mathrm{W}_{0} \left[ \left( 1 + \frac{R_{\text{M}}^{{\text{Chl}}}}{L_{\text{D}} \cdot \hat{\mu}_{0}} \right)
    \cdot \exp \left( 1 + \frac{\alpha \cdot \bar{I}}{\hat{\mu}_{0} \cdot \zeta_{\text{Chl}}} \right) \right]
 \end{flalign}
-$\mathrm{W}_{0}$ is the 0-branch of Lambert's W-function, and $\alpha$ and $\zeta_{\text{Chl}}$ are model parameters (initial Chl-specific slope of P-I curve and cost of chlorophyll synthesis, respectively, Table~3 in K21). %  $\hat{\theta}$ is the optimal chlorophyll density in the chloroplast.\\
-We would like to clarify that 1) the DIN in the denominotor in the solution provided by S16 (Eq.~A-5) was a typo; 2) replacement of $\hat{\mu}_g$ (in S16, $\hat{\mu}^I$) with $\hat{\mu}_{net}$ in our model (see K21) results in appearance of $(1-\hat{\theta} \cdot \zeta_{\text{Chl}})$ when computing $\frac{\hat{\mu}_{net}}{\partial L_I}$; 3) $L_{\text{D}}$ used to be implicit in S16, now it's explicit (K21 eq. 21) therefore it appears for $\frac{\hat{\mu}_{net}}{\partial L_I}$ unlike in S16 \onur{This is what I'm guessing, but maybe it was just forgotten}. However, since $L_D$ is set to 1 in the current study (Section~\ref{S:DescSetup}), this difference is practically not relevant for our immediate purposes.\\ 
+and observing that $\hat{\mu}_{net}$, $L_{\text{I}}$ and $\hat{\theta}$ are functions of $\bar{I}$, 
+$\frac{\partial Z}{\partial \bar{I}}$ can be derived by canonical application of the chain rule:
+\begin{flalign}
+ \frac{\partial Z}{\partial \bar{I}} &=
+ \frac{\partial Z}{\partial \hat{\mu}_{net}} \frac{\partial \hat{\mu}_{net}}{\partial \bar{I}} =
+  \frac{\partial Z}{\partial \hat{\mu}_{net}} \left( \frac{\partial \hat{\mu}_{net}}{\partial\bar{I}}
+   + \frac{\partial \hat{\mu}_{net}}{\partial\hat{\theta}} \frac{\mathrm{d}\, \hat{\theta}}{\mathrm{d}\,\bar{I}} \right)
+ \end{flalign}
+ where solution for the individual terms can be obtained as,
+ \begin{flalign}
+ \frac{\partial Z}{\partial \hat{\mu}_{net}} &= \frac{Q_{\text{N,0}}}{2 \cdot \hat{V}_{\text{N}}} \\  
+ \frac{\partial \hat{\mu}_{net}}{\partial\bar{I}} &= L_{\text{D}} \cdot (1-\hat{\theta} \cdot \zeta_{\text{Chl}})  \cdot \alpha \cdot \hat{\theta} \cdot (1-L_{\text{I}}) \\
+ \frac{\partial \hat{\mu}_{net}}{\partial\hat{\theta}} &= L_{\text{D}} \cdot [ \alpha \cdot \bar{I} \cdot ( 1 - L_{\text{I}} ) \cdot (1 - \zeta_{\text{Chl}} \cdot \hat{\theta})
+ - L_{\text{I}} \cdot \zeta_{\text{Chl}} \cdot \hat{\mu}_{0} ] - R_{\text{M}}^{\text{Chl}} \cdot \zeta_{\text{Chl}} \\
+ \frac{\mathrm{d}\, \hat{\theta}}{\mathrm{d}\, \bar{I}} &= -\frac{\hat{\mu}_{0}}{\alpha\cdot \bar{I}^{2}} (1 - W) - \frac{W}{1 + W} \frac{1}{\bar{I}\cdot \zeta_{\text{Chl}}}
+\end{flalign}
+where $\mathrm{W}_{0}$ is the 0-branch of Lambert's W-function, and $\alpha$ and $\zeta_{\text{Chl}}$ are model parameters (initial Chl-specific slope of P-I curve and cost of chlorophyll synthesis, respectively, Table~3 in K21). We would like to clarify that 1) the DIN in the denominotor in the solution provided by S16 (Eq.~A-5) was a typo; 2) replacement of $\hat{\mu}_g$ (in S16, $\hat{\mu}^I$) with $\hat{\mu}_{net}$ in our model (see K21) results in appearance of $(1-\hat{\theta} \cdot \zeta_{\text{Chl}})$ when computing $\frac{\hat{\mu}_{net}}{\partial L_I}$; 4) Dependence of $\hat{\theta}$ on $\bar{I}$ was ignored in S16 \onur{seems like it?}; 4) $L_{\text{D}}$ used to be implicit in S16, now it's explicit (K21 eq. 21) therefore it appears for $\frac{\hat{\mu}_{net}}{\partial L_I}$ unlike in S16, however, since $L_D$ is set to 1 in the current study (Section~\ref{S:DescSetup}), this difference is practically not relevant for our immediate purposes.\\ 
 %4)Probably we should have considered $\frac{\partial{\hat{\theta}}}{\partial{\bar{I}}}$ as well, since $\hat{\theta} = f(\bar{I}$ (Eq.~26 in K21), but it appears as if it wasn't in S16 either (Eq.~A-4)}\\
 %\onur{Note that in the code, $\frac{\text{DIN}_{i} - \text{DIN}_{i-1}}{\Delta t}$ are still calculated, but are not required in right hand sides, and only saved as diagnostic quantities}
 
