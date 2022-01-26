@@ -220,19 +220,21 @@ $Q_{\text{N}}$ changes over time, which contributes to the rate of change of $\t
   = V_{\text{N}} - F_{\text{Phy}_{\text{C}}-\text{Det}_{\text{C}}}\cdot Q_{\text{N}} + \text{Phy}_{\text{C}} \cdot \frac{\mathrm{d}\,Q_{\text{N}}}{\mathrm{d}\,t}
 \end{equation}
 The right-most term in Eq.~\eqref{eq:phyn}, $\text{Phy}_{\text{C}}\cdot \mathrm{d}\,Q_{\text{N}} / \mathrm{d}\, t$, is not accounted for because $\text{Phy}_{\text{N}}$ is not a state variable.  Hence, total N is not conserved.  If $\text{Phy}_{\text{N}}$ was a state variable, this term would not appear and mass balance would be ensured by tracking the temporal evolution of $\text{Phy}_{\text{N}}$.  Owing to the instantaneous acclimation (IA) of $Q_{\text{N}}$, we must explicitly account for this term in order to maintain mass balance for N\@.  It is impossible to do this mechanistically because that would require tracking the corresponding N flux in the (nonexistent) state variable $\text{Phy}_{\text{N}}$.  Instead, we have to account for this term by modifying the rate of change of one or more of the N-containing state variables of our IA model.  As done by \citet{Smith2016}, we subtract it from the differential equation for DIN\@:
-\begin{equation}\label{eq:sdin2}
-  \frac{\text{d}\text{DIN}}{\text{d}t} = F_{\text{DON}-\text{DIN}} - V_N - \text{Phy}_{\text{C}} \cdot \frac{\mathrm{d}\, Q_{\text{N}}}{\mathrm{d}\, t}
+\begin{flalign}\label{eq:sdin2}
+  \frac{\text{d}\text{DIN}}{\text{d}t} &= F_{\text{DON}-\text{DIN}} - V_N - \text{Phy}_{\text{C}} \cdot \frac{\mathrm{d}\, Q_{\text{N}}}{\mathrm{d}\, t}
   = F_{\text{DON}-\text{DIN}} - V_{\text{N}} - \text{Phy}_{\text{C}} \cdot \left(\frac{\partial Q_{\text{N}}}{\partial \text{DIN}} \frac{\text{d} \text{DIN}}{\text{d} t}
-    + \frac{\partial Q_{\text{N}}}{\partial \bar{I}} \frac{\text{d} \bar{I}}{\text{d} t} + \frac{\partial Q_{\text{N}}}{\partial L_{\text{D}}} \frac{\text{d} L_{\text{D}}}{\text{d} t} \right)
-\end{equation}
-and reorganizing:
+    + \frac{\partial Q_{\text{N}}}{\partial \bar{I}} \frac{\text{d} \bar{I}}{\text{d} t} + \frac{\partial Q_{\text{N}}}{\partial L_{\text{D}}} \frac{\text{d} L_{\text{D}}}{\text{d} t} \right) \\
+  \intertext{and reorganizing:}
 %intermediate step:
 % \begin{equation}\label{eq:sdin2.5}
 %  \frac{\text{d}\text{DIN}}{\text{d}t} \left( 1+\text{Phy}_{\text{C}}\frac{\partial Q_{\text{N}}}{\partial \text{DIN}} \right) = F_{\text{DON}-\text{DIN}} - \text{Phy}_{\text{C}} \left(V_N +  \frac{\partial Q_{\text{N}}}{\partial \bar{I}} \frac{\text{d} \bar{I}}{\text{d} t} \right)\\
 % \end{equation}
-\begin{equation}\label{eq:sdin3}
-  \frac{\text{d}\text{DIN}}{\text{d}t} = \frac{\displaystyle F_{\text{DON}-\text{DIN}} - V_{\text{N}} - \text{Phy}_{\text{C}} \cdot \frac{\partial Q_{\text{N}}}{\partial \bar{I}} \frac{\text{d} \bar{I}}{\text{d} t}}{\displaystyle 1+ \text{Phy}_{\text{C}}\frac{\partial Q_{\text{N}}}{\partial \text{DIN}}}
-\end{equation}
+\label{eq:sdin3}
+\frac{\text{d}\text{DIN}}{\text{d}t} &= \frac{\displaystyle F_{\text{DON}-\text{DIN}} - V_{\text{N}} - \text{Phy}_{\text{C}} \cdot
+  \left( \frac{\partial Q_{\text{N}}}{\partial \bar{I}} \frac{\text{d} \bar{I}}{\text{d} t}
+    + \frac{\partial Q_{\text{N}}}{\partial L_{\text{D}}} \frac{\text{d} L_{\text{D}}}{\text{d} t} \right)}%
+{\displaystyle 1+ \text{Phy}_{\text{C}}\frac{\partial Q_{\text{N}}}{\partial \text{DIN}}}
+\end{flalign}
 While this, rather arbitrary, measure for achieving N mass balance violates the assumptions behind the model by assigning part of $\text{Phy}_{\text{N}}$ to DIN, the resulting differences compared to explicitly resolving $\text{Phy}_{\text{N}}$ are relatively small \citep{Ward2017}.
 
 % Here, $\frac{\text{d} \text{Phy}_{\text{C}}}{\text{d} t} \big\rvert_G$ corresponds to gross growth of phytoplankton C biomass, i.e., $F_{\text{DIC}-\text{Phy}_{\text{C}}}$ in Eq.~\eqref{eq:sPhyC}. Substituting therefore Eq.~\eqref{eq:fdicphyc} in Eq.~\eqref{eq:dphyNdt}:
@@ -321,12 +323,11 @@ $\partial Z/ \partial \bar{I}$ can then be derived by canonical application of t
  \frac{\partial \hat{\theta}}{\partial L_{\text{D}}} &=
  \frac{W}{1 + W} \frac{\hat{\mu}_{0}}{\displaystyle \alpha \cdot \bar{I} \cdot \left( 1 + L_{\text{D}} \frac{\hat{\mu}_{0}}{R_{\text{M}}^{\text{Chl}}} \right)}
 \end{flalign}
-and the time-derivative of $L_{\text{D}}$ is given in the appendix.  Note that $\partial{\hat{\mu}_{\text{net}}} / \partial \hat{\theta} = 0$ by definition and is therefor not needed.
+Note that $\partial{\hat{\mu}_{\text{net}}} / \partial \hat{\theta} = 0$ by definition and is therefore not needed.
 
 We would like to clarify that (1) the DIN in the denominator in the solution provided by S16 (their Eq.~A-5) was a typo; (2) replacement of $\hat{\mu}_g$ (in S16, $\hat{\mu}^I$) with $\hat{\mu}_{net}$ in our model (see K21) results in the appearance of $(1-\hat{\theta} \cdot \zeta_{\text{Chl}})$ when computing $\partial \hat{\mu}_{\text{net}} / \partial \bar{I}$; (3) $L_{\text{D}}$ used to be implicit in S16, now it's explicit (K21 Eq.~21) therefore it appears for $\partial\hat{\mu}_{\text{net}} / \partial \bar{I}$ unlike in S16 \onur{This is what I'm guessing, but maybe it was just forgotten}. %However, since $L_D$ is set to 1 in the current study (Section~\ref{S:DescSetup}), this difference is practically not relevant for our immediate purposes.\\ 
 
-The final term required in Eq.~\eqref{eq:sdin3} is the change in $\bar{I}$ over time, i.e., $\text{d}\,\bar{I} / \text{d}\,t$. When the irradiance is supplied externally, as typically the case in realistic coupled physical-biological models it is not possible to obtain its temporal derivative analytically, therefore  it is numerically approximated as the discrete backward difference between its current ($t=i$) and previous ($t=i-1$) values, divided by the size of the integration time step i.e., $\text{d}\, \bar{I} / \text{d}\, t \approx (\bar{I}_{i} - \bar{I}_{i-1}) / \Delta t$ (see also Section~\ref{S:DescT1} designed to test the sensitivity of the model results and conservation behavior to this approximation).
-
+The final terms required in Eq.~\eqref{eq:sdin3} are the changes in $\bar{I}$ and $L_{\text{D}}$ over time, i.e., $\text{d}\,\bar{I} / \text{d}\,t$ and $\text{d}\,L_{\text{D}} / \text{d}\,t$. When the irradiance is supplied externally, as typically the case in realistic coupled physical-biological models it is not possible to obtain its temporal derivative analytically, therefore  it is numerically approximated as the discrete backward difference between its current ($t=i$) and previous ($t=i-1$) values, divided by the size of the integration time step i.e., $\text{d}\, \bar{I} / \text{d}\, t \approx (\bar{I}_{i} - \bar{I}_{i-1}) / \Delta t$ (see also Section~\ref{S:DescT1} designed to test the sensitivity of the model results and conservation behavior to this approximation).
 
 \subsection{Test setups and model operation}\label{S:DescSetup}
 \subsubsection{0D setup (T1-T2)}
