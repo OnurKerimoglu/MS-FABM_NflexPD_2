@@ -306,11 +306,11 @@ where $\mathrm{W}_{0}$ is the 0-branch of Lambert's W-function, and $\alpha$ and
 $\partial Z/ \partial \bar{I}$ can then be derived by canonical application of the chain rule:
 \begin{flalign}
  \frac{\partial Z}{\partial \bar{I}} &=
- \frac{\partial Z}{\partial \hat{\mu}_{net}} \frac{\partial \hat{\mu}_{net}}{\partial \bar{I}} =
- \frac{\partial Z}{\partial \hat{\mu}_{net}} %\left(
- \frac{\partial \hat{\mu}_{net}}{\partial\bar{I}} \\
-%   + \frac{\partial \hat{\mu}_{net}}{\partial\hat{\theta}} \frac{\mathrm{d}\, \hat{\theta}}{\mathrm{d}\,\bar{I}} \right)
- \intertext{where solution for the individual terms can be obtained as}
+ \frac{\partial Z}{\partial \hat{\mu}_{net}} \left(
+   \frac{\partial \hat{\mu}_{net}}{\partial\bar{I}}
+   + \frac{\partial \hat{\mu}_{net}}{\partial\hat{\theta}} \frac{\mathrm{d}\, \hat{\theta}}{\mathrm{d}\,\bar{I}} \right)
+ \\
+ \intertext{where $\partial{\hat{\mu}_{\text{net}}} / \partial \hat{\theta} = 0$ by definition and}
  \frac{\partial Z}{\partial \hat{\mu}_{net}} &= \frac{Q_{\text{N,0}}}{2 \cdot \hat{V}_{\text{N}}} \\  
  \frac{\partial \hat{\mu}_{net}}{\partial\bar{I}} &= L_{\text{D}} \cdot (1-\hat{\theta} \cdot \zeta_{\text{Chl}})  \cdot \alpha \cdot \hat{\theta} \cdot (1-L_{\text{I}}) \\
 % \frac{\partial \hat{\mu}_{net}}{\partial\hat{\theta}} &= L_{\text{D}} \cdot [ \alpha \cdot \bar{I} \cdot ( 1 - L_{\text{I}} ) \cdot (1 - \zeta_{\text{Chl}} \cdot \hat{\theta}) - L_{\text{I}} \cdot \zeta_{\text{Chl}} \cdot \hat{\mu}_{0} ] - R_{\text{M}}^{\text{Chl}} \cdot \zeta_{\text{Chl}} \\
@@ -323,7 +323,6 @@ $\partial Z/ \partial \bar{I}$ can then be derived by canonical application of t
  \frac{\partial \hat{\theta}}{\partial L_{\text{D}}} &=
  \frac{W}{1 + W} \frac{\hat{\mu}_{0}}{\displaystyle \alpha \cdot \bar{I} \cdot \left( 1 + L_{\text{D}} \frac{\hat{\mu}_{0}}{R_{\text{M}}^{\text{Chl}}} \right)}
 \end{flalign}
-Note that $\partial{\hat{\mu}_{\text{net}}} / \partial \hat{\theta} = 0$ by definition and is therefore not needed.
 
 We would like to clarify that (1) the DIN in the denominator in the solution provided by S16 (their Eq.~A-5) was a typo; (2) replacement of $\hat{\mu}_g$ (in S16, $\hat{\mu}^I$) with $\hat{\mu}_{net}$ in our model (see K21) results in the appearance of $(1-\hat{\theta} \cdot \zeta_{\text{Chl}})$ when computing $\partial \hat{\mu}_{\text{net}} / \partial \bar{I}$; (3) $L_{\text{D}}$ used to be implicit in S16, now it's explicit (K21 Eq.~21) therefore it appears for $\partial\hat{\mu}_{\text{net}} / \partial \bar{I}$ unlike in S16 \onur{This is what I'm guessing, but maybe it was just forgotten}. %However, since $L_D$ is set to 1 in the current study (Section~\ref{S:DescSetup}), this difference is practically not relevant for our immediate purposes.\\ 
 
