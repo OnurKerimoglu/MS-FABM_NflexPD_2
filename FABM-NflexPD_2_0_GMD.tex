@@ -152,8 +152,8 @@ Here we introduce FABM-NflexPD 2.0, which can resolve C, N and P in DIM pool. We
  %\item a detailed description of the current, C-based version with reference to the previous, N-based version (see below)
  %\item extension of the model with DIC, to enable tracing the conservation of C
  %\item description of the model extended with limitation by other elements, exemplified for P
- \item [T1] \onur{done} an assessment of the conservation of the C and and N by a simplified version of the model in a 0D setup, where temperature and daylength were held constant, and light and temporal changes in light were provided either externally and numerically approximated respectively, and both calculated analytically.
- \item [T2a] \onur{in progress} testing the IA approach in a more realistic 0D setup, where irradiance is supplied externally, temperature and daylength are allowed to vary, and attenuation of light by phytoplankton is accounted for
+ \item [T1] \onur{done} an assessment of the conservation of the C and and N by a simplified version of the model in a 0D setup, where temperature and day length were held constant, and light and temporal changes in light were provided either externally and numerically approximated respectively, and both calculated analytically.
+ \item [T2a] \onur{in progress} testing the IA approach in a more realistic 0D setup, where irradiance is supplied externally, temperature and day length are allowed to vary, and attenuation of light by phytoplankton is accounted for
  \item [T2b] \onur{in progress} comparison of the fully explicit version (the `dynamic acclimation' (DA) variant in K21) vs the instantaneously acclimating (IA) variant of the model 
  %\item [T4] \onur{todo, I doubt that this is needed} comparison of the behavior of the previous and current C- and N- based model versions in a 0D setup
  \item [T3] \onur{todo, if the 0D works without problems} application of the C-N-P model in an idealisitc 1D setup and assessment of mass conservation
@@ -269,8 +269,11 @@ While this, rather arbitrary, measure for achieving N mass balance violates the 
 % \end{equation}
 As a technical remark regarding the FABM implementation of the model: Eq.~\eqref{eq:sdin3} requires combination of terms, which, in K21, used to be calculated by separate abiotic ($F_{\text{DON}-\text{DIN}}$) and phytoplankton modules (all other terms), therefore in the current implementation, in order to avoid a circular-dependency error, an intermediate module collects the necessary terms from the two modules, and sets the right hand sides for the DIN at once.
 
-In Eq.~\eqref{eq:sdin3}, partial derivatives of $Q_{\text{N}}$ with respect to DIN, $\bar{I}$ and $L_{\text{D}}$ are obtained by canonical application of the chain rule. As in \citet{Smith2016}, defining $Z = (Q_{\text{N,0}}/2)\left(\hat{\mu}_{\text{net}}/\hat{V}_{\text{N}}+\zeta_{\text{N}} \right)$ in Eq.~\eqref{eq:Qopt}:
-\begin{flalign}\label{eq.delQdelN}
+In Eq.~\eqref{eq:sdin3}, partial derivatives of $Q_{\text{N}}$ with respect to DIN, $\bar{I}$ and $L_{\text{D}}$ are obtained by canonical application of the chain rule. As in \citet{Smith2016}, we introduce a new variable $Z$ and re-write Eq.~\eqref{eq:Qopt} in terms of $Z$:
+\begin{flalign}
+  \label{eq.Z}
+  Q_{\text{N}} &= \frac{Q_{\text{N},0}}{2} \left( 1 + \sqrt{1 + \frac{1}{Z}}  \right), \qquad Z = \frac{Q_{\text{N},0}}{2}\left( \frac{\hat{\mu}_{\text{net}}}{\hat{V}_{\text{N}}} + \zeta_{\text{N}} \right) \\
+  \label{eq.delQdelN}
  \frac{\partial Q_{\text{N}}}{\partial \text{DIN}} &= \frac{\partial Q_{\text{N}}}{\partial Z} \frac{\partial Z}{\partial \text{DIN}} \\
  \label{eq.delQdelI} 
  \frac{\partial Q_{\text{N}}}{\partial \bar{I}}  &= \frac{\partial Q_{\text{N}}}{\partial Z} \frac{\partial Z}{\partial \bar{I}} \\
@@ -306,17 +309,18 @@ where $\mathrm{W}_{0}$ is the 0-branch of Lambert's W-function, and $\alpha$ and
 $\partial Z/ \partial \bar{I}$ can then be derived by canonical application of the chain rule:
 \begin{flalign}
  \frac{\partial Z}{\partial \bar{I}} &=
- \frac{\partial Z}{\partial \hat{\mu}_{net}} \left(
-   \frac{\partial \hat{\mu}_{net}}{\partial\bar{I}}
+ \frac{\partial Z}{\partial \hat{\mu}_{net}} \left( \frac{\partial \hat{\mu}_{net}}{\partial\bar{I}}
    + \frac{\partial \hat{\mu}_{net}}{\partial\hat{\theta}} \frac{\mathrm{d}\, \hat{\theta}}{\mathrm{d}\,\bar{I}} \right)
- \\
- \intertext{where $\partial{\hat{\mu}_{\text{net}}} / \partial \hat{\theta} = 0$ by definition and}
+ = \frac{\partial Z}{\partial \hat{\mu}_{net}} \frac{\partial \hat{\mu}_{net}}{\partial\bar{I}}
+ \qquad  (\text{because}~ \frac{\partial{\hat{\mu}_{\text{net}}}}{\partial \hat{\theta}} = 0 ~ \text{by definition}) \\
  \frac{\partial Z}{\partial \hat{\mu}_{net}} &= \frac{Q_{\text{N,0}}}{2 \cdot \hat{V}_{\text{N}}} \\  
  \frac{\partial \hat{\mu}_{net}}{\partial\bar{I}} &= L_{\text{D}} \cdot (1-\hat{\theta} \cdot \zeta_{\text{Chl}})  \cdot \alpha \cdot \hat{\theta} \cdot (1-L_{\text{I}}) \\
 % \frac{\partial \hat{\mu}_{net}}{\partial\hat{\theta}} &= L_{\text{D}} \cdot [ \alpha \cdot \bar{I} \cdot ( 1 - L_{\text{I}} ) \cdot (1 - \zeta_{\text{Chl}} \cdot \hat{\theta}) - L_{\text{I}} \cdot \zeta_{\text{Chl}} \cdot \hat{\mu}_{0} ] - R_{\text{M}}^{\text{Chl}} \cdot \zeta_{\text{Chl}} \\
 % \frac{\mathrm{d}\, \hat{\theta}}{\mathrm{d}\, \bar{I}} &= -\frac{\hat{\mu}_{0}}{\alpha\cdot \bar{I}^{2}} (1 - W) - \frac{W}{1 + W} \frac{1}{\bar{I}\cdot \zeta_{\text{Chl}}}
- \intertext{The daylength derivatives are}
- \frac{\partial Z}{\partial L_{\text{D}}} &= \frac{\partial Z}{\partial \hat{\mu}_{\text{net}}} \frac{\partial \hat{\mu}_{\text{net}}}{\partial L_{\text{D}}} \\
+ \intertext{The day-length derivatives are}
+ \frac{\partial Z}{\partial L_{\text{D}}} &= \frac{\partial Z}{\partial \hat{\mu}_{\text{net}}} \left( \frac{\partial \hat{\mu}_{\text{net}}}{\partial L_{\text{D}}}
+   + \frac{\partial \hat{\mu}_{net}}{\partial\hat{\theta}} \frac{\mathrm{d}\, \hat{\theta}}{\mathrm{d}\,\bar{I}} \right)
+ = \frac{\partial Z}{\partial \hat{\mu}_{\text{net}}} \frac{\partial \hat{\mu}_{\text{net}}}{\partial L_{\text{D}}} \\
  \frac{\partial \hat{\mu}_{\text{net}}}{\partial L_{\text{D}}} &= \left[ \hat{\mu}_{0} \cdot L_{\text{I}} + L_{\text{D}} \cdot \alpha \cdot \bar{I} \cdot (1 - L_{\text{I}})
    \frac{\partial \hat{\theta}}{\partial L_{\text{D}}}\right] (1 - \zeta_{\text{Chl}} \hat{\theta})
  - (L_{\text{D}} \cdot \hat{\mu}_{0} \cdot L_{\text{I}} + R_{\text{M}}^{\text{Chl}}) \cdot \zeta_{\text{Chl}} \frac{\partial \hat{\theta}}{\partial L_{\text{D}}} \\
@@ -354,7 +358,7 @@ The final terms required in Eq.~\eqref{eq:sdin3} are the changes in $\bar{I}$ an
 
     
     \paragraph{T2}
-    For these tests, where one of the aims (T2a) was to try the IA approach in a more realistic setting with multiple time-varying factors, we consider variable daylength, $L_D$ as described by \citet{Forsythe2003}, which was used to calculate the daytime average irradiance, based on the externally provided incoming irradiance as described for T1 (i.e., $\bar{I}=\bar{I}_{\text{24h}}/L_D$ as in the original model by \citep{Pahlowetal13}, and as was implemented in K21). \onur{next step: Finally, to account for the seasonal variability in T, it was represented using a sinusoidal function similar to Eq.~\ref{eq.I}, but $T_{\min}$ and $T_{\max}$ set to 2 and 20$\degree$C, respectively.}
+    For these tests, where one of the aims (T2a) was to try the IA approach in a more realistic setting with multiple time-varying factors, we consider variable day length, $L_D$ as described by \citet{Forsythe2003}, which was used to calculate the daytime average irradiance, based on the externally provided incoming irradiance as described for T1 (i.e., $\bar{I}=\bar{I}_{\text{24h}}/L_D$ as in the original model by \citep{Pahlowetal13}, and as was implemented in K21). \onur{next step: Finally, to account for the seasonal variability in T, it was represented using a sinusoidal function similar to Eq.~\ref{eq.I}, but $T_{\min}$ and $T_{\max}$ set to 2 and 20$\degree$C, respectively.}
     
 \subsubsection{1D setup (T3-T4)}
     \onur{TODO}
@@ -384,7 +388,7 @@ As shown in Fig.~\ref{f.T1res}, the model is conservative with respect to C and,
 \FloatBarrier
 
 \subsection{Testing the IA approach in a more realistic setup (T2a)}
-When the variability in daylength is considered, total N is not entirely conserved (Fig.~\ref{f.T2res}). \onur{I could not figure out why. The equations seem all right, and I can reproduce the problem with the R script}.
+When the variability in day length is considered, total N is not entirely conserved (Fig.~\ref{f.T2res}). \onur{I could not figure out why. The equations seem all right, and I can reproduce the problem with the R script}.
 
 \begin{figure}[ht!]
 \includegraphics[width=14cm,trim=0cm 11mm 0.0cm 5mm, clip]{figures/2022-01-24b_T10_LdVar_ThatVar_PARext_IA_vs_DA/0D-Highlat_wconst_lext_T20_CbasedIA_modular_24h_vs_0D-Highlat_wconst_lext_T20_CbasedDA_modular_24h_cont_abio1_2y.png}
