@@ -176,7 +176,7 @@ In this version of the model, C content of phytoplankton ($\text{Phy}_{\text{C}}
   \text{Phy}_{\text{N}} = \text{Phy}_{\text{C}} \cdot Q_{\text{N}}  
 \end{equation}
 
-$Q_{\text{N}}$ is assumed to instantaneously adjust to a balanced-growth optimum value, as determined by the nutrient uptake in the protoplast, $\hat{V}_{\text{N}}$ and net photosynthesis in the chloroplast, $\hat{\mu}_{net}$ (Eq.~10 in K21):
+$Q_{\text{N}}$ is assumed to instantaneously adjust to a balanced-growth optimum value, as determined by the nutrient uptake in the protoplast, $\hat{V}_{\text{N}}$ and net photosynthesis in the chloroplast, $\hat{\mu}_{\text{net}}$ (Eq.~10 in K21):
 \begin{equation}\label{eq:Qopt}
  Q_{\text{N}}^o= \frac{Q_{\text{N,0}}}{2} \left[1+\sqrt{1+\frac{2}{Q_{\text{N,0}}{({\hat{\mu}_{\text{net}}}/{\hat{V}_{\text{N}}}+\zeta_{\text{N}} )}}} \right] \hfill \{\text{IA}\}
 \end{equation}
@@ -206,7 +206,7 @@ with $m_{\text{C}}$ [\unit{m^3\ mmolC^{-1}\ d^{-1}}] being the C-based specific 
 
 As in K21, the source term for the nutrients in DIM pool are described as the remineralization fluxes from the nutrients in dissolved organic form (e.g., DON), $F_{\text{DON}-\text{DIN}}$ (Table 1, K21), minus the fluxes between the DIM (e.g., DIN) and phytoplankton ($F_{\text{DIN}-\text{Phy}_{\text{N}}}$): 
 \begin{equation} \label{eq:sdin}
-  \frac{\text{d}\text{DIN}}{\text{d}t} = F_{\text{DON}-\text{DIN}} - F_{\text{DIN}-\text{Phy}_{\text{N}}}
+  \frac{\text{d}\,\text{DIN}}{\text{d}\,t} = F_{\text{DON}-\text{DIN}} - F_{\text{DIN}-\text{Phy}_{\text{N}}}
 \end{equation}
 $F_{\text{DON}-\text{DIN}}$ is calculated like the $F_{\text{DOC}-\text{DIC}}$ explained above. $F_{\text{DIN}-\text{Phy}_{\text{N}}}$ is N uptake by phytoplankton ($V^{\text{N}}$), which can be expressed as:
 \begin{equation} \label{eq:dphyNdt}
@@ -221,18 +221,18 @@ $Q_{\text{N}}$ changes over time, which contributes to the rate of change of $\t
 \end{equation}
 The right-most term in Eq.~\eqref{eq:phyn}, $\text{Phy}_{\text{C}}\cdot \mathrm{d}\,Q_{\text{N}} / \mathrm{d}\, t$, is not accounted for because $\text{Phy}_{\text{N}}$ is not a state variable.  Hence, total N is not conserved.  If $\text{Phy}_{\text{N}}$ was a state variable, this term would not appear and mass balance would be ensured by tracking the temporal evolution of $\text{Phy}_{\text{N}}$.  Owing to the instantaneous acclimation (IA) of $Q_{\text{N}}$, we must explicitly account for this term in order to maintain mass balance for N\@.  It is impossible to do this mechanistically because that would require tracking the corresponding N flux in the (nonexistent) state variable $\text{Phy}_{\text{N}}$.  Instead, we have to account for this term by modifying the rate of change of one or more of the N-containing state variables of our IA model.  As done by \citet{Smith2016}, we subtract it from the differential equation for DIN\@:
 \begin{flalign}\label{eq:sdin2}
-  \frac{\text{d}\text{DIN}}{\text{d}t} &= F_{\text{DON}-\text{DIN}} - V_N - \text{Phy}_{\text{C}} \cdot \frac{\mathrm{d}\, Q_{\text{N}}}{\mathrm{d}\, t}
-  = F_{\text{DON}-\text{DIN}} - V_{\text{N}} - \text{Phy}_{\text{C}} \cdot \left(\frac{\partial Q_{\text{N}}}{\partial \text{DIN}} \frac{\text{d} \text{DIN}}{\text{d} t}
-    + \frac{\partial Q_{\text{N}}}{\partial \bar{I}} \frac{\text{d} \bar{I}}{\text{d} t} + \frac{\partial Q_{\text{N}}}{\partial L_{\text{D}}} \frac{\text{d} L_{\text{D}}}{\text{d} t} \right) \\
+  \frac{\text{d}\,\text{DIN}}{\text{d}\, t} &= F_{\text{DON}-\text{DIN}} - V_N - \text{Phy}_{\text{C}} \cdot \frac{\mathrm{d}\, Q_{\text{N}}}{\mathrm{d}\, t}
+  = F_{\text{DON}-\text{DIN}} - V_{\text{N}} - \text{Phy}_{\text{C}} \cdot \left(\frac{\partial Q_{\text{N}}}{\partial \text{DIN}} \frac{\text{d}\, \text{DIN}}{\text{d}\, t}
+    + \frac{\partial Q_{\text{N}}}{\partial \bar{I}} \frac{\text{d}\, \bar{I}}{\text{d}\, t} + \frac{\partial Q_{\text{N}}}{\partial L_{\text{D}}} \frac{\text{d}\, L_{\text{D}}}{\text{d}\, t} \right) \\
   \intertext{and reorganizing:}
 %intermediate step:
 % \begin{equation}\label{eq:sdin2.5}
 %  \frac{\text{d}\text{DIN}}{\text{d}t} \left( 1+\text{Phy}_{\text{C}}\frac{\partial Q_{\text{N}}}{\partial \text{DIN}} \right) = F_{\text{DON}-\text{DIN}} - \text{Phy}_{\text{C}} \left(V_N +  \frac{\partial Q_{\text{N}}}{\partial \bar{I}} \frac{\text{d} \bar{I}}{\text{d} t} \right)\\
 % \end{equation}
 \label{eq:sdin3}
-\frac{\text{d}\text{DIN}}{\text{d}t} &= \frac{\displaystyle F_{\text{DON}-\text{DIN}} - V_{\text{N}} - \text{Phy}_{\text{C}} \cdot
-  \left( \frac{\partial Q_{\text{N}}}{\partial \bar{I}} \frac{\text{d} \bar{I}}{\text{d} t}
-    + \frac{\partial Q_{\text{N}}}{\partial L_{\text{D}}} \frac{\text{d} L_{\text{D}}}{\text{d} t} \right)}%
+\frac{\text{d}\,\text{DIN}}{\text{d}\,t} &= \frac{\displaystyle F_{\text{DON}-\text{DIN}} - V_{\text{N}} - \text{Phy}_{\text{C}} \cdot
+  \left( \frac{\partial Q_{\text{N}}}{\partial \bar{I}} \frac{\text{d}\, \bar{I}}{\text{d}\, t}
+    + \frac{\partial Q_{\text{N}}}{\partial L_{\text{D}}} \frac{\text{d}\, L_{\text{D}}}{\text{d}\, t} \right)}%
 {\displaystyle 1+ \text{Phy}_{\text{C}}\frac{\partial Q_{\text{N}}}{\partial \text{DIN}}}
 \end{flalign}
 While this, rather arbitrary, measure for achieving N mass balance violates the assumptions behind the model by assigning part of $\text{Phy}_{\text{N}}$ to DIN, the resulting differences compared to explicitly resolving $\text{Phy}_{\text{N}}$ are relatively small \citep{Ward2017}.
@@ -251,7 +251,7 @@ While this, rather arbitrary, measure for achieving N mass balance violates the 
 
 % According to Eq.~\eqref{eq:dphyNdt3}, the N flux between the DIM pool and phytoplankton can be intuitively understood as the sum of uptake due to growth of C biomass, and the change in the N quota. % It should be noted that this cumulative change can become negative. (?)
 
-% Given that the terms $\hat{V}_{\text{N}}$ and $\hat{\mu}_{net}$ required for calculating $Q_{\text{N}}$ (Eq.~\ref{eq:Qopt}) are respectively functions of DIN (Eq.~16 in K21) and daytime average irradiance, $\bar{I}$ (Eqs.~20--22 in K21), the total time derivative of $Q_{\text{N}}$ in Eq.~\eqref{eq:dphyNdt3} can be computed as the sum of partial derivatives with respect to DIN and $\bar{I}$ using chain rule: 
+% Given that the terms $\hat{V}_{\text{N}}$ and $\hat{\mu}_{\text{net}}$ required for calculating $Q_{\text{N}}$ (Eq.~\ref{eq:Qopt}) are respectively functions of DIN (Eq.~16 in K21) and daytime average irradiance, $\bar{I}$ (Eqs.~20--22 in K21), the total time derivative of $Q_{\text{N}}$ in Eq.~\eqref{eq:dphyNdt3} can be computed as the sum of partial derivatives with respect to DIN and $\bar{I}$ using chain rule:
 % \begin{equation} \label{eq:dqdt}
 %  \frac{\text{d} Q_{\text{N}}}{\text{d} t} = \frac{\partial Q_{\text{N}}}{\partial \text{DIN}} \frac{\text{d} \text{DIN}}{\text{d} t} +  \frac{\partial Q_{\text{N}}}{\partial \bar{I}} \frac{\text{d} \bar{I}}{\text{d} t} 
 % \end{equation}
@@ -287,7 +287,7 @@ In Eqs.~\eqref{eq.delQdelN}--\eqref{eq.delQdd}, the common term $\partial Q_{\te
 Recalling $\hat{V}_{\text{N}}$ from K21, Eq.~17:
 \begin{flalign}
   \hat{V}_{\text{N}} &= \frac{(1-f_{\text{A}})\hat{V}_0 f_{\text{A}} \hat{A}_0 \text{DIN}}{(1-f_{\text{A}})\hat{V}_0 + f_{\text{A}} \hat{A}_0 \text{DIN}}
-  = \frac{\hat{V}_{0}\cdot \hat{A}_{0}\cdot\text{DIN}}{{\left(\sqrt{\hat{V}_{0}} + \sqrt{\hat{A}_{0}\cdot \text{DIN}}\right)}^{2}}, \qquad
+  = \frac{\hat{V}_{0}\cdot \hat{A}_{0}\cdot\text{DIN}}{{(\sqrt{\hat{V}_{0}} + \sqrt{\hat{A}_{0}\cdot \text{DIN}})}^{2}}, \qquad
   f_{\text{A}} = \frac{1}{\displaystyle 1 + \sqrt{\frac{\hat{A}_{0}\cdot\text{DIN}}{\hat{V}_{0}}}}
 \end{flalign}
 the partial derivative of $Z$ with respect to DIN is:
@@ -296,10 +296,10 @@ the partial derivative of $Z$ with respect to DIN is:
   = -\frac{\hat{\mu}_{\text{net}} \cdot Q_{\text{N},0}}{2 \cdot\hat{A}_{0}\cdot \text{DIN}^{2}} \left( 1 + \sqrt{\frac{\hat{A}_{0}\cdot \text{DIN}}{\hat{V}_{0}}} \right)
 \end{flalign}
 
-For calculating the partial derivative of $Z$ with respect to $\bar{I}$, ${\partial Z}/{\partial \bar{I}}$, we recall $\hat{\mu}_{net}$, $L_{\text{I}}$ and $\hat{\theta}$ from K21, Eqs.~20--23 \& 26:
+For calculating the partial derivative of $Z$ with respect to $\bar{I}$, ${\partial Z}/{\partial \bar{I}}$, we recall $\hat{\mu}_{\text{net}}$, $L_{\text{I}}$ and $\hat{\theta}$ from K21, Eqs.~20--23 \& 26:
 \begin{flalign}
- %\hat{\mu}_{net} &= \hat{\mu}_g (1-\zeta_{Chl}\hat{\theta})- R^{Chl}_{\text{M}} \zeta_{Chl}\hat{\theta}\\
- \hat{\mu}_{net} &= L_{\text{D}}\hat{\mu}_0 L_{I} (1-\zeta_{Chl}\hat{\theta})- R^{Chl}_{\text{M}} \zeta_{Chl}\hat{\theta}\\
+ %\hat{\mu}_{\text{net}} &= \hat{\mu}_g (1-\zeta_{\text{Chl}}\hat{\theta})- R^{\text{Chl}}_{\text{M}} \zeta_{\text{Chl}}\hat{\theta}\\
+ \hat{\mu}_{\text{net}} &= L_{\text{D}}\hat{\mu}_0 L_{\text{I}} (1-\zeta_{\text{Chl}}\hat{\theta})- R^{\text{Chl}}_{\text{M}} \zeta_{\text{Chl}}\hat{\theta}\\
   L_{\text{I}} &= 1 - \exp \left( \frac{-\alpha \hat{\theta} \bar{I}}{\hat{\mu}_0} \right)\\
   \hat{\theta} &= \frac{1}{\zeta_{\text{Chl}}} + \frac{\hat{\mu}_{0}}{\alpha\cdot \bar{I}} \cdot (1 - W)\\
  W &= \mathrm{W}_{0} \left[ \left( 1 + \frac{R_{\text{M}}^{{\text{Chl}}}}{L_{\text{D}} \cdot \hat{\mu}_{0}} \right)
@@ -309,26 +309,26 @@ where $\mathrm{W}_{0}$ is the 0-branch of Lambert's W-function, and $\alpha$ and
 $\partial Z/ \partial \bar{I}$ can then be derived by canonical application of the chain rule:
 \begin{flalign}
  \frac{\partial Z}{\partial \bar{I}} &=
- \frac{\partial Z}{\partial \hat{\mu}_{net}} \left( \frac{\partial \hat{\mu}_{net}}{\partial\bar{I}}
-   + \frac{\partial \hat{\mu}_{net}}{\partial\hat{\theta}} \frac{\mathrm{d}\, \hat{\theta}}{\mathrm{d}\,\bar{I}} \right)
- = \frac{\partial Z}{\partial \hat{\mu}_{net}} \frac{\partial \hat{\mu}_{net}}{\partial\bar{I}}
+ \frac{\partial Z}{\partial \hat{\mu}_{\text{net}}} \left( \frac{\partial \hat{\mu}_{\text{net}}}{\partial\bar{I}}
+   + \frac{\partial \hat{\mu}_{\text{net}}}{\partial\hat{\theta}} \frac{\mathrm{d}\, \hat{\theta}}{\mathrm{d}\,\bar{I}} \right)
+ = \frac{\partial Z}{\partial \hat{\mu}_{\text{net}}} \frac{\partial \hat{\mu}_{\text{net}}}{\partial\bar{I}}
  \qquad  (\text{because}~ \frac{\partial{\hat{\mu}_{\text{net}}}}{\partial \hat{\theta}} = 0 ~ \text{by definition}) \\
- \frac{\partial Z}{\partial \hat{\mu}_{net}} &= \frac{Q_{\text{N,0}}}{2 \cdot \hat{V}_{\text{N}}} \\  
- \frac{\partial \hat{\mu}_{net}}{\partial\bar{I}} &= L_{\text{D}} \cdot (1-\hat{\theta} \cdot \zeta_{\text{Chl}})  \cdot \alpha \cdot \hat{\theta} \cdot (1-L_{\text{I}}) \\
-% \frac{\partial \hat{\mu}_{net}}{\partial\hat{\theta}} &= L_{\text{D}} \cdot [ \alpha \cdot \bar{I} \cdot ( 1 - L_{\text{I}} ) \cdot (1 - \zeta_{\text{Chl}} \cdot \hat{\theta}) - L_{\text{I}} \cdot \zeta_{\text{Chl}} \cdot \hat{\mu}_{0} ] - R_{\text{M}}^{\text{Chl}} \cdot \zeta_{\text{Chl}} \\
+ \frac{\partial Z}{\partial \hat{\mu}_{\text{net}}} &= \frac{Q_{\text{N,0}}}{2 \cdot \hat{V}_{\text{N}}} \\
+ \frac{\partial \hat{\mu}_{\text{net}}}{\partial\bar{I}} &= L_{\text{D}} \cdot (1-\hat{\theta} \cdot \zeta_{\text{Chl}})  \cdot \alpha \cdot \hat{\theta} \cdot (1-L_{\text{I}}) \\
+% \frac{\partial \hat{\mu}_{\text{net}}}{\partial\hat{\theta}} &= L_{\text{D}} \cdot [ \alpha \cdot \bar{I} \cdot ( 1 - L_{\text{I}} ) \cdot (1 - \zeta_{\text{Chl}} \cdot \hat{\theta}) - L_{\text{I}} \cdot \zeta_{\text{Chl}} \cdot \hat{\mu}_{0} ] - R_{\text{M}}^{\text{Chl}} \cdot \zeta_{\text{Chl}} \\
 % \frac{\mathrm{d}\, \hat{\theta}}{\mathrm{d}\, \bar{I}} &= -\frac{\hat{\mu}_{0}}{\alpha\cdot \bar{I}^{2}} (1 - W) - \frac{W}{1 + W} \frac{1}{\bar{I}\cdot \zeta_{\text{Chl}}}
  \intertext{The day-length derivatives are}
  \frac{\partial Z}{\partial L_{\text{D}}} &= \frac{\partial Z}{\partial \hat{\mu}_{\text{net}}} \left( \frac{\partial \hat{\mu}_{\text{net}}}{\partial L_{\text{D}}}
-   + \frac{\partial \hat{\mu}_{net}}{\partial\hat{\theta}} \frac{\mathrm{d}\, \hat{\theta}}{\mathrm{d}\,\bar{I}} \right)
+   + \frac{\partial \hat{\mu}_{\text{net}}}{\partial\hat{\theta}} \frac{\mathrm{d}\, \hat{\theta}}{\mathrm{d}\,\bar{I}} \right)
  = \frac{\partial Z}{\partial \hat{\mu}_{\text{net}}} \frac{\partial \hat{\mu}_{\text{net}}}{\partial L_{\text{D}}} \\
  \frac{\partial \hat{\mu}_{\text{net}}}{\partial L_{\text{D}}} &= \left[ \hat{\mu}_{0} \cdot L_{\text{I}} + L_{\text{D}} \cdot \alpha \cdot \bar{I} \cdot (1 - L_{\text{I}})
    \frac{\partial \hat{\theta}}{\partial L_{\text{D}}}\right] (1 - \zeta_{\text{Chl}} \hat{\theta})
  - (L_{\text{D}} \cdot \hat{\mu}_{0} \cdot L_{\text{I}} + R_{\text{M}}^{\text{Chl}}) \cdot \zeta_{\text{Chl}} \frac{\partial \hat{\theta}}{\partial L_{\text{D}}} \\
  \frac{\partial \hat{\theta}}{\partial L_{\text{D}}} &=
- \frac{W}{1 + W} \frac{\hat{\mu}_{0}}{\displaystyle \alpha \cdot \bar{I} \cdot \left( 1 + L_{\text{D}} \frac{\hat{\mu}_{0}}{R_{\text{M}}^{\text{Chl}}} \right)}
+ \frac{W}{1 + W} \frac{\hat{\mu}_{0}}{\displaystyle \alpha \cdot \bar{I} \cdot L_{\text{D}} \cdot \left( 1 + L_{\text{D}} \frac{\hat{\mu}_{0}}{R_{\text{M}}^{\text{Chl}}} \right)}
 \end{flalign}
 
-We would like to clarify that (1) the DIN in the denominator in the solution provided by S16 (their Eq.~A-5) was a typo; (2) replacement of $\hat{\mu}_g$ (in S16, $\hat{\mu}^I$) with $\hat{\mu}_{net}$ in our model (see K21) results in the appearance of $(1-\hat{\theta} \cdot \zeta_{\text{Chl}})$ when computing $\partial \hat{\mu}_{\text{net}} / \partial \bar{I}$; (3) $L_{\text{D}}$ used to be implicit in S16, now it's explicit (K21 Eq.~21) therefore it appears for $\partial\hat{\mu}_{\text{net}} / \partial \bar{I}$ unlike in S16 \onur{This is what I'm guessing, but maybe it was just forgotten}. %However, since $L_D$ is set to 1 in the current study (Section~\ref{S:DescSetup}), this difference is practically not relevant for our immediate purposes.\\ 
+We would like to clarify that (1) the DIN in the denominator in the solution provided by S16 (their Eq.~A-5) was a typo; (2) replacement of $\hat{\mu}_g$ (in S16, $\hat{\mu}^I$) with $\hat{\mu}_{\text{net}}$ in our model (see K21) results in the appearance of $(1-\hat{\theta} \cdot \zeta_{\text{Chl}})$ when computing $\partial \hat{\mu}_{\text{net}} / \partial \bar{I}$; (3) $L_{\text{D}}$ used to be implicit in S16, now it's explicit (K21 Eq.~21) therefore it appears for $\partial\hat{\mu}_{\text{net}} / \partial \bar{I}$ unlike in S16 \onur{This is what I'm guessing, but maybe it was just forgotten}. %However, since $L_D$ is set to 1 in the current study (Section~\ref{S:DescSetup}), this difference is practically not relevant for our immediate purposes.
 
 The final terms required in Eq.~\eqref{eq:sdin3} are the changes in $\bar{I}$ and $L_{\text{D}}$ over time, i.e., $\text{d}\,\bar{I} / \text{d}\,t$ and $\text{d}\,L_{\text{D}} / \text{d}\,t$. When the irradiance is supplied externally, as typically the case in realistic coupled physical-biological models it is not possible to obtain its temporal derivative analytically, therefore  it is numerically approximated as the discrete backward difference between its current ($t=i$) and previous ($t=i-1$) values, divided by the size of the integration time step i.e., $\text{d}\, \bar{I} / \text{d}\, t \approx (\bar{I}_{i} - \bar{I}_{i-1}) / \Delta t$ (see also Section~\ref{S:DescT1} designed to test the sensitivity of the model results and conservation behavior to this approximation).
 
@@ -346,7 +346,7 @@ The final terms required in Eq.~\eqref{eq:sdin3} are the changes in $\bar{I}$ an
     where, $\bar{I}_{\min}= 1.6\, \mathrm{mol\,m^2d^{-1}}$  and $\bar{I}_{\max} = \mathrm{110 \, mol\, m^2 d^{-1}}$ define the minimum and maximum values throughout the year, $t$ is the day of the year, and $t'$ represents the relative day of the year delayed by a quarter cycle to obtain the peak value at the middle of the year to represent a seasonal cycle representative of a high latitude environment in the northern hemisphere (see Fig.~\ref{f.T1light} for the behavior of the function with these parameters). 
     \item [PAR:A] with the numerical approach described above, approximating the derivative with a discrete difference term can lead to inaccuracies. In order to diagnose such a potential source of error, we consider a a second case, where the temporal derivative of short wave radiation is calculated  analytically:
     \begin{flalign}\label{eq.dIdt}
-    \frac{\text{d}\bar{I}}{\text{d}t} &= (\bar{I}_{\max}-\bar{I}_{\min}) \frac{\pi}{365} \cos \left[ 2 \pi t' \right]
+    \frac{\text{d}\,\bar{I}}{\text{d}\,t} &= (\bar{I}_{\max}-\bar{I}_{\min}) \frac{\pi}{365} \cos \left[ 2 \pi t' \right]
     \end{flalign}
     \end{description}
     
@@ -378,7 +378,7 @@ The final terms required in Eq.~\eqref{eq:sdin3} are the changes in $\bar{I}$ an
 \section{Results}
 
 \subsection{Accuracy of numerical approximation of temporal derivative of light (T1)}
-As shown in Fig.~\ref{f.T1res}, the model is conservative with respect to C and, to a great extent N\@. Total-N as estimated with the numerical approach (PAR:N) slightly (about 0.02 \unit{mmolN\ m^3} increases at the very beginning of the simulation, which is caused by the unknown previous value of $\bar{I}$ during the first day of the simulation (as required by the numerical approximation of $\text{d}\bar{I}/\text{d}t$), which is set to the current value (such that $\text{d}\bar{I}/\text{d}t$=0.0), causing therefore a difference between the total N as simulated by the analytical approach (PAR:A). However, after this initial jump, this new baseline is preserved until the end of the simulation.
+As shown in Fig.~\ref{f.T1res}, the model is conservative with respect to C and, to a great extent N\@. Total-N as estimated with the numerical approach (PAR:N) slightly (about 0.02 \unit{mmolN\ m^3} increases at the very beginning of the simulation, which is caused by the unknown previous value of $\bar{I}$ during the first day of the simulation (as required by the numerical approximation of $\text{d}\,\bar{I}/\text{d}\,t$), which is set to the current value (such that $\text{d}\,\bar{I}/\text{d}\,t$=0.0), causing therefore a difference between the total N as simulated by the analytical approach (PAR:A). However, after this initial jump, this new baseline is preserved until the end of the simulation.
 
 \begin{figure}[ht!]
 \includegraphics[width=14cm,trim=0cm 11mm 0.0cm 5mm, clip]{figures/2022-01-24a_T10_Ld1_ThatVar_PARext_vs_PARint/0D-Highlat_wconst_lext_Ld1_T20_CbasedIA_modular_24h_vs_0D-Highlat_wconst_lint_Ld1_T20_CbasedIA_modular_24h_cont_abio1_2y.png}
@@ -396,7 +396,7 @@ When the variability in day length is considered, total N is not entirely conser
 \end{figure}
 
 \subsection{Comparison of IA approach to the fully explicit DA approach (T2b)}
-The IA and the fully explicit DA variants produce almost identical outputs (Fig.~\ref{f.T2res}). This similarity is as expected, and in agreement with \citet{Ward2017}. On a closer look, some differences can be detected, such as a slightly higher $\text{Phy}_{\text{N}}$ at the peak of the spring bloom and slightly higher DON and $\text{Det}_{\text{N}}$ after the spring bloom simulated by the DA variant. While tracing the exact mechanisms governing these differences is not straightforward, they are thought to occur due to 1) balancing the changes in $\text{d}Q_{\text{N}}/\text{d}t$ with fluxes to and from DIN only in the IA variant, whereas in the fully explicit version, the changes in quota is a result of interactions of phytoplankton with DIC, DIN, $\text{Det}_{\text{C}}$ and $\text{Det}_{\text{N}}$ pools; 2) representation of $\text{Phy}_{\text{N}}$ in the DA variant with an explicit state variable resulting in a `memory' effect that tracks the history of the past events, unlike in the IA variant (see also Appendix~\ref{S:appIADA}) \onur{Markus, please reformulate as you see fit}.
+The IA and the fully explicit DA variants produce almost identical outputs (Fig.~\ref{f.T2res}). This similarity is as expected, and in agreement with \citet{Ward2017}. On a closer look, some differences can be detected, such as a slightly higher $\text{Phy}_{\text{N}}$ at the peak of the spring bloom and slightly higher DON and $\text{Det}_{\text{N}}$ after the spring bloom simulated by the DA variant. While tracing the exact mechanisms governing these differences is not straightforward, they are thought to occur due to 1) balancing the changes in $\text{d}\,Q_{\text{N}}/\text{d}\,t$ with fluxes to and from DIN only in the IA variant, whereas in the fully explicit version, the changes in quota is a result of interactions of phytoplankton with DIC, DIN, $\text{Det}_{\text{C}}$ and $\text{Det}_{\text{N}}$ pools; 2) representation of $\text{Phy}_{\text{N}}$ in the DA variant with an explicit state variable resulting in a `memory' effect that tracks the history of the past events, unlike in the IA variant (see also Appendix~\ref{S:appIADA}) \onur{Markus, please reformulate as you see fit}.
 
 % DISCUSSION
 %\section{Discussion}
@@ -433,14 +433,14 @@ The IA and the fully explicit DA variants produce almost identical outputs (Fig.
 %and considering that $\text{Phy}_{\text{N}}=\text{Phy}_{\text{C}} \cdot Q_{\text{N}}$, it can be thought that the changes in $Q_{\text{N}}$ needs to be taken into account for calculating the flux between phytoplankton and detrital N due to mortality. 
 Potential links between cellular quotas and loss processes can be assessed by analyzing the components of the changes in $\text{Phy}_{\text{N}}$ occurring due to loss terms, as was previously done for the case of growth (Eq.~\eqref{eq:dphyNdt}). Observing that the only loss process we considered here is mortality:
 \begin{flalign}
-\frac{\text{d}\text{Phy}_{\text{N}}}{\text{d}t} \bigg\rvert_L
-&=\frac{\text{d}\text{Phy}_{\text{C}} Q_{\text{N}}}{\text{d}t} \bigg\rvert_M
-= Q_{\text{N}} \frac{\text{d}\text{Phy}_{\text{C}}}{\text{d}t} \bigg\rvert_M + \text{Phy}_{\text{N}}\frac{\text{d}\text{Q}_{\text{N}}}{\text{d}t} \bigg\rvert_M
+  \frac{\text{d}\,\text{Phy}_{\text{N}}}{\text{d}\,t} \bigg\rvert_L
+  &=\frac{\text{d}\,\text{Phy}_{\text{C}} Q_{\text{N}}}{\text{d}\,t} \bigg\rvert_M
+  = Q_{\text{N}} \frac{\text{d}\,\text{Phy}_{\text{C}}}{\text{d}\,t} \bigg\rvert_M + \text{Phy}_{\text{N}}\frac{\text{d}\,\text{Q}_{\text{N}}}{\text{d}\,t} \bigg\rvert_M
 \end{flalign}
-Here, in the first term, $\frac{\text{d}\text{Phy}_{\text{C}}}{\text{d}t} \rvert_M$ represents the C-based mortality rate ($=m \cdot \text{Phy}_{\text{C}}^2$, Eq.~\eqref{eq:mortC}). In the second term, $\frac{\text{d}\text{Q}_{\text{N}}}{\text{d}t} \rvert_M$ represents the changes occurring in $Q_{\text{N}}$, however, due to mortality only. As in our model, we did not consider any effect of mortality on quota (assuming that when a cell dies, it dies altogether and all of its contents become detritus), this term collapses to 0, therefore reducing the associated flux term to:
+Here, in the first term, $\frac{\text{d}\,\text{Phy}_{\text{C}}}{\text{d}\,t} \rvert_M$ represents the C-based mortality rate ($=m \cdot \text{Phy}_{\text{C}}^2$, Eq.~\eqref{eq:mortC}). In the second term, $\frac{\text{d}\,\text{Q}_{\text{N}}}{\text{d}\,t} \rvert_M$ represents the changes occurring in $Q_{\text{N}}$, however, due to mortality only. As in our model, we did not consider any effect of mortality on quota (assuming that when a cell dies, it dies altogether and all of its contents become detritus), this term collapses to 0, therefore reducing the associated flux term to:
 \begin{flalign}
 F_{\text{Phy}_{\text{N}}-\text{Det}_{\text{N}}} &=
-Q_{\text{N}} \frac{\text{d}\text{Phy}_{\text{C}}}{\text{d}t} \bigg\rvert_M = Q_{\text{N}} \cdot m \cdot \text{Phy}_{\text{C}}^2 
+Q_{\text{N}} \frac{\text{d}\,\text{Phy}_{\text{C}}}{\text{d}\,t} \bigg\rvert_M = Q_{\text{N}} \cdot m \cdot \text{Phy}_{\text{C}}^2
 \end{flalign}
 However, in any other model that may consider processes that may affect the cellular quotas, such as excretion of C-rich, N-poor substances, associated consequences on various elemental fluxes can be taken into account following this framework.
 
