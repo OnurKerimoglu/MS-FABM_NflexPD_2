@@ -223,7 +223,9 @@ The right-most term in Eq.~\eqref{eq:phyn}, $\text{Phy}_{\text{C}}\cdot \mathrm{
 \begin{flalign}\label{eq:sdin2}
   \frac{\text{d}\,\text{DIN}}{\text{d}\, t} &= F_{\text{DON}-\text{DIN}} - V_N - \text{Phy}_{\text{C}} \cdot \frac{\mathrm{d}\, Q_{\text{N}}}{\mathrm{d}\, t}
   = F_{\text{DON}-\text{DIN}} - V_{\text{N}} - \text{Phy}_{\text{C}} \cdot \left(\frac{\partial Q_{\text{N}}}{\partial \text{DIN}} \frac{\text{d}\, \text{DIN}}{\text{d}\, t}
-    + \frac{\partial Q_{\text{N}}}{\partial \bar{I}} \frac{\text{d}\, \bar{I}}{\text{d}\, t} + \frac{\partial Q_{\text{N}}}{\partial L_{\text{D}}} \frac{\text{d}\, L_{\text{D}}}{\text{d}\, t} \right) \\
+    + \frac{\partial Q_{\text{N}}}{\partial \bar{I}} \frac{\text{d}\, \bar{I}}{\text{d}\, t} 
+    + \frac{\partial Q_{\text{N}}}{\partial L_{\text{D}}} \frac{\text{d}\, L_{\text{D}}}{\text{d}\, t} 
+    + \frac{\partial Q_{\text{N}}}{\partial T} \frac{\text{d}\, T}{\text{d}\, t} \right) \\
   \intertext{and reorganizing:}
 %intermediate step:
 % \begin{equation}\label{eq:sdin2.5}
@@ -232,7 +234,8 @@ The right-most term in Eq.~\eqref{eq:phyn}, $\text{Phy}_{\text{C}}\cdot \mathrm{
 \label{eq:sdin3}
 \frac{\text{d}\,\text{DIN}}{\text{d}\,t} &= \frac{\displaystyle F_{\text{DON}-\text{DIN}} - V_{\text{N}} - \text{Phy}_{\text{C}} \cdot
   \left( \frac{\partial Q_{\text{N}}}{\partial \bar{I}} \frac{\text{d}\, \bar{I}}{\text{d}\, t}
-    + \frac{\partial Q_{\text{N}}}{\partial L_{\text{D}}} \frac{\text{d}\, L_{\text{D}}}{\text{d}\, t} \right)}%
+    + \frac{\partial Q_{\text{N}}}{\partial L_{\text{D}}} \frac{\text{d}\, L_{\text{D}}}{\text{d}\, t}
+    + \frac{\partial Q_{\text{N}}}{\partial T} \frac{\text{d}\, T}{\text{d}\, t} \right)}%
 {\displaystyle 1+ \text{Phy}_{\text{C}}\frac{\partial Q_{\text{N}}}{\partial \text{DIN}}}
 \end{flalign}
 While this, rather arbitrary, measure for achieving N mass balance violates the assumptions behind the model by assigning part of $\text{Phy}_{\text{N}}$ to DIN, the resulting differences compared to explicitly resolving $\text{Phy}_{\text{N}}$ are relatively small \citep{Ward2017}.
@@ -269,7 +272,7 @@ While this, rather arbitrary, measure for achieving N mass balance violates the 
 % \end{equation}
 As a technical remark regarding the FABM implementation of the model: Eq.~\eqref{eq:sdin3} requires combination of terms, which, in K21, used to be calculated by separate abiotic ($F_{\text{DON}-\text{DIN}}$) and phytoplankton modules (all other terms), therefore in the current implementation, in order to avoid a circular-dependency error, an intermediate module collects the necessary terms from the two modules, and sets the right hand sides for the DIN at once.
 
-In Eq.~\eqref{eq:sdin3}, partial derivatives of $Q_{\text{N}}$ with respect to DIN, $\bar{I}$ and $L_{\text{D}}$ are obtained by canonical application of the chain rule. As in \citet{Smith2016}, we introduce a new variable $Z$ and re-write Eq.~\eqref{eq:Qopt} in terms of $Z$:
+In Eq.~\eqref{eq:sdin3}, partial derivatives of $Q_{\text{N}}$ with respect to DIN, $\bar{I}$ and $L_{\text{D}}$ are obtained by canonical application of the chain rule \onur{whereas the partial derivative of $Q_{\text{N}}$ with respect to $T$ is approximated numerically as described below}. As in \citet{Smith2016}, we introduce a new variable $Z$ and re-write Eq.~\eqref{eq:Qopt} in terms of $Z$:
 \begin{flalign}
   \label{eq.Z}
   Q_{\text{N}} &= \frac{Q_{\text{N},0}}{2} \left( 1 + \sqrt{1 + \frac{1}{Z}}  \right), \qquad Z = \frac{Q_{\text{N},0}}{2}\left( \frac{\hat{\mu}_{\text{net}}}{\hat{V}_{\text{N}}} + \zeta_{\text{N}} \right) \\
@@ -328,9 +331,19 @@ $\partial Z/ \partial \bar{I}$ can then be derived by canonical application of t
  \frac{W}{1 + W} \frac{\hat{\mu}_{0}}{\displaystyle \alpha \cdot \bar{I} \cdot L_{\text{D}} \cdot \left( 1 + L_{\text{D}} \frac{\hat{\mu}_{0}}{R_{\text{M}}^{\text{Chl}}} \right)}
 \end{flalign}
 
+\onur{
+The partial derivatives of $T$ Eq.~\eqref{eq:sdin3} are approximated numerically, as the analytical solution of $\partial Q_{\text{N}}/\partial T$ is unwieldy, given the temperature dependence of $\hat{\mu}_0$,  $\hat{V}_0$ and $R_{\text{M}}^{\text{Chl}}$, and numerous occurrence of these terms in intermediate quantities $\hat{\theta}$ and $L_{\text{I}}$ when $Q_{\text{N}}$ (Eq.~\ref{eq:Qopt}) is fully expanded. The numerical approximation is achieved by storing the previous value ($t=i-1$) of $T$, calculating $Q_{\text{N}}$ based on this previous value (but the current values of $\bar{I}$ and $L_{\text{D}}$), and calculating the differences with the current values ($t=i$), i.e.,
+\begin{align}
+ \frac{\partial Q_{\text{N}}}{\partial T} & \sim
+ \frac{Q_{\text{N}}(\bar{I}_{i},\ L_{\text{D}_i},\ T_{i}) - Q_{\text{N}}(\bar{I}_{i},\ L_{\text{D}_i},T_{i-1})} {T_{i} - T_{i-1}} 
+\end{align}
+}
+
 We would like to clarify that (1) the DIN in the denominator in the solution provided by S16 (their Eq.~A-5) was a typo; (2) replacement of $\hat{\mu}_g$ (in S16, $\hat{\mu}^I$) with $\hat{\mu}_{\text{net}}$ in our model (see K21) results in the appearance of $(1-\hat{\theta} \cdot \zeta_{\text{Chl}})$ when computing $\partial \hat{\mu}_{\text{net}} / \partial \bar{I}$; (3) $L_{\text{D}}$ used to be implicit in S16, now it's explicit (K21 Eq.~21) therefore it appears for $\partial\hat{\mu}_{\text{net}} / \partial \bar{I}$ unlike in S16 \onur{This is what I'm guessing, but maybe it was just forgotten}. %However, since $L_D$ is set to 1 in the current study (Section~\ref{S:DescSetup}), this difference is practically not relevant for our immediate purposes.
 
-The final terms required in Eq.~\eqref{eq:sdin3} are the changes in $\bar{I}$ and $L_{\text{D}}$ over time, i.e., $\text{d}\,\bar{I} / \text{d}\,t$ and $\text{d}\,L_{\text{D}} / \text{d}\,t$. When the irradiance is supplied externally, as typically the case in realistic coupled physical-biological models it is not possible to obtain its temporal derivative analytically, therefore  it is numerically approximated as the discrete backward difference between its current ($t=i$) and previous ($t=i-1$) values, divided by the size of the integration time step i.e., $\text{d}\, \bar{I} / \text{d}\, t \approx (\bar{I}_{i} - \bar{I}_{i-1}) / \Delta t$ (see also Section~\ref{S:DescT1} designed to test the sensitivity of the model results and conservation behavior to this approximation).
+The final terms required in Eq.~\eqref{eq:sdin3} are the changes in $\bar{I}$, $L_{\text{D}}$ and $T$ over time, i.e., $\text{d}\,\bar{I} / \text{d}\,t$, $\text{d}\,L_{\text{D}} / \text{d}\,t$ 
+and $\text{d}\,T / \text{d}\,t$. 
+When the irradiance and temperature are supplied externally, as typically the case in realistic coupled physical-biological models it is not possible to obtain their temporal derivative analytically, therefore they are numerically approximated as the discrete backward difference between its current ($t=i$) and previous ($t=i-1$) values, divided by the size of the integration time step i.e., $\text{d}\, E / \text{d}\, t \approx (E_{i} - E_{i-1}) / \Delta t$ for $E=\{\bar{I},\ T\}$ (see also Section~\ref{S:DescT1} designed to test the sensitivity of the model results and conservation behavior to this approximation for $E=\bar{I}$).
 
 \subsection{Test setups and model operation}\label{S:DescSetup}
 \subsubsection{0D setup (T1-T2)}
