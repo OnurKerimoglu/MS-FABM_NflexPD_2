@@ -9,8 +9,8 @@
 %% Please use the following documentclass and journal abbreviations for preprints and final revised papers.
 
 %% 2-column papers and preprints
-%\documentclass[gmd, manuscript]{copernicus}
-\documentclass[gmd, manuscript, draft]{copernicus}
+\documentclass[gmd, manuscript]{copernicus}
+%\documentclass[gmd, manuscript, draft]{copernicus}
 
 %% Journal abbreviations (please use the same for preprints and final revised papers)
 
@@ -75,6 +75,7 @@
 %Additional packages: 
 \usepackage{mathrsfs} %provides calligraphic Fonts
 \usepackage{placeins}
+\usepackage[percent]{overpic}
 \allowdisplaybreaks
 
 \graphicspath{
@@ -332,10 +333,10 @@ $\partial Z/ \partial \bar{I}$ can then be derived by canonical application of t
 \end{flalign}
 
 \onur{
-The partial derivatives of $T$ Eq.~\eqref{eq:sdin3} are approximated numerically, as the analytical solution of $\partial Q_{\text{N}}/\partial T$ is unwieldy, given the temperature dependence of $\hat{\mu}_0$,  $\hat{V}_0$ and $R_{\text{M}}^{\text{Chl}}$, and numerous occurrence of these terms in intermediate quantities $\hat{\theta}$ and $L_{\text{I}}$ when $Q_{\text{N}}$ (Eq.~\ref{eq:Qopt}) is fully expanded. The numerical approximation is achieved by storing the previous value ($t=i-1$) of $T$, calculating $Q_{\text{N}}$ based on this previous value (but the current values of $\bar{I}$ and $L_{\text{D}}$), and calculating the differences with the current values ($t=i$), i.e.,
+The partial derivatives of $T$ Eq.~\eqref{eq:sdin3} are approximated numerically, as the analytical solution of $\partial Q_{\text{N}}/\partial T$ is unwieldy, given the temperature dependence of $\hat{\mu}_0$,  $\hat{V}_0$ and $R_{\text{M}}^{\text{Chl}}$, and numerous occurrence of these terms in intermediate quantities $\hat{\theta}$ and $L_{\text{I}}$ when $Q_{\text{N}}$ (Eq.~\ref{eq:Qopt}) is fully expanded. The numerical difference approximation is achieved by storing the value of $T$ in the previous integration step ($t=i-1$), calculating $Q_{\text{N}}$ based on this previous value of $T$ (but the values of DIN, $\bar{I}$ and $L_{\text{D}}$ in the current time step ($t=i$)), and substracting this from the current value of $Q_{\text{N}}$, i.e.,
 \begin{align}
- \frac{\partial Q_{\text{N}}}{\partial T} & \sim
- \frac{Q_{\text{N}}(\bar{I}_{i},\ L_{\text{D}_i},\ T_{i}) - Q_{\text{N}}(\bar{I}_{i},\ L_{\text{D}_i},T_{i-1})} {T_{i} - T_{i-1}} 
+ \frac{\partial Q_{\text{N}}}{\partial T} & \approx
+ \frac{Q_{\text{N}}(\text{DIN}_{i},\ \bar{I}_{i},\ L_{\text{D}_i},\ T_{i}) - Q_{\text{N}}(\text{DIN}_{i},\ \bar{I}_{i},\ L_{\text{D}_i},T_{i-1})} {T_{i} - T_{i-1}} 
 \end{align}
 }
 
@@ -365,7 +366,7 @@ When the irradiance and temperature are supplied externally, as typically the ca
     
     Both the irradiance and its temporal derivative, as found by the numerical and analytical approaches are identical, as was targeted (Fig.~\ref{f.T1light}).
     \begin{figure}[ht!]
-    \includegraphics[width=14cm,trim=0cm 0mm 0.0cm 0mm, clip]{figures/2022-01-24a_T10_Ld1_ThatVar_PARext_vs_PARint/0D-Highlat_wconst_lext_Ld1_T20_CbasedIA_modular_24h_vs_0D-Highlat_wconst_lint_Ld1_T20_CbasedIA_modular_24h_cont_abio0_2y.png}
+    \includegraphics[width=8cm,trim=2.9cm 0mm 20.0cm 0mm, clip]{figures/2022-02-10a_Ld1_T20_ThatVar_PARint_vs_PARext/0D-Highlat_wconst_lext_Ld1_T20_CbasedIA_modular_24h_vs_0D-Highlat_wconst_lint_Ld1_T20_CbasedIA_modular_24h_cont_abio0_1y.png}
     \caption{Daily average irradiance and its temporal derivative, as extracted from the simulation outputs generated for T1. PAR:N (solid blue line) is the model version where the temporal derivative of irradiance is approximated numerically; PAR:A (dashed orange line): both irradiance and its temporal derivative are calculated analytically.\label{f.T1light}}
     \end{figure}
 
@@ -394,22 +395,58 @@ When the irradiance and temperature are supplied externally, as typically the ca
 As shown in Fig.~\ref{f.T1res}, the model is conservative with respect to C and, to a great extent N\@. Total-N as estimated with the numerical approach (PAR:N) slightly (about 0.02 \unit{mmolN\ m^3} increases at the very beginning of the simulation, which is caused by the unknown previous value of $\bar{I}$ during the first day of the simulation (as required by the numerical approximation of $\text{d}\,\bar{I}/\text{d}\,t$), which is set to the current value (such that $\text{d}\,\bar{I}/\text{d}\,t$=0.0), causing therefore a difference between the total N as simulated by the analytical approach (PAR:A). However, after this initial jump, this new baseline is preserved until the end of the simulation.
 
 \begin{figure}[ht!]
-\includegraphics[width=14cm,trim=0cm 11mm 0.0cm 5mm, clip]{figures/2022-01-24a_T10_Ld1_ThatVar_PARext_vs_PARint/0D-Highlat_wconst_lext_Ld1_T20_CbasedIA_modular_24h_vs_0D-Highlat_wconst_lint_Ld1_T20_CbasedIA_modular_24h_cont_abio1_2y.png}
-\caption{Results of T1: Carbon (left) and nitrogen (right) pools according to the PAR:N (solid blue line), and PAR:A (dashed orange line) approaches \onur{Figure is for drafting purposes, I'm not sure if we need all panels here}.\label{f.T1res}}
+\includegraphics[width=12cm,trim=0cm 16.8cm 0.0cm 5mm, clip]{figures/2022-02-10a_Ld1_T20_ThatVar_PARint_vs_PARext/0D-Highlat_wconst_lext_Ld1_T20_CbasedIA_modular_24h_vs_0D-Highlat_wconst_lint_Ld1_T20_CbasedIA_modular_24h_cont_abio1_1y.png}
+\caption{Results of T1: Carbon (left) and nitrogen (right) pools according to the PAR:N (solid blue line), and PAR:A (dashed orange line) approaches \onur{I think the other panels (din,phy,det,don) are not necessary to include here}.\label{f.T1res}}
 \end{figure}
 
 \FloatBarrier
 
-\subsection{Testing the IA approach in a more realistic setup (T2a)}
-When the variability in day length is considered, total N is not entirely conserved (Fig.~\ref{f.T2res}). \onur{I could not figure out why. The equations seem all right, and I can reproduce the problem with the R script}.
+\subsection{Testing the IA approach in a more realistic setup, in comparison to the fully explicit DA approach (T2)}
+
+For this test, seasonal variations in $T$ and $L_{\text{D}}$ were considered, as shown in (Fig.~\ref{f.T2env}). It should be noted that, because of the variations in $L_{\text{D}}$, the seasonal course of $\bar{I}$, and $\text{d}\bar{I}/\text{d}t$ are affected.
 
 \begin{figure}[ht!]
-\includegraphics[width=14cm,trim=0cm 11mm 0.0cm 5mm, clip]{figures/2022-01-24b_T10_LdVar_ThatVar_PARext_IA_vs_DA/0D-Highlat_wconst_lext_T20_CbasedIA_modular_24h_vs_0D-Highlat_wconst_lext_T20_CbasedDA_modular_24h_cont_abio1_2y.png}
-\caption{Results of T2: Carbon (left) and nitrogen (right) pools according to the IA (solid blue line) and DA (dashed orange line) approaches  \onur{Figure is for drafting purposes, I'm not sure if we need all panels here, or maybe need to show some other variables}.\label{f.T2res}}
+\centering
+\setlength{\unitlength}{1mm}
+  \begin{picture}(80,55)(0,0)
+  \put(0,27){\begin{overpic}[width=8cm,trim=23cm 0cm 0.0cm 0mm, clip]{figures/2022-02-10d_Ldvar_Tvar_ThatVar_PARext_IA_vs_DA/0D-Highlat_wconst_lext_Ldvar_Tvar_CbasedIA_modular_24h_vs_0D-Highlat_wconst_lext_Ldvar_Tvar_CbasedDA_modular_24h_cont_abio0_1y.png}\end{overpic}}
+  \put(0,0){\begin{overpic}[width=8cm,trim=2.9cm 0cm 20.0cm 0mm, clip]{figures/2022-02-10d_Ldvar_Tvar_ThatVar_PARext_IA_vs_DA/0D-Highlat_wconst_lext_Ldvar_Tvar_CbasedIA_modular_24h_vs_0D-Highlat_wconst_lext_Ldvar_Tvar_CbasedDA_modular_24h_cont_abio0_1y.png}\end{overpic}}
+    %\put(9,26){\scriptsize{\textsf{(a)}}}
+    %\put(69,26){\scriptsize{\textsf{(b)}}}
+  %\put(0,0){\tiny \grid(80,50)(5,5)[0,0]}
+  \end{picture}
+  \caption{Daily average irradiance and its temporal derivative, as extracted from the simulation outputs generated for T1. PAR:N (solid blue line) is the model version where the temporal derivative of irradiance is approximated numerically; PAR:A (dashed orange line): both irradiance and its temporal derivative are calculated analytically.\label{f.T2env}}
+\end{figure}
+    
+
+% \begin{figure}[ht!]
+% \centering
+%   \setlength{\unitlength}{1mm}
+%   \begin{picture}(120,70)(0,0)
+%     \put(0,45){
+%     \begin{overpic}[width=14cm,trim=0cm 16.8cm 0.0cm 5mm, clip]{figures/2022-02-10b_Ld1_T20_ThatVar_PARext_IA_vs_DA/0D-Highlat_wconst_lext_Ld1_T20_CbasedIA_modular_24h_vs_0D-Highlat_wconst_lext_Ld1_T20_CbasedDA_modular_24h_cont_abio1_1y.png}
+%     \end{overpic}}
+%     \put(0,22){
+%     \begin{overpic}[width=14cm,trim=0cm 16.8cm 0.0cm 14mm, clip]{figures/2022-02-10c_Ldvar_T20_ThatVar_PARext_IA_vs_DA/0D-Highlat_wconst_lext_Ldvar_T20_CbasedIA_modular_24h_vs_0D-Highlat_wconst_lext_Ldvar_T20_CbasedDA_modular_24h_cont_abio1_1y.png}
+%     \end{overpic}}
+%     \put(0,0){
+%     \begin{overpic}[width=14cm,trim=0cm 16.8cm 0.0cm 14mm, clip]{figures/2022-02-10d_Ldvar_Tvar_ThatVar_PARext_IA_vs_DA/0D-Highlat_wconst_lext_Ldvar_Tvar_CbasedIA_modular_24h_vs_0D-Highlat_wconst_lext_Ldvar_Tvar_CbasedDA_modular_24h_cont_abio1_1y.png}
+%     \end{overpic}}
+%     %\put(9,26){\scriptsize{\textsf{(a)}}}
+%     %\put(69,26){\scriptsize{\textsf{(b)}}}
+%   \put(0,0){\tiny \grid(140,70)(5,5)[0,0]}
+%   \end{picture}
+% 
+% \caption{Results of T2: Carbon (left) and nitrogen (right) pools according to the IA (solid blue line) and DA (dashed orange line) approaches, (a-b) under constant $L_{\text{D}}=1$ and $T=20^{\circ}C$;  (c-d) variable $L_{\text{D}}$; (e-f) constant $T=20^{\circ}C$;  variable $L_{\text{D}}$ and$T$; . \onur{Again, I think no other panels required here}.\label{f.T2ares}}
+% \end{figure}
+
+Under these more realistic settings, conservation of Total N by the IA variant has not deteriorated (Fig.~\ref{f.T2res}). Moreover, the IA and the fully explicit DA variants produce almost identical outputs (Fig.~\ref{f.T2res}).  This similarity is as expected, and in agreement with \citet{Ward2017}. On a closer look, some differences can be detected, such as a slightly higher $\text{Phy}_{\text{N}}$ at the peak of the spring bloom and slightly higher DON and $\text{Det}_{\text{N}}$ after the spring bloom simulated by the DA variant. While tracing the exact mechanisms governing these differences is not straightforward, they are thought to occur due to 1) balancing the changes in $\text{d}\,Q_{\text{N}}/\text{d}\,t$ with fluxes to and from DIN only in the IA variant, whereas in the fully explicit version, the changes in quota is a result of interactions of phytoplankton with DIC, DIN, $\text{Det}_{\text{C}}$ and $\text{Det}_{\text{N}}$ pools; 2) representation of $\text{Phy}_{\text{N}}$ in the DA variant with an explicit state variable resulting in a `memory' effect that tracks the history of the past events, unlike in the IA variant (see also Appendix~\ref{S:appIADA}) \onur{Markus, please reformulate as you see fit}.
+
+\begin{figure}[ht!]
+\includegraphics[width=14cm,trim=0cm 11mm 0.0cm 5mm, clip]{figures/2022-02-10d_Ldvar_Tvar_ThatVar_PARext_IA_vs_DA/0D-Highlat_wconst_lext_Ldvar_Tvar_CbasedIA_modular_24h_vs_0D-Highlat_wconst_lext_Ldvar_Tvar_CbasedDA_modular_24h_cont_abio1_1y.png}
+\caption{Results of T2: Carbon (left) and nitrogen (right) pools according to the IA (solid blue line) and DA (dashed orange line) approaches under variable $L_{\text{D}}$ and $T$. \onur{Figure is for drafting purposes, I'm not sure if we need all panels here, or maybe need to show some other variables}.\label{f.T2res}}
 \end{figure}
 
-\subsection{Comparison of IA approach to the fully explicit DA approach (T2b)}
-The IA and the fully explicit DA variants produce almost identical outputs (Fig.~\ref{f.T2res}). This similarity is as expected, and in agreement with \citet{Ward2017}. On a closer look, some differences can be detected, such as a slightly higher $\text{Phy}_{\text{N}}$ at the peak of the spring bloom and slightly higher DON and $\text{Det}_{\text{N}}$ after the spring bloom simulated by the DA variant. While tracing the exact mechanisms governing these differences is not straightforward, they are thought to occur due to 1) balancing the changes in $\text{d}\,Q_{\text{N}}/\text{d}\,t$ with fluxes to and from DIN only in the IA variant, whereas in the fully explicit version, the changes in quota is a result of interactions of phytoplankton with DIC, DIN, $\text{Det}_{\text{C}}$ and $\text{Det}_{\text{N}}$ pools; 2) representation of $\text{Phy}_{\text{N}}$ in the DA variant with an explicit state variable resulting in a `memory' effect that tracks the history of the past events, unlike in the IA variant (see also Appendix~\ref{S:appIADA}) \onur{Markus, please reformulate as you see fit}.
 
 % DISCUSSION
 %\section{Discussion}
