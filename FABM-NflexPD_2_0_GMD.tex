@@ -289,9 +289,10 @@ In Eqs.~\eqref{eq.delQdelN}--\eqref{eq.delQdd}, the common term $\partial Q_{\te
 \end{equation}
 Recalling $\hat{V}_{\text{N}}$ from K21, Eq.~17:
 \begin{flalign}
-  \hat{V}_{\text{N}} &= \frac{(1-f_{\text{A}})\hat{V}_0 f_{\text{A}} \hat{A}_0 \text{DIN}}{(1-f_{\text{A}})\hat{V}_0 + f_{\text{A}} \hat{A}_0 \text{DIN}}
+  \hat{V}_{\text{N}} &= \frac{(1-f_{\text{A}})\hat{V}_{0} f_{\text{A}} \hat{A}_{0} \text{DIN}}{(1-f_{\text{A}})\hat{V}_{0} + f_{\text{A}} \hat{A}_{0} \text{DIN}}
   = \frac{\hat{V}_{0}\cdot \hat{A}_{0}\cdot\text{DIN}}{{(\sqrt{\hat{V}_{0}} + \sqrt{\hat{A}_{0}\cdot \text{DIN}})}^{2}}, \qquad
-  f_{\text{A}} = \frac{1}{\displaystyle 1 + \sqrt{\frac{\hat{A}_{0}\cdot\text{DIN}}{\hat{V}_{0}}}}
+  f_{\text{A}} = \frac{1}{\displaystyle 1 + \sqrt{\frac{\hat{A}_{0}\cdot\text{DIN}}{\hat{V}_{0}}}} \\
+  \hat{V}_{0} &= \hat{\mu}_{0} = \mu_{0} \cdot f(T) \qquad f(T) = \exp\left[ -\frac{E_{\text{a}}}{R}\left( \frac{1}{T / \text{K}} - \frac{1}{T_{\text{ref}} / \text{K}} \right) \right]
 \end{flalign}
 the partial derivative of $Z$ with respect to DIN is:
 \begin{flalign}
@@ -301,11 +302,12 @@ the partial derivative of $Z$ with respect to DIN is:
 
 For calculating the partial derivative of $Z$ with respect to $\bar{I}$, ${\partial Z}/{\partial \bar{I}}$, we recall $\hat{\mu}_{\text{net}}$, $L_{\text{I}}$ and $\hat{\theta}$ from K21, Eqs.~20--23 \& 26:
 \begin{flalign}
- %\hat{\mu}_{\text{net}} &= \hat{\mu}_g (1-\zeta_{\text{Chl}}\hat{\theta})- R^{\text{Chl}}_{\text{M}} \zeta_{\text{Chl}}\hat{\theta}\\
- \hat{\mu}_{\text{net}} &= L_{\text{D}}\hat{\mu}_0 L_{\text{I}} (1-\zeta_{\text{Chl}}\hat{\theta})- R^{\text{Chl}}_{\text{M}} \zeta_{\text{Chl}}\hat{\theta}\\
-  L_{\text{I}} &= 1 - \exp \left( \frac{-\alpha \hat{\theta} \bar{I}}{\hat{\mu}_0} \right)\\
-  \hat{\theta} &= \frac{1}{\zeta_{\text{Chl}}} + \frac{\hat{\mu}_{0}}{\alpha\cdot \bar{I}} \cdot (1 - W)\\
- W &= \mathrm{W}_{0} \left[ \left( 1 + \frac{R_{\text{M}}^{{\text{Chl}}}}{L_{\text{D}} \cdot \hat{\mu}_{0}} \right)
+  % \hat{\mu}_{\text{net}} &= \hat{\mu}_g (1-\zeta_{\text{Chl}}\hat{\theta})- R^{\text{Chl}}_{\text{M}} \zeta_{\text{Chl}}\hat{\theta}\\
+  R^{\text{Chl}} &= f(T) \cdot R_{\text{M}}^{\text{Chl}} \zeta_{\text{Chl}}\hat{\theta}  \\
+ \hat{\mu}_{\text{net}} &= L_{\text{D}}\hat{\mu}_{0} L_{\text{I}} (1-\zeta_{\text{Chl}}\hat{\theta})- R^{\text{Chl}}\\
+  L_{\text{I}} &= 1 - \exp \left( \frac{-\alpha \hat{\theta} \bar{I}}{\hat{\mu}_{0}} \right)\\
+  \hat{\theta} &= \frac{1}{\zeta_{\text{Chl}}} + \frac{\hat{\mu}_{0}}{\alpha\cdot \bar{I}} \cdot (1 - W) \qquad
+  W = \mathrm{W}_{0} \left[ \left( 1 + \frac{f(T) \cdot R_{\text{M}}^{{\text{Chl}}}}{L_{\text{D}} \cdot \hat{\mu}_{0}} \right)
    \cdot \exp \left( 1 + \frac{\alpha \cdot \bar{I}}{\hat{\mu}_{0} \cdot \zeta_{\text{Chl}}} \right) \right]
 \end{flalign}
 where $\mathrm{W}_{0}$ is the 0-branch of Lambert's W-function, and $\alpha$ and $\zeta_{\text{Chl}}$ are model parameters (initial Chl-specific slope of P-I curve and cost of chlorophyll synthesis, respectively, Table~3 in K21). %  $\hat{\theta}$ is the optimal chlorophyll density in the chloroplast.\\
@@ -324,20 +326,24 @@ $\partial Z/ \partial \bar{I}$ can then be derived by canonical application of t
  \frac{\partial Z}{\partial L_{\text{D}}} &= \frac{\partial Z}{\partial \hat{\mu}_{\text{net}}} \left( \frac{\partial \hat{\mu}_{\text{net}}}{\partial L_{\text{D}}}
    + \frac{\partial \hat{\mu}_{\text{net}}}{\partial\hat{\theta}} \frac{\mathrm{d}\, \hat{\theta}}{\mathrm{d}\,\bar{I}} \right)
  = \frac{\partial Z}{\partial \hat{\mu}_{\text{net}}} \frac{\partial \hat{\mu}_{\text{net}}}{\partial L_{\text{D}}} \\
- \frac{\partial \hat{\mu}_{\text{net}}}{\partial L_{\text{D}}} &= \left[ \hat{\mu}_{0} \cdot L_{\text{I}} + L_{\text{D}} \cdot \alpha \cdot \bar{I} \cdot (1 - L_{\text{I}})
-   \frac{\partial \hat{\theta}}{\partial L_{\text{D}}}\right] (1 - \zeta_{\text{Chl}} \hat{\theta})
- - (L_{\text{D}} \cdot \hat{\mu}_{0} \cdot L_{\text{I}} + R_{\text{M}}^{\text{Chl}}) \cdot \zeta_{\text{Chl}} \frac{\partial \hat{\theta}}{\partial L_{\text{D}}} \\
- \frac{\partial \hat{\theta}}{\partial L_{\text{D}}} &=
- \frac{W}{1 + W} \frac{\hat{\mu}_{0}}{\displaystyle \alpha \cdot \bar{I} \cdot L_{\text{D}} \cdot \left( 1 + L_{\text{D}} \frac{\hat{\mu}_{0}}{R_{\text{M}}^{\text{Chl}}} \right)}
+ \frac{\partial \hat{\mu}_{\text{net}}}{\partial L_{\text{D}}} &= \hat{\mu}_{0} \cdot L_{\text{I}} \cdot (1 - \zeta_{\text{Chl}} \hat{\theta})
 \end{flalign}
-
-\onur{
-The partial derivatives of $T$ Eq.~\eqref{eq:sdin3} are approximated numerically, as the analytical solution of $\partial Q_{\text{N}}/\partial T$ is unwieldy, given the temperature dependence of $\hat{\mu}_0$,  $\hat{V}_0$ and $R_{\text{M}}^{\text{Chl}}$, and numerous occurrence of these terms in intermediate quantities $\hat{\theta}$ and $L_{\text{I}}$ when $Q_{\text{N}}$ (Eq.~\ref{eq:Qopt}) is fully expanded. The numerical approximation is achieved by storing the previous value ($t=i-1$) of $T$, calculating $Q_{\text{N}}$ based on this previous value (but the current values of $\bar{I}$ and $L_{\text{D}}$), and calculating the differences with the current values ($t=i$), i.e.,
-\begin{align}
- \frac{\partial Q_{\text{N}}}{\partial T} & \sim
- \frac{Q_{\text{N}}(\bar{I}_{i},\ L_{\text{D}_i},\ T_{i}) - Q_{\text{N}}(\bar{I}_{i},\ L_{\text{D}_i},T_{i-1})} {T_{i} - T_{i-1}} 
-\end{align}
-}
+The temperature derivatives are obtained via the derivatives with respect to $\hat{\mu}_{0}$ and $R_{\text{M}}^{\text{Chl}}$:
+\begin{flalign}
+  \frac{\partial Q_{\text{N}}}{\partial T} &= \frac{\partial Q_{\text{N}}}{\partial Z} \left( \frac{\partial Z}{\partial \hat{\mu}_{0}} \cdot \hat{\mu}_{0}
+    - \frac{\partial Z}{\partial \hat{\mu}_{\text{net}}} \cdot R^{\text{Chl}} \right) \frac{1}{f(T)} \frac{\text{d}\,f(T)}{\text{d}\,T} \\
+  \frac{\partial Z}{\partial \hat{\mu}_{0}} &= \frac{\partial Z}{\partial \hat{\mu}_{net}} \frac{\partial \hat{\mu}_{net}}{\partial \hat{\mu}_{0}}
+  - \hat{\mu}_{\text{net}} \frac{Q_{\text{N},0}}{2 \hat{\mu}_{0} \sqrt{\hat{\mu}_{0} \cdot \hat{V}_{\text{N}}}} \\
+  \frac{\partial \hat{\mu}_{net}}{\partial \hat{\mu}_{0}} &= L_{\text{D}} \cdot (1 - \zeta_{\text{Chl}} \hat{\theta})
+  \left[ L_{\text{I}} - (1 - L_{\text{I}}) \frac{\alpha \cdot \bar{I}}{\hat{\mu}_{0}} \hat{\theta} \right] \\
+  \frac{1}{f(T)} \frac{\text{d}\,f(T)}{\text{d}\,T} &= \frac{E_{\text{a}}}{R\cdot {(T / \text{K})}^{2}}
+\end{flalign}
+% \onur{The partial derivatives of $T$ Eq.~\eqref{eq:sdin3} are approximated numerically, as the analytical solution of $\partial Q_{\text{N}}/\partial T$ is unwieldy, given the temperature dependence of $\hat{\mu}_{0}$,  $\hat{V}_{0}$ and $R_{\text{M}}^{\text{Chl}}$, and numerous occurrence of these terms in intermediate quantities $\hat{\theta}$ and $L_{\text{I}}$ when $Q_{\text{N}}$ (Eq.~\ref{eq:Qopt}) is fully expanded. The numerical approximation is achieved by storing the previous value ($t=i-1$) of $T$, calculating $Q_{\text{N}}$ based on this previous value (but the current values of $\bar{I}$ and $L_{\text{D}}$), and calculating the differences with the current values ($t=i$), i.e.,
+% \begin{align}
+%  \frac{\partial Q_{\text{N}}}{\partial T} & \sim
+%  \frac{Q_{\text{N}}(\bar{I}_{i},\ L_{\text{D}_i},\ T_{i}) - Q_{\text{N}}(\bar{I}_{i},\ L_{\text{D}_i},T_{i-1})} {T_{i} - T_{i-1}} 
+% \end{align}
+% }
 
 We would like to clarify that (1) the DIN in the denominator in the solution provided by S16 (their Eq.~A-5) was a typo; (2) replacement of $\hat{\mu}_g$ (in S16, $\hat{\mu}^I$) with $\hat{\mu}_{\text{net}}$ in our model (see K21) results in the appearance of $(1-\hat{\theta} \cdot \zeta_{\text{Chl}})$ when computing $\partial \hat{\mu}_{\text{net}} / \partial \bar{I}$; (3) $L_{\text{D}}$ used to be implicit in S16, now it's explicit (K21 Eq.~21) therefore it appears for $\partial\hat{\mu}_{\text{net}} / \partial \bar{I}$ unlike in S16 \onur{This is what I'm guessing, but maybe it was just forgotten}. %However, since $L_D$ is set to 1 in the current study (Section~\ref{S:DescSetup}), this difference is practically not relevant for our immediate purposes.
 
