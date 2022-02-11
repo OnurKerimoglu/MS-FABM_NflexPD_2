@@ -328,7 +328,9 @@ $\partial Z/ \partial \bar{I}$ can then be derived by canonical application of t
  = \frac{\partial Z}{\partial \hat{\mu}_{\text{net}}} \frac{\partial \hat{\mu}_{\text{net}}}{\partial L_{\text{D}}} \\
  \frac{\partial \hat{\mu}_{\text{net}}}{\partial L_{\text{D}}} &= \hat{\mu}_{0} \cdot L_{\text{I}} \cdot (1 - \zeta_{\text{Chl}} \hat{\theta})
 \end{flalign}
-The temperature derivatives are obtained via the derivatives with respect to $\hat{\mu}_{0}$ and $R_{\text{M}}^{\text{Chl}}$:
+
+\onur{This is probably ignoring $\hat{V}_0$ not being a function of $T$, or perhaps $\hat{V}_0=\hat{\mu}_0$: (?)}\\
+\textcolor{red}{The temperature derivatives are obtained via the derivatives with respect to $\hat{\mu}_{0}$ and $R_{\text{M}}^{\text{Chl}}$:
 \begin{flalign}
   \frac{\partial Q_{\text{N}}}{\partial T} &= \frac{\partial Q_{\text{N}}}{\partial Z} \left( \frac{\partial Z}{\partial \hat{\mu}_{0}} \cdot \hat{\mu}_{0}
     - \frac{\partial Z}{\partial \hat{\mu}_{\text{net}}} \cdot R^{\text{Chl}} \right) \frac{1}{f(T)} \frac{\text{d}\,f(T)}{\text{d}\,T} \\
@@ -337,13 +339,26 @@ The temperature derivatives are obtained via the derivatives with respect to $\h
   \frac{\partial \hat{\mu}_{net}}{\partial \hat{\mu}_{0}} &= L_{\text{D}} \cdot (1 - \zeta_{\text{Chl}} \hat{\theta})
   \left[ L_{\text{I}} - (1 - L_{\text{I}}) \frac{\alpha \cdot \bar{I}}{\hat{\mu}_{0}} \hat{\theta} \right] \\
   \frac{1}{f(T)} \frac{\text{d}\,f(T)}{\text{d}\,T} &= \frac{E_{\text{a}}}{R\cdot {(T / \text{K})}^{2}}
-\end{flalign}
+\end{flalign}}
 % \onur{The partial derivatives of $T$ Eq.~\eqref{eq:sdin3} are approximated numerically, as the analytical solution of $\partial Q_{\text{N}}/\partial T$ is unwieldy, given the temperature dependence of $\hat{\mu}_{0}$,  $\hat{V}_{0}$ and $R_{\text{M}}^{\text{Chl}}$, and numerous occurrence of these terms in intermediate quantities $\hat{\theta}$ and $L_{\text{I}}$ when $Q_{\text{N}}$ (Eq.~\ref{eq:Qopt}) is fully expanded. The numerical approximation is achieved by storing the previous value ($t=i-1$) of $T$, calculating $Q_{\text{N}}$ based on this previous value (but the current values of $\bar{I}$ and $L_{\text{D}}$), and calculating the differences with the current values ($t=i$), i.e.,
 % \begin{align}
 %  \frac{\partial Q_{\text{N}}}{\partial T} & \sim
 %  \frac{Q_{\text{N}}(\bar{I}_{i},\ L_{\text{D}_i},\ T_{i}) - Q_{\text{N}}(\bar{I}_{i},\ L_{\text{D}_i},T_{i-1})} {T_{i} - T_{i-1}} 
 % \end{align}
 % }
+
+\onur{When $\hat{V}_0 = f(T)$:}\\
+\textcolor{green}{The temperature derivatives are obtained via the derivatives with respect to $\hat{\mu}_{0}$, $\hat{V}_{0}$ and $R_{\text{M}}^{\text{Chl}}$:
+\begin{flalign}
+   \frac{\partial Q_{\text{N}}}{\partial T} 
+   &= \frac{\partial Q_{\text{N}}}{\partial Z} \frac{\partial Z}{\partial T} = 
+   %\frac{\partial Q_{\text{N}}}{\partial Z} \frac{\partial \frac{Q_{\text{N},0}}{2}\left( \frac{\hat{\mu}_{\text{net}}}{\hat{V}_{\text{N}}} + \zeta_{\text{N}} \right)} {\partial T} =
+   \frac{\partial Q_{\text{N}}}{\partial Z} \frac{Q_{\text{N},0}}{2}  \frac{\partial (\frac{\hat{\mu}_{\text{net}}}{\hat{V}_{\text{N}}}) } {\partial T}\\
+   &=\frac{\partial Q_{\text{N}}}{\partial Z} \frac{Q_{\text{N},0}}{2}  
+   \frac{\hat{V}_{\text{N}} \frac{ \partial \hat{\mu}_{\text{net}}} {\partial T} -\hat{\mu}_{\text{net}} \frac{\partial \hat{V}}{\partial T}} 
+   {\hat{V}_{\text{N}}^2} = ...
+ \end{flalign}  
+}
 
 We would like to clarify that (1) the DIN in the denominator in the solution provided by S16 (their Eq.~A-5) was a typo; (2) replacement of $\hat{\mu}_g$ (in S16, $\hat{\mu}^I$) with $\hat{\mu}_{\text{net}}$ in our model (see K21) results in the appearance of $(1-\hat{\theta} \cdot \zeta_{\text{Chl}})$ when computing $\partial \hat{\mu}_{\text{net}} / \partial \bar{I}$; (3) $L_{\text{D}}$ used to be implicit in S16, now it's explicit (K21 Eq.~21) therefore it appears for $\partial\hat{\mu}_{\text{net}} / \partial \bar{I}$ unlike in S16 \onur{This is what I'm guessing, but maybe it was just forgotten}. %However, since $L_D$ is set to 1 in the current study (Section~\ref{S:DescSetup}), this difference is practically not relevant for our immediate purposes.
 
