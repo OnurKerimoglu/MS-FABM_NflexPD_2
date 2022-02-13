@@ -148,17 +148,16 @@ Recently, \citet{Kerimoglu2021} (hereafter K21) introduced FABM-NflexPD 1.0, whi
 but not for applications that require resolution of multiple nutrients and carbon in DIM form.
 
 %\subsection{Objectives of this study}
-Here we introduce FABM-NflexPD 2.0, which can resolve C, N and P in DIM pool. We present a detailed description of a C-based version, which is extended to trace DIC, and the N fluxes occurring due to instantaneous changes in cell quotas, such that C and N cycles are both closed. \onur{TODO: Furthermore, the model is now extended with limitation by P}. For evaluating the consistency and rubustness of the model, we present following tests:
+Here we introduce FABM-NflexPD 2.0, which can resolve C and N in DIM pool. We present a detailed description of a C-based version, which is extended to trace DIC, and the N fluxes occurring due to instantaneous changes in cell quotas, such that C and N cycles are both closed. \onur{TODO: Furthermore, the model is now extended with limitation by P}. For evaluating the consistency and robustness of the model, we present following tests:
 \begin{description}
  %\item a detailed description of the current, C-based version with reference to the previous, N-based version (see below)
  %\item extension of the model with DIC, to enable tracing the conservation of C
  %\item description of the model extended with limitation by other elements, exemplified for P
  \item [T1] \onur{done} an assessment of the conservation of the C and and N by a simplified version of the model in a 0D setup, where temperature and day length were held constant, and light and temporal changes in light were provided either externally and numerically approximated respectively, and both calculated analytically.
- \item [T2a] \onur{in progress} testing the IA approach in a more realistic 0D setup, where irradiance is supplied externally, temperature and day length are allowed to vary, and attenuation of light by phytoplankton is accounted for
- \item [T2b] \onur{in progress} comparison of the fully explicit version (the `dynamic acclimation' (DA) variant in K21) vs the instantaneously acclimating (IA) variant of the model 
- %\item [T4] \onur{todo, I doubt that this is needed} comparison of the behavior of the previous and current C- and N- based model versions in a 0D setup
- \item [T3] \onur{todo, if the 0D works without problems} application of the C-N-P model in an idealisitc 1D setup and assessment of mass conservation
- \item [T4] \onur{todo} demonstration with multiple phytoplanton groups \onur{ideally in 1D, but possibly in 0D (idea: difference in scaling of model speed vs number of plankton functional types (e.g., 1, 5, 10 pfts) with DA and IA variants. Expectation: clearer speed advantages of IA when simulating higher number of pfts)}
+ \item [T2a] \onur{done} testing the IA approach in a more realistic 0D setup, where irradiance is supplied externally, temperature and day length are allowed to vary. %, and attenuation of light by phytoplankton is accounted for.
+ \item [T2b] \onur{done} comparison of the fully explicit version (the `dynamic acclimation' (DA) variant in K21) vs the instantaneously acclimating (IA) variant of the model 
+ \item [T3] \onur{in progress} demonstration with multiple phytoplanton groups \onur{idea: difference in scaling of model speed vs number of plankton functional types (e.g., 1, 2, 5 pfts) with DA and IA variants, with potentially clearer speed advantages of IA when simulating higher number of pfts)}
+ \item [T4] application of the model in an idealisitc 1D setup and assessment of mass conservation \textcolor{red}{\{Onur: this test failed. In 1D, model does not seem to be mass conservative. The question is whether we want to show and discuss these results?\}} 
 \end{description}
 
 % \begin{figure}[htb]
@@ -371,10 +370,10 @@ When the irradiance and temperature are supplied externally, as typically the ca
     \end{figure}
 
     
-    \paragraph{T2}
-    For these tests, where one of the aims (T2a) was to try the IA approach in a more realistic setting with multiple time-varying factors, we consider variable day length, $L_D$ as described by \citet{Forsythe2003}, which was used to calculate the daytime average irradiance, based on the externally provided incoming irradiance as described for T1 (i.e., $\bar{I}=\bar{I}_{\text{24h}}/L_D$ as in the original model by \citep{Pahlowetal13}, and as was implemented in K21). \onur{next step: Finally, to account for the seasonal variability in T, it was represented using a sinusoidal function similar to Eq.~\ref{eq.I}, but $T_{\min}$ and $T_{\max}$ set to 2 and 20$\degree$C, respectively.}
+    \paragraph{T2-T3}
+    For these tests, we consider variable day length, $L_D$ as described by \citet{Forsythe2003}, which was used to calculate the daytime average irradiance, based on the externally provided incoming irradiance as described for T1 (i.e., $\bar{I}=\bar{I}_{\text{24h}}/L_D$ as in the original model by \citep{Pahlowetal13}, and as was implemented in K21). Moreover, to account for the seasonal variability in T, it was represented using a sinusoidal function similar to Eq.~\ref{eq.I}, but $T_{\min}$ and $T_{\max}$ set to 2 and 20$\degree$C, respectively.
     
-\subsubsection{1D setup (T3-T4)}
+\subsubsection{1D setup (T4)}
     \onur{TODO}
 
 %$\bar{I}_{\min}$=1.6 and $\bar{I}_{\max}$=110 
@@ -447,6 +446,28 @@ Under these more realistic settings, conservation of Total N by the IA variant h
 \caption{Results of T2: Carbon (left) and nitrogen (right) pools according to the IA (solid blue line) and DA (dashed orange line) approaches under variable $L_{\text{D}}$ and $T$. \onur{Figure is for drafting purposes, I'm not sure if we need all panels here, or maybe need to show some other variables}.\label{f.T2res}}
 \end{figure}
 
+
+\subsection{T3: Comparing DA and IA variants in simulating in simulating multiple PFT's}
+
+For the case of multiple phytoplankton, Eq.~\ref{eq:sdin3} can be generalized as follows:
+\begin{flalign}\label{eq:sdin4}
+\frac{\text{d}\,\text{DIN}}{\text{d}\,t} &= \frac{\displaystyle F_{\text{DON}-\text{DIN}} - 
+  \sum_j \left[ V_{\text{N}}^j - \text{Phy}_{\text{C}}^j \cdot
+  \left( \frac{\partial Q_{\text{N}}^j}{\partial \bar{I}} \frac{\text{d}\, \bar{I}}{\text{d}\, t}
+    + \frac{\partial Q_{\text{N}}^j}{\partial L_{\text{D}}} \frac{\text{d}\, L_{\text{D}}}{\text{d}\, t}
+    + \frac{\partial Q_{\text{N}}^j}{\partial T} \frac{\text{d}\, T}{\text{d}\, t} \right) \right]} %
+{\displaystyle 1+ \sum_j \left[ \text{Phy}_{\text{C}}^j\frac{\partial Q_{\text{N}}^j}{\partial \text{DIN}} \right]}
+\end{flalign}
+Where, $j$ indexes the different PFTs simulated \onur{maybe it's better to move it right after Eq.~\ref{eq:sdin3}}.
+
+In Fig.~\ref{f.T3res} we present the results of a numerical experiment with 2 phytoplankton types, as simulated by IA and DA. The first type characterizes a fast growing `opportunist' species, and the second type characterizes a `gleaner' species, with lower growth rate but higher nutrient affinity. As expected, the first type reaches higher C-biomass during the spring bloom, whereas the second type maintains higher concentrations during summer, under low nutrient concentrations. The predictions by the two variants are almost identical.
+
+As a technical note regarding the technical implementation is that, using the separate \verb|phy_Cbased.F90| and \verb|abio_Cbased.F90| modules, the number of phytoplankton types can be changed without needing to change and recompile the code, and by adjusting the configuration file in run time (see the \verb|fabm.yaml| examples in the \verb|testcases| folder that were employed to produce the results presented in this study), which is a feature enabled by the modularity of FABM.
+
+\begin{figure}[ht!]
+\includegraphics[width=14cm,trim=0cm 11mm 0.0cm 5mm, clip]{figures/2022-02-13_Ldvar_Tvar_ThatVar_2P_PARext_IA_vs_DA/0D-Highlat_wconst_lext_Ldvar_Tvar_2P_CbasedIA_modular_24h_vs_0D-Highlat_wconst_lext_Ldvar_Tvar_2P_CbasedDA_modular_24h_cont_abio1_1y.png}
+\caption{Results of T3: Carbon (left) and nitrogen (right) pools according to the IA (solid blue line) and DA (dashed orange line) approaches under variable $L_{\text{D}}$ and $T$ and 2 phytoplankton types. \onur{Figure is for drafting purposes}.\label{f.T3res}}
+\end{figure}
 
 % DISCUSSION
 %\section{Discussion}
