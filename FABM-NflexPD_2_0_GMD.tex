@@ -72,9 +72,10 @@
 %\usepackage{subfig}
 %\usepackage{rotating}
 
-%Additional packages:
+%Additional packages: 
 \usepackage{mathrsfs} %provides calligraphic Fonts
 \usepackage{placeins}
+\usepackage[percent]{overpic}
 \allowdisplaybreaks
 
 \graphicspath{
@@ -139,7 +140,7 @@
 %INTRODUCTION
 \introduction%% \introduction[modified heading if necessary]
 
-%\subsection{Autotroph Acclimation and Biogeochemical Cycles}
+%\subsection{Autotroph Acclimation and Biogeochemical Cycles} 
 
 %\subsection{Instantaneous acclimation approach}
 \subsection{Background and Objectives}
@@ -153,11 +154,10 @@ Here we introduce FABM-NflexPD 2.0, which can resolve C, N and P in DIM pool. We
  %\item extension of the model with DIC, to enable tracing the conservation of C
  %\item description of the model extended with limitation by other elements, exemplified for P
  \item [T1] \onur{done} an assessment of the conservation of the C and and N by a simplified version of the model in a 0D setup, where temperature and day length were held constant, and light and temporal changes in light were provided either externally and numerically approximated respectively, and both calculated analytically.
- \item [T2a] \onur{in progress} testing the IA approach in a more realistic 0D setup, where irradiance is supplied externally, temperature and day length are allowed to vary, and attenuation of light by phytoplankton is accounted for
- \item [T2b] \onur{in progress} comparison of the fully explicit version (the `dynamic acclimation' (DA) variant in K21) vs the instantaneously acclimating (IA) variant of the model
- %\item [T4] \onur{todo, I doubt that this is needed} comparison of the behavior of the previous and current C- and N- based model versions in a 0D setup
- \item [T3] \onur{todo, if the 0D works without problems} application of the C-N-P model in an idealisitc 1D setup and assessment of mass conservation
- \item [T4] \onur{todo} demonstration with multiple phytoplankton groups \onur{ideally in 1D, but possibly in 0D (idea: difference in scaling of model speed vs number of plankton functional types (e.g., 1, 5, 10 pfts) with DA and IA variants. Expectation: clearer speed advantages of IA when simulating higher number of pfts)}
+ \item [T2a] \onur{done} testing the IA approach in a more realistic 0D setup, where irradiance is supplied externally, temperature and day length are allowed to vary, and attenuation of light by phytoplankton is accounted for
+ \item [T2b] \onur{done} comparison of the fully explicit version (the `dynamic acclimation' (DA) variant in K21) vs the instantaneously acclimating (IA) variant of the model 
+ \item [T3] \onur{in progress} demonstration with multiple phytoplanton groups \onur{idea: difference in scaling of model speed vs number of plankton functional types (e.g., 1, 2, 5 pfts) with DA and IA variants, with potentially clearer speed advantages of IA when simulating higher number of pfts)}
+ \item [T4] application of the model in an idealistic 1D setup and assessment of mass conservation \textcolor{red}{\{Onur: this test failed. In 1D, model does not seem to be mass conservative. The question is whether we want to show and discuss these results?\}} 
 \end{description}
 
 % \begin{figure}[htb]
@@ -331,6 +331,11 @@ $\partial Z/ \partial \bar{I}$ can then be derived by canonical application of t
  = \frac{\partial Z}{\partial \hat{\mu}_{\text{net}}} \frac{\partial \hat{\mu}_{\text{net}}}{\partial L_{\text{D}}} \\
  \frac{\partial \hat{\mu}_{\text{net}}}{\partial L_{\text{D}}} &= \hat{\mu}_{0} \cdot L_{\text{I}} \cdot (1 - \zeta_{\text{Chl}} \hat{\theta})
 \end{flalign}
+%The partial derivatives of $T$ Eq.~\eqref{eq:sdin3} are approximated numerically, as the analytical solution of $\partial Q_{\text{N}}/\partial T$ is unwieldy, given the temperature dependence of $\hat{\mu}_0$,  $\hat{V}_0$ and $R_{\text{M}}^{\text{Chl}}$, and numerous occurrence of these terms in intermediate quantities $\hat{\theta}$ and $L_{\text{I}}$ when $Q_{\text{N}}$ (Eq.~\ref{eq:Qopt}) is fully expanded. The numerical difference approximation is achieved by storing the value of $T$ in the previous integration step ($t=i-1$), calculating $Q_{\text{N}}$ based on this previous value of $T$ (but the values of DIN, $\bar{I}$ and $L_{\text{D}}$ in the current time step ($t=i$)), and substracting this from the current value of $Q_{\text{N}}$, i.e.,
+%\begin{align}
+% \frac{\partial Q_{\text{N}}}{\partial T} & \approx
+% \frac{Q_{\text{N}}(\text{DIN}_{i},\ \bar{I}_{i},\ L_{\text{D}_i},\ T_{i}) - Q_{\text{N}}(\text{DIN}_{i},\ \bar{I}_{i},\ L_{\text{D}_i},T_{i-1})} {T_{i} - T_{i-1}} 
+%\end{align}
 The temperature-derivative of $Z$ is obtained via the derivatives with respect to $\hat{\mu}_{0}$, $\hat{V}_{0}$ and $R^{\text{Chl}}$:
 \begin{flalign}
   \begin{split}
@@ -376,7 +381,7 @@ When the irradiance and temperature are supplied externally, as typically the ca
     \end{description}
     The temporal derivatives found by the numerical and analytical approaches are almost identical, as was targeted (Fig.~\ref{f.T1light}).
     \begin{figure}[ht!]
-    \includegraphics[width=14cm,trim=0cm 0mm 0.0cm 0mm, clip]{figures/2022-01-24a_T10_Ld1_ThatVar_PARext_vs_PARint/0D-Highlat_wconst_lext_Ld1_T20_CbasedIA_modular_24h_vs_0D-Highlat_wconst_lint_Ld1_T20_CbasedIA_modular_24h_cont_abio0_2y.png}
+    \includegraphics[width=8cm,trim=2.9cm 0mm 20.0cm 0mm, clip]{figures/2022-02-10a_Ld1_T20_ThatVar_PARint_vs_PARext/0D-Highlat_wconst_lext_Ld1_T20_CbasedIA_modular_24h_vs_0D-Highlat_wconst_lint_Ld1_T20_CbasedIA_modular_24h_cont_abio0_1y.png}
     \caption{Daily average irradiance and its temporal derivative, as extracted from the simulation outputs generated for T1. PAR:N (solid blue line) is the model version where the temporal derivative of irradiance is approximated numerically; PAR:A (dashed orange line): both irradiance and its temporal derivative are calculated analytically.\label{f.T1light}}
     \end{figure}
 
@@ -405,23 +410,81 @@ When the irradiance and temperature are supplied externally, as typically the ca
 As shown in Fig.~\ref{f.T1res}, the model is conservative with respect to C and, to a great extent N\@. Total-N as estimated with the numerical approach (PAR:N) slightly (about 0.02 \unit{mmolN\ m^3} increases at the very beginning of the simulation, which is caused by the unknown previous value of $\bar{I}$ during the first day of the simulation (as required by the numerical approximation of $\text{d}\,\bar{I}/\text{d}\,t$), which is set to the current value (such that $\text{d}\,\bar{I}/\text{d}\,t$=0.0), causing therefore a difference between the total N as simulated by the analytical approach (PAR:A). However, after this initial jump, this new baseline is preserved until the end of the simulation.
 
 \begin{figure}[ht!]
-\includegraphics[width=14cm,trim=0cm 11mm 0.0cm 5mm, clip]{figures/2022-01-24a_T10_Ld1_ThatVar_PARext_vs_PARint/0D-Highlat_wconst_lext_Ld1_T20_CbasedIA_modular_24h_vs_0D-Highlat_wconst_lint_Ld1_T20_CbasedIA_modular_24h_cont_abio1_2y.png}
-\caption{Results of T1: Carbon (left) and nitrogen (right) pools according to the PAR:N (solid blue line), and PAR:A (dashed orange line) approaches \onur{Figure is for drafting purposes, I'm not sure if we need all panels here}.\label{f.T1res}}
+\includegraphics[width=12cm,trim=0cm 16.8cm 0.0cm 5mm, clip]{figures/2022-02-10a_Ld1_T20_ThatVar_PARint_vs_PARext/0D-Highlat_wconst_lext_Ld1_T20_CbasedIA_modular_24h_vs_0D-Highlat_wconst_lint_Ld1_T20_CbasedIA_modular_24h_cont_abio1_1y.png}
+\caption{Results of T1: Carbon (left) and nitrogen (right) pools according to the PAR:N (solid blue line), and PAR:A (dashed orange line) approaches \onur{I think the other panels (din,phy,det,don) are not necessary to include here}.\label{f.T1res}}
 \end{figure}
 
 \FloatBarrier
 
 \subsection{Testing the IA approach in a more realistic setup (T2a)}
-When the variability in day length is considered, total N is not entirely conserved (Fig.~\ref{f.T2res}). \onur{I could not figure out why. The equations seem all right, and I can reproduce the problem with the R script}.
+
+For this test, seasonal variations in $T$ and $L_{\text{D}}$ were considered, as shown in (Fig.~\ref{f.T2env}). It should be noted that, because of the variations in $L_{\text{D}}$, the seasonal course of $\bar{I}$, and $\text{d}\bar{I}/\text{d}t$ are affected.
 
 \begin{figure}[ht!]
-\includegraphics[width=14cm,trim=0cm 11mm 0.0cm 5mm, clip]{figures/2022-01-24b_T10_LdVar_ThatVar_PARext_IA_vs_DA/0D-Highlat_wconst_lext_T20_CbasedIA_modular_24h_vs_0D-Highlat_wconst_lext_T20_CbasedDA_modular_24h_cont_abio1_2y.png}
-\caption{Results of T2: Carbon (left) and nitrogen (right) pools according to the IA (solid blue line) and DA (dashed orange line) approaches  \onur{Figure is for drafting purposes, I'm not sure if we need all panels here, or maybe need to show some other variables}.\label{f.T2res}}
+\centering
+\setlength{\unitlength}{1mm}
+  \begin{picture}(80,55)(0,0)
+  \put(0,27){\begin{overpic}[width=8cm,trim=23cm 0cm 0.0cm 0mm, clip]{figures/2022-02-10d_Ldvar_Tvar_ThatVar_PARext_IA_vs_DA/0D-Highlat_wconst_lext_Ldvar_Tvar_CbasedIA_modular_24h_vs_0D-Highlat_wconst_lext_Ldvar_Tvar_CbasedDA_modular_24h_cont_abio0_1y.png}\end{overpic}}
+  \put(0,0){\begin{overpic}[width=8cm,trim=2.9cm 0cm 20.0cm 0mm, clip]{figures/2022-02-10d_Ldvar_Tvar_ThatVar_PARext_IA_vs_DA/0D-Highlat_wconst_lext_Ldvar_Tvar_CbasedIA_modular_24h_vs_0D-Highlat_wconst_lext_Ldvar_Tvar_CbasedDA_modular_24h_cont_abio0_1y.png}\end{overpic}}
+    %\put(9,26){\scriptsize{\textsf{(a)}}}
+    %\put(69,26){\scriptsize{\textsf{(b)}}}
+  %\put(0,0){\tiny \grid(80,50)(5,5)[0,0]}
+  \end{picture}
+  \caption{Daily average irradiance and its temporal derivative, as extracted from the simulation outputs generated for T1. PAR:N (solid blue line) is the model version where the temporal derivative of irradiance is approximated numerically; PAR:A (dashed orange line): both irradiance and its temporal derivative are calculated analytically.\label{f.T2env}}
 \end{figure}
+    
+% \begin{figure}[ht!]
+% \centering
+%   \setlength{\unitlength}{1mm}
+%   \begin{picture}(120,70)(0,0)
+%     \put(0,45){
+%     \begin{overpic}[width=14cm,trim=0cm 16.8cm 0.0cm 5mm, clip]{figures/2022-02-10b_Ld1_T20_ThatVar_PARext_IA_vs_DA/0D-Highlat_wconst_lext_Ld1_T20_CbasedIA_modular_24h_vs_0D-Highlat_wconst_lext_Ld1_T20_CbasedDA_modular_24h_cont_abio1_1y.png}
+%     \end{overpic}}
+%     \put(0,22){
+%     \begin{overpic}[width=14cm,trim=0cm 16.8cm 0.0cm 14mm, clip]{figures/2022-02-10c_Ldvar_T20_ThatVar_PARext_IA_vs_DA/0D-Highlat_wconst_lext_Ldvar_T20_CbasedIA_modular_24h_vs_0D-Highlat_wconst_lext_Ldvar_T20_CbasedDA_modular_24h_cont_abio1_1y.png}
+%     \end{overpic}}
+%     \put(0,0){
+%     \begin{overpic}[width=14cm,trim=0cm 16.8cm 0.0cm 14mm, clip]{figures/2022-02-10d_Ldvar_Tvar_ThatVar_PARext_IA_vs_DA/0D-Highlat_wconst_lext_Ldvar_Tvar_CbasedIA_modular_24h_vs_0D-Highlat_wconst_lext_Ldvar_Tvar_CbasedDA_modular_24h_cont_abio1_1y.png}
+%     \end{overpic}}
+%     %\put(9,26){\scriptsize{\textsf{(a)}}}
+%     %\put(69,26){\scriptsize{\textsf{(b)}}}
+%   \put(0,0){\tiny \grid(140,70)(5,5)[0,0]}
+%   \end{picture}
+% 
+% \caption{Results of T2: Carbon (left) and nitrogen (right) pools according to the IA (solid blue line) and DA (dashed orange line) approaches, (a-b) under constant $L_{\text{D}}=1$ and $T=20^{\circ}C$;  (c-d) variable $L_{\text{D}}$; (e-f) constant $T=20^{\circ}C$;  variable $L_{\text{D}}$ and$T$; . \onur{Again, I think no other panels required here}.\label{f.T2ares}}
+% \end{figure}
 
 \subsection{Comparison of IA approach to the fully explicit DA approach (T2b)}
 
 The IA and the fully explicit DA variants produce almost identical outputs (Fig.~\ref{f.T2res}). This similarity is expected and in agreement with \citet{Ward2017}. On a closer look, some differences can be detected, such as a slightly higher $\text{Phy}_{\text{N}}$ at the peak of the spring bloom and slightly higher DON and $\text{Det}_{\text{N}}$ after the spring bloom simulated by the DA variant.  The differences are due to the re-allocation of part of the fluxes into and out of $\text{Phy}_{\text{N}}$ to DIN fluxes in Eq.~\eqref{eq:sdin3}.  They remain relatively small because (1) the time scale of the optimal regulation of N uptake in the DA variant is short relative to those of phytoplankton growth and the DIN-changes in our simulations, and (2) the strong interaction between phytoplankton and DIN leads to a negative feed-back between the deviations between the IA and DA variants and the extra DIN fluxes caused by variations in $Q_{\text{N}}$ in the IA variant.
+
+\begin{figure}[ht!]
+\includegraphics[width=14cm,trim=0cm 11mm 0.0cm 5mm, clip]{figures/2022-02-10d_Ldvar_Tvar_ThatVar_PARext_IA_vs_DA/0D-Highlat_wconst_lext_Ldvar_Tvar_CbasedIA_modular_24h_vs_0D-Highlat_wconst_lext_Ldvar_Tvar_CbasedDA_modular_24h_cont_abio1_1y.png}
+\caption{Results of T2: Carbon (left) and nitrogen (right) pools according to the IA (solid blue line) and DA (dashed orange line) approaches under variable $L_{\text{D}}$ and $T$. \onur{Figure is for drafting purposes, I'm not sure if we need all panels here, or maybe need to show some other variables}.\label{f.T2res}}
+\end{figure}
+
+
+\subsection{T3: Comparing DA and IA variants in simulating in simulating multiple PFT's}
+
+For the case of multiple phytoplankton, Eq.~\ref{eq:sdin3} can be generalized as follows:
+\begin{flalign}\label{eq:sdin4}
+\frac{\text{d}\,\text{DIN}}{\text{d}\,t} &= \frac{\displaystyle F_{\text{DON}-\text{DIN}} - 
+  \sum_j \left[ V_{\text{N}}^j - \text{Phy}_{\text{C}}^j \cdot
+  \left( \frac{\partial Q_{\text{N}}^j}{\partial \bar{I}} \frac{\text{d}\, \bar{I}}{\text{d}\, t}
+    + \frac{\partial Q_{\text{N}}^j}{\partial L_{\text{D}}} \frac{\text{d}\, L_{\text{D}}}{\text{d}\, t}
+    + \frac{\partial Q_{\text{N}}^j}{\partial T} \frac{\text{d}\, T}{\text{d}\, t} \right) \right]} %
+{\displaystyle 1+ \sum_j \left[ \text{Phy}_{\text{C}}^j\frac{\partial Q_{\text{N}}^j}{\partial \text{DIN}} \right]}
+\end{flalign}
+Where, $j$ indexes the different PFTs simulated \onur{maybe it's better to move it right after Eq.~\ref{eq:sdin3}}.
+
+In Fig.~\ref{f.T3res} we present the results of a numerical experiment with 2 phytoplankton types, as simulated by IA and DA. The first type characterizes a fast growing `opportunist' species, and the second type characterizes a `gleaner' species, with lower growth rate but higher nutrient affinity. As expected, the first type reaches higher C-biomass during the spring bloom, whereas the second type maintains higher concentrations during summer, under low nutrient concentrations. The predictions by the two variants are almost identical.
+
+As a technical note regarding the technical implementation is that, using the separate \verb|phy_Cbased.F90| and \verb|abio_Cbased.F90| modules, the number of phytoplankton types can be changed without needing to change and recompile the code, and by adjusting the configuration file in run time (see the \verb|fabm.yaml| examples in the \verb|testcases| folder that were employed to produce the results presented in this study), which is a feature enabled by the modularity of FABM.
+
+\begin{figure}[ht!]
+\includegraphics[width=14cm,trim=0cm 11mm 0.0cm 5mm, clip]{figures/2022-02-13_Ldvar_Tvar_ThatVar_2P_PARext_IA_vs_DA/0D-Highlat_wconst_lext_Ldvar_Tvar_2P_CbasedIA_modular_24h_vs_0D-Highlat_wconst_lext_Ldvar_Tvar_2P_CbasedDA_modular_24h_cont_abio1_1y.png}
+\caption{Results of T3: Carbon (left) and nitrogen (right) pools according to the IA (solid blue line) and DA (dashed orange line) approaches under variable $L_{\text{D}}$ and $T$ and 2 phytoplankton types. \onur{Figure is for drafting purposes}.\label{f.T3res}}
+\end{figure}
 
 % DISCUSSION
 %\section{Discussion}
