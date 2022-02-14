@@ -154,10 +154,10 @@ Here we introduce FABM-NflexPD 2.0, which can resolve C, N and P in DIM pool. We
  %\item extension of the model with DIC, to enable tracing the conservation of C
  %\item description of the model extended with limitation by other elements, exemplified for P
  \item [T1] \onur{done} an assessment of the conservation of the C and and N by a simplified version of the model in a 0D setup, where temperature and day length were held constant, and light and temporal changes in light were provided either externally and numerically approximated respectively, and both calculated analytically.
- \item [T2a] \onur{done} testing the IA approach in a more realistic 0D setup, where irradiance is supplied externally, temperature and day length are allowed to vary, and attenuation of light by phytoplankton is accounted for
+ \item [T2a] \onur{done} testing the IA approach in a more realistic 0D setup, where irradiance is supplied externally, temperature and day length are allowed to vary, and attenuation of light by phytoplankton is accounted for.
  \item [T2b] \onur{done} comparison of the fully explicit version (the `dynamic acclimation' (DA) variant in K21) vs the instantaneously acclimating (IA) variant of the model 
- \item [T3] \onur{in progress} demonstration with multiple phytoplanton groups \onur{idea: difference in scaling of model speed vs number of plankton functional types (e.g., 1, 2, 5 pfts) with DA and IA variants, with potentially clearer speed advantages of IA when simulating higher number of pfts)}
- \item [T4] application of the model in an idealistic 1D setup and assessment of mass conservation \textcolor{red}{\{Onur: this test failed. In 1D, model does not seem to be mass conservative. The question is whether we want to show and discuss these results?\}} 
+ \item [T3] \onur{done} demonstration of a model run with multiple phytoplanton groups.
+ \item [T4] \onur{done} application of the model in an idealistic 1D setup and assessment of mass conservation \textcolor{red}{\{Onur: this test failed: in 1D, model does not seem to be mass conservative, see Section~\ref{s.resT4}.\}} 
 \end{description}
 
 % \begin{figure}[htb]
@@ -363,8 +363,8 @@ and $\text{d}\,T / \text{d}\,t$.
 When the irradiance and temperature are supplied externally, as typically the case in realistic coupled physical-biological models it is not possible to obtain their temporal derivative analytically, therefore they are numerically approximated as the discrete backward difference between its current ($t=i$) and previous ($t=i-1$) values, divided by the size of the integration time step i.e., $\text{d}\, E / \text{d}\, t \approx (E_{i} - E_{i-1}) / \Delta t$ for $E=\{\bar{I},\ T\}$ (see also Section~\ref{S:DescT1} designed to test the sensitivity of the model results and conservation behavior to this approximation for $E=\bar{I}$).
 
 \subsection{Test setups and model operation}\label{S:DescSetup}
-\subsubsection{0D setup (T1-T2)}
-    For the tests T1-T2, the model is operated in a spatially homogeneous `box' setup, using the 0d driver of FABM \citep{Bruggeman2014}. With this 0D setup, numerical solutions are obtained using 4$^\text{th}$ order Runge-Kutta method with a time step of 60 seconds. Model forcing applied in 0D setups vary among different tests, as explained below.
+\subsubsection{0D setup (T1-T3)}
+    For the tests T1-T3, the model is operated in a spatially homogeneous `box' setup, using the 0d driver of FABM \citep{Bruggeman2014}. With this 0D setup, numerical solutions are obtained using 4$^\text{th}$ order Runge-Kutta method with a time step of 60 seconds. Model forcing applied in 0D setups vary among different tests, as explained below.
 
     \paragraph{T1}\label{S:DescT1}
     As simplifications for this test, we assume that temperature, T is fixed at 10$\degree$C, fractional day length, $L_D$ is unity, and ignore light attenuation and albedo effects. We consider two cases with regard to the handling of irradiance and its temporal derivative:
@@ -385,14 +385,11 @@ When the irradiance and temperature are supplied externally, as typically the ca
     \caption{Daily average irradiance and its temporal derivative, as extracted from the simulation outputs generated for T1. PAR:N (solid blue line) is the model version where the temporal derivative of irradiance is approximated numerically; PAR:A (dashed orange line): both irradiance and its temporal derivative are calculated analytically.\label{f.T1light}}
     \end{figure}
 
-
-    \paragraph{T2}
-    For these tests, where one of the aims (T2a) was to try the IA approach in a more realistic setting with multiple time-varying factors, we consider variable day length, $L_D$ as described by \citet{Forsythe2003}, which was used to calculate the daytime average irradiance, based on the externally provided incoming irradiance as described for T1 (i.e., $\bar{I}=\bar{I}_{\text{24h}}/L_D$ as in the original model by \citep{Pahlowetal13}, and as was implemented in K21). \onur{next step: Finally, to account for the seasonal variability in T, it was represented using a sinusoidal function similar to Eq.~\ref{eq.I}, but $T_{\min}$ and $T_{\max}$ set to 2 and 20$\degree$C, respectively.}
-
-\subsubsection{1D setup (T3-T4)}
-    \onur{TODO}
-
-%$\bar{I}_{\min}$=1.6 and $\bar{I}_{\max}$=110
+    \paragraph{T2-T3}
+    For these tests, we consider variable day length, $L_D$ as described by \citet{Forsythe2003}, which was used to calculate the daytime average irradiance, based on the externally provided incoming irradiance as described for T1 (i.e., $\bar{I}=\bar{I}_{\text{24h}}/L_D$ as in the original model by \citep{Pahlowetal13}, and as was implemented in K21). Moreover, to account for the seasonal variability in T, it was represented using a sinusoidal function similar to Eq.~\ref{eq.I}, but $T_{\min}$ and $T_{\max}$ set to 2 and 20$\degree$C, respectively.
+    
+\subsubsection{1D setup (T4)}
+    \onur{I'm not sure if we really need to show these results, although I included them for now }
 
 %\begin{figure}[t]
 %\includegraphics[width=8.3cm,trim=0cm 6mm 0.0cm 10mm, clip]{figures/fI_analytical.png}
@@ -421,8 +418,8 @@ As shown in Fig.~\ref{f.T1res}, the model is conservative with respect to C and,
 For this test, seasonal variations in $T$ and $L_{\text{D}}$ were considered, as shown in (Fig.~\ref{f.T2env}). It should be noted that, because of the variations in $L_{\text{D}}$, the seasonal course of $\bar{I}$, and $\text{d}\bar{I}/\text{d}t$ are affected.
 
 \begin{figure}[ht!]
-\centering
-\setlength{\unitlength}{1mm}
+  \centering
+  \setlength{\unitlength}{1mm}
   \begin{picture}(80,55)(0,0)
   \put(0,27){\begin{overpic}[width=8cm,trim=23cm 0cm 0.0cm 0mm, clip]{figures/2022-02-10d_Ldvar_Tvar_ThatVar_PARext_IA_vs_DA/0D-Highlat_wconst_lext_Ldvar_Tvar_CbasedIA_modular_24h_vs_0D-Highlat_wconst_lext_Ldvar_Tvar_CbasedDA_modular_24h_cont_abio0_1y.png}\end{overpic}}
   \put(0,0){\begin{overpic}[width=8cm,trim=2.9cm 0cm 20.0cm 0mm, clip]{figures/2022-02-10d_Ldvar_Tvar_ThatVar_PARext_IA_vs_DA/0D-Highlat_wconst_lext_Ldvar_Tvar_CbasedIA_modular_24h_vs_0D-Highlat_wconst_lext_Ldvar_Tvar_CbasedDA_modular_24h_cont_abio0_1y.png}\end{overpic}}
@@ -433,6 +430,7 @@ For this test, seasonal variations in $T$ and $L_{\text{D}}$ were considered, as
   \caption{Daily average irradiance and its temporal derivative, as extracted from the simulation outputs generated for T1. PAR:N (solid blue line) is the model version where the temporal derivative of irradiance is approximated numerically; PAR:A (dashed orange line): both irradiance and its temporal derivative are calculated analytically.\label{f.T2env}}
 \end{figure}
     
+
 % \begin{figure}[ht!]
 % \centering
 %   \setlength{\unitlength}{1mm}
@@ -463,8 +461,8 @@ The IA and the fully explicit DA variants produce almost identical outputs (Fig.
 \caption{Results of T2: Carbon (left) and nitrogen (right) pools according to the IA (solid blue line) and DA (dashed orange line) approaches under variable $L_{\text{D}}$ and $T$. \onur{Figure is for drafting purposes, I'm not sure if we need all panels here, or maybe need to show some other variables}.\label{f.T2res}}
 \end{figure}
 
-
-\subsection{T3: Comparing DA and IA variants in simulating in simulating multiple PFT's}
+\FloatBarrier
+\subsection{T3: Comparing DA and IA variants in simulating in simulating multiple PFT's}\label{s.resT3}
 
 For the case of multiple phytoplankton, Eq.~\ref{eq:sdin3} can be generalized as follows:
 \begin{flalign}\label{eq:sdin4}
@@ -482,9 +480,38 @@ In Fig.~\ref{f.T3res} we present the results of a numerical experiment with 2 ph
 As a technical note regarding the technical implementation is that, using the separate \verb|phy_Cbased.F90| and \verb|abio_Cbased.F90| modules, the number of phytoplankton types can be changed without needing to change and recompile the code, and by adjusting the configuration file in run time (see the \verb|fabm.yaml| examples in the \verb|testcases| folder that were employed to produce the results presented in this study), which is a feature enabled by the modularity of FABM.
 
 \begin{figure}[ht!]
-\includegraphics[width=14cm,trim=0cm 11mm 0.0cm 5mm, clip]{figures/2022-02-13_Ldvar_Tvar_ThatVar_2P_PARext_IA_vs_DA/0D-Highlat_wconst_lext_Ldvar_Tvar_2P_CbasedIA_modular_24h_vs_0D-Highlat_wconst_lext_Ldvar_Tvar_2P_CbasedDA_modular_24h_cont_abio1_1y.png}
+\includegraphics[width=14cm,trim=0cm 11mm 0.0cm 5mm, clip]{figures/2022-02-14_Ldvar_Tvar_ThatVar_kc_2P_PARext_IA_vs_DA/0D-Highlat_wconst_lext_Ldvar_Tvar_2P_CbasedIA_modular_24h_vs_0D-Highlat_wconst_lext_Ldvar_Tvar_2P_CbasedDA_modular_24h_cont_abio1_1y.png}
 \caption{Results of T3: Carbon (left) and nitrogen (right) pools according to the IA (solid blue line) and DA (dashed orange line) approaches under variable $L_{\text{D}}$ and $T$ and 2 phytoplankton types. \onur{Figure is for drafting purposes}.\label{f.T3res}}
 \end{figure}
+
+
+
+\subsection{T4: Comparing DA and IA variants in a 1D setup}\label{s.resT4}
+When operated in a 1-D setup, IA model appears to not conserve N, as suggested by a comparison of depth-averaged C and N pools (Fig.~\ref{f.T4resTS}). Vertical distribution of N pools are shown in Fig.~\ref{f.T4resC}. 
+
+\onur{Apparently, the correction fluxes that have been calculated for the temporal changes need to be calculated across the spatial changes as well. But for this task FABM is not a good platform, as the framework is space unaware, by design. If we want to try this, we should do this in another manuscript I think, and maybe using the R script, and only two spatial nodes for example. The question is whether we want to only mention these results in this manuscript, or also show and discuss them?}
+
+\begin{figure}[ht!]
+\includegraphics[width=14cm,trim=0cm 11mm 0.0cm 5mm, clip]{figures/2022-02-14_1D_Ldvar_Tva_ThatVar_kc0_2P_PARext_IA_vs_DA/1D-Highlat_wconst_lext_Ldvar_Tvar_2P_CbasedIA_modular_24h_vs_1D-Highlat_wconst_lext_Ldvar_Tvar_2P_CbasedDA_modular_24h_cont_abio1_1y.png}
+\caption{Results of T4: Depth-averaged carbon (left) and nitrogen (right) pools according to the IA (solid blue line) and DA (dashed orange line) approaches under variable $L_{\text{D}}$ and $T$ in a 1D setup.\label{f.T4resTS}}
+\end{figure}
+
+\begin{figure}[ht!]
+\centering
+  \setlength{\unitlength}{1mm}
+  \begin{picture}(120,100)(0,0)
+  \put(0,0){\begin{overpic}[width=6cm,trim=11cm 6mm 0cm 0mm, clip]{figures/2022-02-14_1D_Ldvar_Tva_ThatVar_kc0_2P_PARext_IA_vs_DA/1D-Highlat_wconst_lext_Ldvar_Tvar_2P_CbasedIA_modular_24h_cont_abio1_1y.png}\end{overpic}}
+  \put(60,0){\begin{overpic}[width=6cm,trim=11cm 6mm 0cm 0mm, clip]{figures/2022-02-14_1D_Ldvar_Tva_ThatVar_kc0_2P_PARext_IA_vs_DA/1D-Highlat_wconst_lext_Ldvar_Tvar_2P_CbasedDA_modular_24h_cont_abio1_1y.png}\end{overpic}}
+  
+  \put(27,97){\normalsize{\textsf{IA}}}
+  \put(87,97){\normalsize{\textsf{DA}}}
+    %\put(9,26){\scriptsize{\textsf{(a)}}}
+    %\put(69,26){\scriptsize{\textsf{(b)}}}
+  %\put(0,0){\tiny \grid(120,100)(5,5)[0,0]}
+  \end{picture}
+\caption{Results of T4: Contour plots nitrogen pools according to the IA (left) and DA (right) approaches under variable $L_{\text{D}}$ and $T$ in a 1D setup.\label{f.T4resC}}
+\end{figure}
+
 
 % DISCUSSION
 %\section{Discussion}
