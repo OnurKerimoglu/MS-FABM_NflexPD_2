@@ -292,7 +292,8 @@ Recalling $\hat{V}_{\text{N}}$ from K21, Eq.~17:
   \hat{V}_{\text{N}} &= \frac{(1-f_{\text{A}})\hat{V}_{0} f_{\text{A}} \hat{A}_{0} \text{DIN}}{(1-f_{\text{A}})\hat{V}_{0} + f_{\text{A}} \hat{A}_{0} \text{DIN}}
   = \frac{\hat{V}_{0}\cdot \hat{A}_{0}\cdot\text{DIN}}{{(\sqrt{\hat{V}_{0}} + \sqrt{\hat{A}_{0}\cdot \text{DIN}})}^{2}}, \qquad
   f_{\text{A}} = \frac{1}{\displaystyle 1 + \sqrt{\frac{\hat{A}_{0}\cdot\text{DIN}}{\hat{V}_{0}}}} \\
-  \hat{V}_{0} &= \hat{\mu}_{0} = \mu_{0} \cdot f(T) \qquad f(T) = \exp\left[ -\frac{E_{\text{a}}}{R}\left( \frac{1}{T / \text{K}} - \frac{1}{T_{\text{ref}} / \text{K}} \right) \right]
+  \label{eq:v0mu0}
+  \hat{V}_{0} &= V_{0} \cdot f(T) \qquad \hat{\mu}_{0} = \mu_{0} \cdot f(T) \qquad f(T) = \exp\left[ -\frac{E_{\text{a}}}{R}\left( \frac{1}{T / \text{K}} - \frac{1}{T_{\text{ref}} / \text{K}} \right) \right]
 \end{flalign}
 the partial derivative of $Z$ with respect to DIN is:
 \begin{flalign}
@@ -329,17 +330,19 @@ $\partial Z/ \partial \bar{I}$ can then be derived by canonical application of t
  \frac{\partial \hat{\mu}_{\text{net}}}{\partial L_{\text{D}}} &= \hat{\mu}_{0} \cdot L_{\text{I}} \cdot (1 - \zeta_{\text{Chl}} \hat{\theta})
 \end{flalign}
 
-\onur{This is probably ignoring $\hat{V}_0$ not being a function of $T$, or perhaps $\hat{V}_0=\hat{\mu}_0$: (?)}\\
+\onur{This is probably ignoring $\hat{V}_0$ not being a function of $T$, or perhaps $\hat{V}_0=\hat{\mu}_0$: (?)  Markus: yes, this is what I wrote in Eq.~\eqref{eq:v0mu0}} (now I changed it to allow different $\hat{V}_{0}$ and $\hat{\mu}_{0}$)\\
 \textcolor{red}{The temperature derivatives are obtained via the derivatives with respect to $\hat{\mu}_{0}$ and $R_{\text{M}}^{\text{Chl}}$:
-\begin{flalign}
-  \frac{\partial Q_{\text{N}}}{\partial T} &= \frac{\partial Q_{\text{N}}}{\partial Z} \left( \frac{\partial Z}{\partial \hat{\mu}_{0}} \cdot \hat{\mu}_{0}
-    - \frac{\partial Z}{\partial \hat{\mu}_{\text{net}}} \cdot R^{\text{Chl}} \right) \frac{1}{f(T)} \frac{\text{d}\,f(T)}{\text{d}\,T} \\
-  \frac{\partial Z}{\partial \hat{\mu}_{0}} &= \frac{\partial Z}{\partial \hat{\mu}_{net}} \frac{\partial \hat{\mu}_{net}}{\partial \hat{\mu}_{0}}
-  - \hat{\mu}_{\text{net}} \frac{Q_{\text{N},0}}{2 \hat{\mu}_{0} \sqrt{\hat{\mu}_{0} \cdot \hat{V}_{\text{N}}}} \\
-  \frac{\partial \hat{\mu}_{net}}{\partial \hat{\mu}_{0}} &= L_{\text{D}} \cdot (1 - \zeta_{\text{Chl}} \hat{\theta})
-  \left[ L_{\text{I}} - (1 - L_{\text{I}}) \frac{\alpha \cdot \bar{I}}{\hat{\mu}_{0}} \hat{\theta} \right] \\
-  \frac{1}{f(T)} \frac{\text{d}\,f(T)}{\text{d}\,T} &= \frac{E_{\text{a}}}{R\cdot {(T / \text{K})}^{2}}
-\end{flalign}}
+  \begin{flalign}
+    \label{eq:dQdT}
+    \frac{\partial Q_{\text{N}}}{\partial T} &= \frac{\partial Q_{\text{N}}}{\partial Z} \left( \frac{\partial Z}{\partial \hat{\mu}_{0}} \cdot \hat{\mu}_{0}
+      - \frac{\partial Z}{\partial \hat{\mu}_{\text{net}}} \cdot R^{\text{Chl}} \right) \frac{1}{f(T)} \frac{\text{d}\,f(T)}{\text{d}\,T} \\
+    \label{eq:dZdV}
+    \frac{\partial Z}{\partial \hat{\mu}_{0}} &= \frac{\partial Z}{\partial \hat{\mu}_{net}} \frac{\partial \hat{\mu}_{net}}{\partial \hat{\mu}_{0}}
+    - \hat{\mu}_{\text{net}} \frac{Q_{\text{N},0}}{2 \hat{\mu}_{0} \sqrt{\hat{\mu}_{0} \cdot \hat{V}_{\text{N}}}} \\
+    \frac{\partial \hat{\mu}_{net}}{\partial \hat{\mu}_{0}} &= L_{\text{D}} \cdot (1 - \zeta_{\text{Chl}} \hat{\theta})
+    \left[ L_{\text{I}} - (1 - L_{\text{I}}) \frac{\alpha \cdot \bar{I}}{\hat{\mu}_{0}} \hat{\theta} \right] \\
+    \frac{1}{f(T)} \frac{\text{d}\,f(T)}{\text{d}\,T} &= \frac{E_{\text{a}}}{R\cdot {(T / \text{K})}^{2}}
+  \end{flalign}}
 % \onur{The partial derivatives of $T$ Eq.~\eqref{eq:sdin3} are approximated numerically, as the analytical solution of $\partial Q_{\text{N}}/\partial T$ is unwieldy, given the temperature dependence of $\hat{\mu}_{0}$,  $\hat{V}_{0}$ and $R_{\text{M}}^{\text{Chl}}$, and numerous occurrence of these terms in intermediate quantities $\hat{\theta}$ and $L_{\text{I}}$ when $Q_{\text{N}}$ (Eq.~\ref{eq:Qopt}) is fully expanded. The numerical approximation is achieved by storing the previous value ($t=i-1$) of $T$, calculating $Q_{\text{N}}$ based on this previous value (but the current values of $\bar{I}$ and $L_{\text{D}}$), and calculating the differences with the current values ($t=i$), i.e.,
 % \begin{align}
 %  \frac{\partial Q_{\text{N}}}{\partial T} & \sim
@@ -347,16 +350,15 @@ $\partial Z/ \partial \bar{I}$ can then be derived by canonical application of t
 % \end{align}
 % }
 
-\onur{When $\hat{V}_0 = f(T)$:}\\
+\onur{When $\hat{V}_0 = f(T)$: Markus: we need only modify Eqs.~\eqref{eq:dQdT} and \eqref{eq:dZdV}}\\
 \textcolor{green}{The temperature derivatives are obtained via the derivatives with respect to $\hat{\mu}_{0}$, $\hat{V}_{0}$ and $R_{\text{M}}^{\text{Chl}}$:
 \begin{flalign}
-   \frac{\partial Q_{\text{N}}}{\partial T} 
-   &= \frac{\partial Q_{\text{N}}}{\partial Z} \frac{\partial Z}{\partial T} = 
-   %\frac{\partial Q_{\text{N}}}{\partial Z} \frac{\partial \frac{Q_{\text{N},0}}{2}\left( \frac{\hat{\mu}_{\text{net}}}{\hat{V}_{\text{N}}} + \zeta_{\text{N}} \right)} {\partial T} =
-   \frac{\partial Q_{\text{N}}}{\partial Z} \frac{Q_{\text{N},0}}{2}  \frac{\partial (\frac{\hat{\mu}_{\text{net}}}{\hat{V}_{\text{N}}}) } {\partial T}\\
-   &=\frac{\partial Q_{\text{N}}}{\partial Z} \frac{Q_{\text{N},0}}{2}  
-   \frac{\hat{V}_{\text{N}} \frac{ \partial \hat{\mu}_{\text{net}}} {\partial T} -\hat{\mu}_{\text{net}} \frac{\partial \hat{V}}{\partial T}} 
-   {\hat{V}_{\text{N}}^2} = ...
+  \frac{\partial Q_{\text{N}}}{\partial T} &= \frac{\partial Q_{\text{N}}}{\partial Z} \left( \frac{\partial Z}{\partial \hat{\mu}_{0}} \cdot \hat{\mu}_{0}
+    + \frac{\partial Z}{\partial \hat{V}_{0}} \cdot \hat{V}_{0}
+    - \frac{\partial Z}{\partial \hat{\mu}_{\text{net}}} \cdot R^{\text{Chl}} \right) \frac{1}{f(T)} \frac{\text{d}\,f(T)}{\text{d}\,T} \tag{\ref{eq:dQdT}a} \\
+  \frac{\partial Z}{\partial \hat{\mu}_{0}} &= \frac{\partial Z}{\partial \hat{\mu}_{net}} \frac{\partial \hat{\mu}_{net}}{\partial \hat{\mu}_{0}}
+  \qquad \frac{\partial Z}{\partial \hat{V}_{0}} = -\hat{\mu}_{\text{net}} \frac{Q_{\text{N},0}}{2 \hat{\mu}_{0} \sqrt{\hat{\mu}_{0} \cdot \hat{V}_{\text{N}}}}
+  \tag{\ref{eq:dZdV}a}
  \end{flalign}  
 }
 
