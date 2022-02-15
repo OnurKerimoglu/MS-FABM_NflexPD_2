@@ -192,19 +192,19 @@ This term is used in this updated model version also to track the DIC concentrat
 \begin{equation} \label{eq:dic}
   \frac{\mathrm{d}\, \text{DIC}}{\mathrm{d}\, t} = \underbrace{F_{\text{DOC}-\text{DIC}}}_{\textrm{Remineralization}} - \underbrace{F_{\text{DIC}-\text{Phy}_{\text{C}}}}_{\textrm{Net C uptake}}
 \end{equation}
-Note that representing the C uptake and respiration terms with a lumped term $F_{\text{DIC}-\text{Phy}_{\text{C}}}$ in Eq.~\eqref{eq:dic} is based on the assumption that the respiration terms (see Eq.~7 in K21) are added back to DIC, and would have to be separated if CO2 was explicitly resolved. Remineralization flux, $F_{\text{DOC}-\text{DIC}}$ is calculated as a order reaction as in K21, which was previously only to trace the DOC (K21).
+Note that representing the C uptake and respiration terms with a lumped term $F_{\text{DIC}-\text{Phy}_{\text{C}}}$ in Eq.~\eqref{eq:dic} is based on the assumption that the respiration terms (see Eq.~7 in K21) are added back to DIC, and would have to be separated if CO2 was explicitly resolved. The remineralization flux, $F_{\text{DOC}-\text{DIC}}$ is calculated as a first-order reaction as in K21, which was previously only used to trace the DOC (K21).
 
-The second term in Eq.~\eqref{eq:sPhyC}, $F_{\text{Phy}_{\text{C}}-\text{Det}_{\text{C}}}$, representing the mortality of phytoplankton, is calculated as a quadratic rate like in K21 (Table 1), but now it is directly based on $\text{Phy}_{\text{C}}$ concentration, i.e.,  
+The second term in Eq.~\eqref{eq:sPhyC}, $F_{\text{Phy}_{\text{C}}-\text{Det}_{\text{C}}}$, representing the mortality of phytoplankton, is calculated as a quadratic rate as in K21 (Table 1), but now it is directly based on $\text{Phy}_{\text{C}}$ concentration, i.e.,  
 \begin{flalign}\label{eq:mortC}
 F_{\text{Phy}_{\text{C}}-\text{Det}_{\text{C}}} &= m_{\text{C}} \cdot \text{Phy}_{\text{C}}^2
 \end{flalign}
-with $m_{\text{C}}$ [\unit{m^3\ mmolC^{-1}\ d^{-1}}] being the C-based specific mortality rate. Then the N counterpart, $F_{\text{Phy}_{\text{N}}-\text{Det}_{\text{N}}}$ is found by multiplying this term by $Q_{\text{N}}$ (see also Appendix~\ref{S:appQ4loss}).
+with $m_{\text{C}}$ [\unit{m^3\ mmolC^{-1}\ d^{-1}}] being the C-based specific mortality rate.  The N counterpart, $F_{\text{Phy}_{\text{N}}-\text{Det}_{\text{N}}}$ is found by multiplying this term by $Q_{\text{N}}$ (see also Appendix~\ref{S:appQ4loss}).
 
 %given by the division of N flux from phytoplankton to detritus, $F_{\text{Phy}_{\text{N}}-\text{Det}_{\text{N}}}$ by $Q_{\text{N}}$
 
 \subsection{Flux of nutrients between DIM and Phytoplankton}\label{S:DescFlux}
 
-As in K21, the source term for the nutrients in DIM pool are described as the remineralization fluxes from the nutrients in dissolved organic form (e.g., DON), $F_{\text{DON}-\text{DIN}}$ (Table 1, K21), minus the fluxes between the DIM (e.g., DIN) and phytoplankton ($F_{\text{DIN}-\text{Phy}_{\text{N}}}$): 
+As in K21, the source term for the nutrients in the DIM pool are described as the remineralization fluxes from the nutrients in dissolved organic form (e.g., DON), $F_{\text{DON}-\text{DIN}}$ (Table 1, K21), minus the fluxes between the DIM (e.g., DIN) and phytoplankton ($F_{\text{DIN}-\text{Phy}_{\text{N}}}$): 
 \begin{equation} \label{eq:sdin}
   \frac{\text{d}\,\text{DIN}}{\text{d}\,t} = F_{\text{DON}-\text{DIN}} - F_{\text{DIN}-\text{Phy}_{\text{N}}}
 \end{equation}
@@ -270,7 +270,7 @@ While this, rather arbitrary, measure for achieving N mass balance violates the 
 % \begin{equation}\label{eq:sdin3}
 %  s(\text{DIN}) = \frac{\text{d}\text{DIN}}{\text{d}t} = \frac{F_{\text{DON}-\text{DIN}} - \text{Phy}_{\text{C}} \left(V_{\text{N}} +  \frac{\partial Q_{\text{N}}}{\partial \bar{I}} \frac{\text{d} \bar{I}}{\text{d} t} \right)}{ 1+\text{Phy}_{\text{C}}\frac{\partial Q_{\text{N}}}{\partial \text{DIN}}}
 % \end{equation}
-As a technical remark regarding the FABM implementation of the model: Eq.~\eqref{eq:sdin3} requires combination of terms, which, in K21, used to be calculated by separate abiotic ($F_{\text{DON}-\text{DIN}}$) and phytoplankton modules (all other terms), therefore in the current implementation, in order to avoid a circular-dependency error, an intermediate module collects the necessary terms from the two modules, and sets the right hand sides for the DIN at once.
+As a technical remark regarding the FABM implementation of the model: Eq.~\eqref{eq:sdin3} requires a combination of terms, which, in K21, used to be calculated by separate abiotic ($F_{\text{DON}-\text{DIN}}$) and phytoplankton modules (all other terms), therefore in the current implementation, in order to avoid a circular-dependency error, an intermediate module collects the necessary terms from the two modules, and sets the right hand sides for DIN at once.
 
 In Eq.~\eqref{eq:sdin3}, partial derivatives of $Q_{\text{N}}$ with respect to DIN, $\bar{I}$ and $L_{\text{D}}$ are obtained by canonical application of the chain rule \onur{whereas the partial derivative of $Q_{\text{N}}$ with respect to $T$ is approximated numerically as described below}. As in \citet{Smith2016}, we introduce a new variable $Z$ and re-write Eq.~\eqref{eq:Qopt} in terms of $Z$:
 \begin{flalign}
@@ -287,7 +287,7 @@ In Eqs.~\eqref{eq.delQdelN}--\eqref{eq.delQdd}, the common term $\partial Q_{\te
 \begin{equation} \label{eq:delQdelZ}
  \frac{\partial Q_{\text{N}}}{\partial Z} = \frac{-Q_{\text{N,0}}}{4 \cdot Z \cdot \sqrt{Z\cdot(1+Z)}}
 \end{equation}
-Recalling $\hat{V}_{\text{N}}$ from K21, Eq.~17:
+Recalling $\hat{V}_{\text{N}}$ from K21, Eq.~(17):
 \begin{flalign}
   \hat{V}_{\text{N}} &= \frac{(1-f_{\text{A}})\hat{V}_{0} f_{\text{A}} \hat{A}_{0} \text{DIN}}{(1-f_{\text{A}})\hat{V}_{0} + f_{\text{A}} \hat{A}_{0} \text{DIN}}
   = \frac{\hat{V}_{0}\cdot \hat{A}_{0}\cdot\text{DIN}}{{(\sqrt{\hat{V}_{0}} + \sqrt{\hat{A}_{0}\cdot \text{DIN}})}^{2}}, \qquad
@@ -374,8 +374,7 @@ When the irradiance and temperature are supplied externally, as typically the ca
     \frac{\text{d}\,\bar{I}}{\text{d}\,t} &= (\bar{I}_{\max}-\bar{I}_{\min}) \frac{\pi}{365} \cos \left[ 2 \pi t' \right]
     \end{flalign}
     \end{description}
-    
-    Both the irradiance and its temporal derivative, as found by the numerical and analytical approaches are identical, as was targeted (Fig.~\ref{f.T1light}).
+    The temporal derivatives found by the numerical and analytical approaches are almost identical, as was targeted (Fig.~\ref{f.T1light}).
     \begin{figure}[ht!]
     \includegraphics[width=14cm,trim=0cm 0mm 0.0cm 0mm, clip]{figures/2022-01-24a_T10_Ld1_ThatVar_PARext_vs_PARint/0D-Highlat_wconst_lext_Ld1_T20_CbasedIA_modular_24h_vs_0D-Highlat_wconst_lint_Ld1_T20_CbasedIA_modular_24h_cont_abio0_2y.png}
     \caption{Daily average irradiance and its temporal derivative, as extracted from the simulation outputs generated for T1. PAR:N (solid blue line) is the model version where the temporal derivative of irradiance is approximated numerically; PAR:A (dashed orange line): both irradiance and its temporal derivative are calculated analytically.\label{f.T1light}}
