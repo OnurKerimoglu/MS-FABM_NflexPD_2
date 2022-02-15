@@ -72,7 +72,7 @@
 %\usepackage{subfig}
 %\usepackage{rotating}
 
-%Additional packages: 
+%Additional packages:
 \usepackage{mathrsfs} %provides calligraphic Fonts
 \usepackage{placeins}
 \allowdisplaybreaks
@@ -139,7 +139,7 @@
 %INTRODUCTION
 \introduction%% \introduction[modified heading if necessary]
 
-%\subsection{Autotroph Acclimation and Biogeochemical Cycles} 
+%\subsection{Autotroph Acclimation and Biogeochemical Cycles}
 
 %\subsection{Instantaneous acclimation approach}
 \subsection{Background and Objectives}
@@ -154,7 +154,7 @@ Here we introduce FABM-NflexPD 2.0, which can resolve C, N and P in DIM pool. We
  %\item description of the model extended with limitation by other elements, exemplified for P
  \item [T1] \onur{done} an assessment of the conservation of the C and and N by a simplified version of the model in a 0D setup, where temperature and day length were held constant, and light and temporal changes in light were provided either externally and numerically approximated respectively, and both calculated analytically.
  \item [T2a] \onur{in progress} testing the IA approach in a more realistic 0D setup, where irradiance is supplied externally, temperature and day length are allowed to vary, and attenuation of light by phytoplankton is accounted for
- \item [T2b] \onur{in progress} comparison of the fully explicit version (the `dynamic acclimation' (DA) variant in K21) vs the instantaneously acclimating (IA) variant of the model 
+ \item [T2b] \onur{in progress} comparison of the fully explicit version (the `dynamic acclimation' (DA) variant in K21) vs the instantaneously acclimating (IA) variant of the model
  %\item [T4] \onur{todo, I doubt that this is needed} comparison of the behavior of the previous and current C- and N- based model versions in a 0D setup
  \item [T3] \onur{todo, if the 0D works without problems} application of the C-N-P model in an idealisitc 1D setup and assessment of mass conservation
  \item [T4] \onur{todo} demonstration with multiple phytoplankton groups \onur{ideally in 1D, but possibly in 0D (idea: difference in scaling of model speed vs number of plankton functional types (e.g., 1, 5, 10 pfts) with DA and IA variants. Expectation: clearer speed advantages of IA when simulating higher number of pfts)}
@@ -168,12 +168,12 @@ Here we introduce FABM-NflexPD 2.0, which can resolve C, N and P in DIM pool. We
 
 %MODEL DESCRIPTION
 \section{Model Description}
-In this section, we will highlight the differences and similarities between the present, `C-based' version of the model from the earlier version of the `N-based' model version presented by K21. 
+In this section, we will highlight the differences and similarities between the present, `C-based' version of the model from the earlier version of the `N-based' model version presented by K21.
 
 \subsection{C and N content of Phytoplankton}
 In this version of the model, C content of phytoplankton ($\text{Phy}_{\text{C}}$) is dynamically tracked (thus, C-based) instead of the N content ($\text{Phy}_{\text{N}}$) as was the case in the earlier (thus, N-based) version. Wherever required, $\text{Phy}_{\text{N}}$ is calculated as:
 \begin{equation} \label{eq:Q}
-  \text{Phy}_{\text{N}} = \text{Phy}_{\text{C}} \cdot Q_{\text{N}}  
+  \text{Phy}_{\text{N}} = \text{Phy}_{\text{C}} \cdot Q_{\text{N}}
 \end{equation}
 
 $Q_{\text{N}}$ is assumed to instantaneously adjust to a balanced-growth optimum value, as determined by the nutrient uptake in the protoplast, $\hat{V}_{\text{N}}$ and net photosynthesis in the chloroplast, $\hat{\mu}_{\text{net}}$ (Eq.~10 in K21):
@@ -184,7 +184,7 @@ where $Q_{\text{N,0}}$ and $\zeta_{\text{N}}$ are model parameters (subsistence 
 \begin{equation} \label{eq:sPhyC}
 \frac{\mathrm{d}\, \text{Phy}_{\text{C}}}{\mathrm{d}\, t} = F_{\text{DIC}-\text{Phy}_{\text{C}}} - F_{\text{Phy}_{\text{C}}-\text{Det}_{\text{C}}}
 \end{equation}
-which is identical to the source term of the `DA' variant (Eq.~1b in K21). Here, $F_{\text{DIC}-\text{Phy}_{\text{C}}}$ and $F_{\text{Phy}_{\text{C}}-\text{Det}_{\text{C}}}$ are the fluxes from Dissolved Inorganic Carbon (DIC) to phytoplankton, and from phytoplankton to detrital C (Det$_{\text{C}}$), respectively. The first term in Eq.~\eqref{eq:sPhyC} represents net phytoplankton growth, and as before (Eq.~8 in K21), it is given by the product of Phy$_{\text{C}}$ with net growth rate, $\mu$: 
+which is identical to the source term of the `DA' variant (Eq.~1b in K21). Here, $F_{\text{DIC}-\text{Phy}_{\text{C}}}$ and $F_{\text{Phy}_{\text{C}}-\text{Det}_{\text{C}}}$ are the fluxes from Dissolved Inorganic Carbon (DIC) to phytoplankton, and from phytoplankton to detrital C (Det$_{\text{C}}$), respectively. The first term in Eq.~\eqref{eq:sPhyC} represents net phytoplankton growth, and as before (Eq.~8 in K21), it is given by the product of Phy$_{\text{C}}$ with net growth rate, $\mu$:
 \begin{equation} \label{eq:fdicphyc}
  F_{\text{DIC}-\text{Phy}_{\text{C}}} = \mu \cdot \text{Phy}_{\text{C}}
 \end{equation}
@@ -194,17 +194,17 @@ This term is used in this updated model version also to track the DIC concentrat
 \end{equation}
 Note that representing the C uptake and respiration terms with a lumped term $F_{\text{DIC}-\text{Phy}_{\text{C}}}$ in Eq.~\eqref{eq:dic} is based on the assumption that the respiration terms (see Eq.~7 in K21) are added back to DIC, and would have to be separated if CO2 was explicitly resolved. The remineralization flux, $F_{\text{DOC}-\text{DIC}}$ is calculated as a first-order reaction as in K21, which was previously only used to trace the DOC (K21).
 
-The second term in Eq.~\eqref{eq:sPhyC}, $F_{\text{Phy}_{\text{C}}-\text{Det}_{\text{C}}}$, representing the mortality of phytoplankton, is calculated as a quadratic rate as in K21 (Table 1), but now it is directly based on $\text{Phy}_{\text{C}}$ concentration, i.e.,  
+The second term in Eq.~\eqref{eq:sPhyC}, $F_{\text{Phy}_{\text{C}}-\text{Det}_{\text{C}}}$, representing the mortality of phytoplankton, is calculated as a quadratic rate as in K21 (Table 1), but now it is directly based on $\text{Phy}_{\text{C}}$ concentration, i.e.,
 \begin{flalign}\label{eq:mortC}
 F_{\text{Phy}_{\text{C}}-\text{Det}_{\text{C}}} &= m_{\text{C}} \cdot \text{Phy}_{\text{C}}^2
 \end{flalign}
-with $m_{\text{C}}$ [\unit{m^3\ mmolC^{-1}\ d^{-1}}] being the C-based specific mortality rate.  The N counterpart, $F_{\text{Phy}_{\text{N}}-\text{Det}_{\text{N}}}$ is found by multiplying this term by $Q_{\text{N}}$ (see also Appendix~\ref{S:appQ4loss}).
+with $m_{\text{C}}$ [\unit{m^3\ mmolC^{-1}\ d^{-1}}] being the C-based specific mortality rate.  The N counterpart, $F_{\text{Phy}_{\text{N}}-\text{Det}_{\text{N}}}$ is found by multiplying this term by $Q_{\text{N}}$.
 
 %given by the division of N flux from phytoplankton to detritus, $F_{\text{Phy}_{\text{N}}-\text{Det}_{\text{N}}}$ by $Q_{\text{N}}$
 
 \subsection{Flux of nutrients between DIM and Phytoplankton}\label{S:DescFlux}
 
-As in K21, the source term for the nutrients in the DIM pool are described as the remineralization fluxes from the nutrients in dissolved organic form (e.g., DON), $F_{\text{DON}-\text{DIN}}$ (Table 1, K21), minus the fluxes between the DIM (e.g., DIN) and phytoplankton ($F_{\text{DIN}-\text{Phy}_{\text{N}}}$): 
+As in K21, the source term for the nutrients in the DIM pool are described as the remineralization fluxes from the nutrients in dissolved organic form (e.g., DON), $F_{\text{DON}-\text{DIN}}$ (Table 1, K21), minus the fluxes between the DIM (e.g., DIN) and phytoplankton ($F_{\text{DIN}-\text{Phy}_{\text{N}}}$):
 \begin{equation} \label{eq:sdin}
   \frac{\text{d}\,\text{DIN}}{\text{d}\,t} = F_{\text{DON}-\text{DIN}} - F_{\text{DIN}-\text{Phy}_{\text{N}}}
 \end{equation}
@@ -221,11 +221,14 @@ $Q_{\text{N}}$ changes over time, which contributes to the rate of change of $\t
 \end{equation}
 The right-most term in Eq.~\eqref{eq:phyn}, $\text{Phy}_{\text{C}}\cdot \mathrm{d}\,Q_{\text{N}} / \mathrm{d}\, t$, is not accounted for because $\text{Phy}_{\text{N}}$ is not a state variable.  Hence, total N is not conserved.  If $\text{Phy}_{\text{N}}$ was a state variable, this term would not appear and mass balance would be ensured by tracking the temporal evolution of $\text{Phy}_{\text{N}}$.  Owing to the instantaneous acclimation (IA) of $Q_{\text{N}}$, we must explicitly account for this term in order to maintain mass balance for N\@.  It is impossible to do this mechanistically because that would require tracking the corresponding N flux in the (nonexistent) state variable $\text{Phy}_{\text{N}}$.  Instead, we have to account for this term by modifying the rate of change of one or more of the N-containing state variables of our IA model.  As done by \citet{Smith2016}, we subtract it from the differential equation for DIN\@:
 \begin{flalign}\label{eq:sdin2}
-  \frac{\text{d}\,\text{DIN}}{\text{d}\, t} &= F_{\text{DON}-\text{DIN}} - V_{\text{N}} - \text{Phy}_{\text{C}} \cdot \frac{\mathrm{d}\, Q_{\text{N}}}{\mathrm{d}\, t}
-  = F_{\text{DON}-\text{DIN}} - V_{\text{N}} - \text{Phy}_{\text{C}} \cdot \left(\frac{\partial Q_{\text{N}}}{\partial \text{DIN}} \frac{\text{d}\, \text{DIN}}{\text{d}\, t}
-    + \frac{\partial Q_{\text{N}}}{\partial \bar{I}} \frac{\text{d}\, \bar{I}}{\text{d}\, t} 
-    + \frac{\partial Q_{\text{N}}}{\partial L_{\text{D}}} \frac{\text{d}\, L_{\text{D}}}{\text{d}\, t} 
-    + \frac{\partial Q_{\text{N}}}{\partial T} \frac{\text{d}\, T}{\text{d}\, t} \right) \\
+  \begin{split}
+    \frac{\text{d}\,\text{DIN}}{\text{d}\, t} &= F_{\text{DON}-\text{DIN}} - V_{\text{N}} - \text{Phy}_{\text{C}} \cdot \frac{\mathrm{d}\, Q_{\text{N}}}{\mathrm{d}\, t} \\
+    &= F_{\text{DON}-\text{DIN}} - V_{\text{N}} - \text{Phy}_{\text{C}} \cdot \left(\frac{\partial Q_{\text{N}}}{\partial \text{DIN}} \frac{\text{d}\, \text{DIN}}{\text{d}\, t}
+      + \frac{\partial Q_{\text{N}}}{\partial \bar{I}} \frac{\text{d}\, \bar{I}}{\text{d}\, t}
+      + \frac{\partial Q_{\text{N}}}{\partial L_{\text{D}}} \frac{\text{d}\, L_{\text{D}}}{\text{d}\, t}
+      + \frac{\partial Q_{\text{N}}}{\partial T} \frac{\text{d}\, T}{\text{d}\, t} \right)
+  \end{split}
+  \\
   \intertext{and reorganizing:}
 %intermediate step:
 % \begin{equation}\label{eq:sdin2.5}
@@ -242,21 +245,21 @@ While this, rather arbitrary, measure for achieving N mass balance violates the 
 
 % Here, $\frac{\text{d} \text{Phy}_{\text{C}}}{\text{d} t} \big\rvert_G$ corresponds to gross growth of phytoplankton C biomass, i.e., $F_{\text{DIC}-\text{Phy}_{\text{C}}}$ in Eq.~\eqref{eq:sPhyC}. Substituting therefore Eq.~\eqref{eq:fdicphyc} in Eq.~\eqref{eq:dphyNdt}:
 % \begin{equation} \label{eq:dphyNdt2}
-%   \frac{\text{d}\text{Phy}_{\text{N}}}{\text{d}t} \bigg\rvert_G= Q_{\text{N}} \cdot \mu \cdot \text{Phy}_{\text{C}} + \text{Phy}_{\text{C}} \frac{\text{d} Q_{\text{N}}}{\text{d} t} 
+%   \frac{\text{d}\text{Phy}_{\text{N}}}{\text{d}t} \bigg\rvert_G= Q_{\text{N}} \cdot \mu \cdot \text{Phy}_{\text{C}} + \text{Phy}_{\text{C}} \frac{\text{d} Q_{\text{N}}}{\text{d} t}
 % \end{equation}
-% where, assuming balanced growth \citep{Burmaster1979}, i.e., $V_{\text{N}} = Q_N \cdot \mu$  (K21, Eq.~6) the first term on the right hand side of Eq.~\eqref{eq:dphyNdt2} can be replaced with $V_{\text{N}} \cdot \text{Phy}_{\text{C}}$, i.e., 
+% where, assuming balanced growth \citep{Burmaster1979}, i.e., $V_{\text{N}} = Q_N \cdot \mu$  (K21, Eq.~6) the first term on the right hand side of Eq.~\eqref{eq:dphyNdt2} can be replaced with $V_{\text{N}} \cdot \text{Phy}_{\text{C}}$, i.e.,
 % \begin{equation} \label{eq:dphyNdt3}
 %   \frac{\text{d}\text{Phy}_{\text{N}}}{\text{d}t} \bigg\rvert_G=  \text{Phy}_{\text{C}} \left( V_{\text{N}} + \frac{\text{d} Q_{\text{N}}}{\text{d} t} \right)
 % \end{equation}
 
-% %\onur{In the N-based version, we had (K21, Eq.~5): $F_{DIN-%\text{Phy}_{\text{N}}} = V_{\text{N}} \cdot \text{Phy}_{\text{C}}$. i.e., excluding the $%\frac{\text{d} Q_{\text{N}}}{\text{d} t}$ term in Eq.~\eqref{eq:dphyNdt3}. %As we discussed, this apparent difference %(apparent, because maybe there is a mistake in the notation? Also note that $F_{DIN-\text{Phy}_{\text{N}}}$ is not used anywhere, and in the C-based version of the model it is only saved as a diagnostic quantity) 
+% %\onur{In the N-based version, we had (K21, Eq.~5): $F_{DIN-%\text{Phy}_{\text{N}}} = V_{\text{N}} \cdot \text{Phy}_{\text{C}}$. i.e., excluding the $%\frac{\text{d} Q_{\text{N}}}{\text{d} t}$ term in Eq.~\eqref{eq:dphyNdt3}. %As we discussed, this apparent difference %(apparent, because maybe there is a mistake in the notation? Also note that $F_{DIN-\text{Phy}_{\text{N}}}$ is not used anywhere, and in the C-based version of the model it is only saved as a diagnostic quantity)
 % %doesn't violate the internal consistency of the N-based version, but it would be great if we could explain what this really is. For instance, is this a `real deviation' in model formulations that contributes (among other sources) to quantitative differences in results?}
 
 % According to Eq.~\eqref{eq:dphyNdt3}, the N flux between the DIM pool and phytoplankton can be intuitively understood as the sum of uptake due to growth of C biomass, and the change in the N quota. % It should be noted that this cumulative change can become negative. (?)
 
 % Given that the terms $\hat{V}_{\text{N}}$ and $\hat{\mu}_{\text{net}}$ required for calculating $Q_{\text{N}}$ (Eq.~\ref{eq:Qopt}) are respectively functions of DIN (Eq.~16 in K21) and daytime average irradiance, $\bar{I}$ (Eqs.~20--22 in K21), the total time derivative of $Q_{\text{N}}$ in Eq.~\eqref{eq:dphyNdt3} can be computed as the sum of partial derivatives with respect to DIN and $\bar{I}$ using chain rule:
 % \begin{equation} \label{eq:dqdt}
-%  \frac{\text{d} Q_{\text{N}}}{\text{d} t} = \frac{\partial Q_{\text{N}}}{\partial \text{DIN}} \frac{\text{d} \text{DIN}}{\text{d} t} +  \frac{\partial Q_{\text{N}}}{\partial \bar{I}} \frac{\text{d} \bar{I}}{\text{d} t} 
+%  \frac{\text{d} Q_{\text{N}}}{\text{d} t} = \frac{\partial Q_{\text{N}}}{\partial \text{DIN}} \frac{\text{d} \text{DIN}}{\text{d} t} +  \frac{\partial Q_{\text{N}}}{\partial \bar{I}} \frac{\text{d} \bar{I}}{\text{d} t}
 % \end{equation}
 % Substituting Eq.~\eqref{eq:dqdt} in Eq.~\eqref{eq:dphyNdt3}, and subsequently Eq.~\eqref{eq:dphyNdt3} in Eq.~\eqref{eq:sdin}:
 % \begin{equation}\label{eq:sdin2}
@@ -272,18 +275,17 @@ While this, rather arbitrary, measure for achieving N mass balance violates the 
 % \end{equation}
 As a technical remark regarding the FABM implementation of the model: Eq.~\eqref{eq:sdin3} requires a combination of terms, which, in K21, used to be calculated by separate abiotic ($F_{\text{DON}-\text{DIN}}$) and phytoplankton modules (all other terms), therefore in the current implementation, in order to avoid a circular-dependency error, an intermediate module collects the necessary terms from the two modules, and sets the right hand sides for DIN at once.
 
-In Eq.~\eqref{eq:sdin3}, partial derivatives of $Q_{\text{N}}$ with respect to DIN, $\bar{I}$ and $L_{\text{D}}$ are obtained by canonical application of the chain rule \onur{whereas the partial derivative of $Q_{\text{N}}$ with respect to $T$ is approximated numerically as described below}. As in \citet{Smith2016}, we introduce a new variable $Z$ and re-write Eq.~\eqref{eq:Qopt} in terms of $Z$:
+In Eq.~\eqref{eq:sdin3}, partial derivatives of $Q_{\text{N}}$ with respect to DIN, $\bar{I}$, $L_{\text{D}}$ and $T$ are obtained by canonical application of the chain rule. As in \citet{Smith2016}, we introduce a new variable $Z$ and re-write Eq.~\eqref{eq:Qopt} in terms of $Z$:
 \begin{flalign}
   \label{eq.Z}
   Q_{\text{N}} &= \frac{Q_{\text{N},0}}{2} \left( 1 + \sqrt{1 + \frac{1}{Z}}  \right), \qquad Z = \frac{Q_{\text{N},0}}{2}\left( \frac{\hat{\mu}_{\text{net}}}{\hat{V}_{\text{N}}} + \zeta_{\text{N}} \right) \\
   \label{eq.delQdelN}
- \frac{\partial Q_{\text{N}}}{\partial \text{DIN}} &= \frac{\partial Q_{\text{N}}}{\partial Z} \frac{\partial Z}{\partial \text{DIN}} \\
- \label{eq.delQdelI} 
- \frac{\partial Q_{\text{N}}}{\partial \bar{I}}  &= \frac{\partial Q_{\text{N}}}{\partial Z} \frac{\partial Z}{\partial \bar{I}} \\
- \label{eq.delQdd} 
- \frac{\partial Q_{\text{N}}}{\partial L_{\text{D}}} &= \frac{\partial Q_{\text{N}}}{\partial Z} \frac{\partial Z}{\partial L_{\text{D}}}
+ \frac{\partial Q_{\text{N}}}{\partial \text{DIN}} &= \frac{\partial Q_{\text{N}}}{\partial Z} \frac{\partial Z}{\partial \text{DIN}}, \qquad
+ \frac{\partial Q_{\text{N}}}{\partial \bar{I}}  = \frac{\partial Q_{\text{N}}}{\partial Z} \frac{\partial Z}{\partial \bar{I}}, \qquad
+ \frac{\partial Q_{\text{N}}}{\partial L_{\text{D}}} = \frac{\partial Q_{\text{N}}}{\partial Z} \frac{\partial Z}{\partial L_{\text{D}}}, \qquad
+ \frac{\partial Q_{\text{N}}}{\partial T} = \frac{\partial Q_{\text{N}}}{\partial Z} \frac{\partial Z}{\partial T}
 \end{flalign}
-In Eqs.~\eqref{eq.delQdelN}--\eqref{eq.delQdd}, the common term $\partial Q_{\text{N}} / \partial Z$, as in S16, yields:
+In Eqs.~\eqref{eq.delQdelN}, the common term $\partial Q_{\text{N}} / \partial Z$, as in S16, is:
 \begin{equation} \label{eq:delQdelZ}
  \frac{\partial Q_{\text{N}}}{\partial Z} = \frac{-Q_{\text{N,0}}}{4 \cdot Z \cdot \sqrt{Z\cdot(1+Z)}}
 \end{equation}
@@ -302,13 +304,12 @@ the partial derivative of $Z$ with respect to DIN is:
   = -\frac{\hat{\mu}_{\text{net}} \cdot Q_{\text{N},0}}{2 \cdot\hat{A}_{0}\cdot \text{DIN}^{2}} \left( 1 + \sqrt{\frac{\hat{A}_{0}\cdot \text{DIN}}{\hat{V}_{0}}} \right)
 \end{flalign}
 
-For calculating the partial derivative of $Z$ with respect to $\bar{I}$, ${\partial Z}/{\partial \bar{I}}$, we recall $\hat{\mu}_{\text{net}}$, $L_{\text{I}}$ and $\hat{\theta}$ from K21, Eqs.~20--23 \& 26:
+For calculating the partial derivative of $Z$ with respect to $\bar{I}$, ${\partial Z}/{\partial \bar{I}}$, we recall $\hat{\mu}_{\text{net}}$, $L_{\text{I}}$ and $\hat{\theta}$ from K21, Eqs.~(20)--(23) \& (26):
 \begin{flalign}
-  % \hat{\mu}_{\text{net}} &= \hat{\mu}_g (1-\zeta_{\text{Chl}}\hat{\theta})- R^{\text{Chl}}_{\text{M}} \zeta_{\text{Chl}}\hat{\theta}\\
-  R^{\text{Chl}} &= f(T) \cdot R_{\text{M}}^{\text{Chl}} \zeta_{\text{Chl}}\hat{\theta}  \\
- \hat{\mu}_{\text{net}} &= L_{\text{D}}\hat{\mu}_{0} L_{\text{I}} (1-\zeta_{\text{Chl}}\hat{\theta})- R^{\text{Chl}}\\
-  L_{\text{I}} &= 1 - \exp \left( \frac{-\alpha \hat{\theta} \bar{I}}{\hat{\mu}_{0}} \right)\\
-  \hat{\theta} &= \frac{1}{\zeta_{\text{Chl}}} + \frac{\hat{\mu}_{0}}{\alpha\cdot \bar{I}} \cdot (1 - W) \qquad
+  \hat{\mu}_{\text{net}} &= L_{\text{D}}\hat{\mu}_{0} L_{\text{I}} (1-\zeta_{\text{Chl}}\hat{\theta})- R^{\text{Chl}}, \qquad
+    R^{\text{Chl}} = f(T) \cdot R_{\text{M}}^{\text{Chl}} \zeta_{\text{Chl}}\hat{\theta} \\
+  L_{\text{I}} &= 1 - \exp \left( \frac{-\alpha \hat{\theta} \bar{I}}{\hat{\mu}_{0}} \right), \qquad
+  \hat{\theta} = \frac{1}{\zeta_{\text{Chl}}} + \frac{\hat{\mu}_{0}}{\alpha\cdot \bar{I}} \cdot (1 - W), \qquad
   W = \mathrm{W}_{0} \left[ \left( 1 + \frac{f(T) \cdot R_{\text{M}}^{{\text{Chl}}}}{L_{\text{D}} \cdot \hat{\mu}_{0}} \right)
    \cdot \exp \left( 1 + \frac{\alpha \cdot \bar{I}}{\hat{\mu}_{0} \cdot \zeta_{\text{Chl}}} \right) \right]
 \end{flalign}
@@ -330,16 +331,15 @@ $\partial Z/ \partial \bar{I}$ can then be derived by canonical application of t
  = \frac{\partial Z}{\partial \hat{\mu}_{\text{net}}} \frac{\partial \hat{\mu}_{\text{net}}}{\partial L_{\text{D}}} \\
  \frac{\partial \hat{\mu}_{\text{net}}}{\partial L_{\text{D}}} &= \hat{\mu}_{0} \cdot L_{\text{I}} \cdot (1 - \zeta_{\text{Chl}} \hat{\theta})
 \end{flalign}
-
-The temperature-derivative of $Q_{\text{N}}$ is obtained via the derivatives of $Z$ with respect to $\hat{\mu}_{0}$, $\hat{V}_{0}$ and $R^{\text{Chl}}$:
+The temperature-derivative of $Z$ is obtained via the derivatives with respect to $\hat{\mu}_{0}$, $\hat{V}_{0}$ and $R^{\text{Chl}}$:
 \begin{flalign}
   \begin{split}
-    \frac{\partial Q_{\text{N}}}{\partial T} &= \frac{\partial Q_{\text{N}}}{\partial Z} \frac{\partial Z}{\partial T}
-    = \frac{\partial Q_{\text{N}}}{\partial Z} \left[ \frac{\partial Z}{\partial \hat{\mu}_{\text{net}}}
+    \frac{\partial Z}{\partial T}
+    &=   \frac{\partial Z}{\partial \hat{\mu}_{\text{net}}}
       \left( \frac{\partial \hat{\mu}_{\text{net}}}{\partial \hat{\mu}_{0}} \frac{\partial \hat{\mu}_{0}}{\partial T}
         + \frac{\partial \hat{\mu}_{\text{net}}}{\partial R^{\text{Chl}}} \frac{\partial R^{\text{Chl}}}{\partial T} \right)
-      + \frac{\partial Z}{\partial \hat{V}_{\text{N}}} \frac{\partial \hat{V}_{\text{N}}}{\partial \hat{V}_{0}} \frac{\partial \hat{V}_{0}}{\partial T} \right] \\ &
-    = \frac{\partial Q_{\text{N}}}{\partial Z} \left[ \frac{\partial Z}{\partial \hat{\mu}_{\text{net}}}
+      + \frac{\partial Z}{\partial \hat{V}_{\text{N}}} \frac{\partial \hat{V}_{\text{N}}}{\partial \hat{V}_{0}} \frac{\partial \hat{V}_{0}}{\partial T} \\ &
+    = \left[ \frac{\partial Z}{\partial \hat{\mu}_{\text{net}}}
       \left( \frac{\partial \hat{\mu}_{\text{net}}}{\partial \hat{\mu}_{0}} \cdot \hat{\mu}_{0} - R^{\text{Chl}} \right)
       + \frac{\partial Z}{\partial \hat{V}_{0}} \cdot \hat{V}_{0}
     \right] \frac{1}{f(T)} \frac{\text{d}\,f(T)}{\text{d}\,T}
@@ -349,12 +349,12 @@ The temperature-derivative of $Q_{\text{N}}$ is obtained via the derivatives of 
   \left[ L_{\text{I}} - (1 - L_{\text{I}}) \frac{\alpha \cdot \bar{I}}{\hat{\mu}_{0}} \hat{\theta} \right] \qquad
   \frac{\partial Z}{\partial \hat{V}_{0}} = -\hat{\mu}_{\text{net}} \frac{Q_{\text{N},0}}{2 \hat{\mu}_{0} \sqrt{\hat{\mu}_{0} \cdot \hat{V}_{\text{N}}}} \\
   \frac{1}{f(T)} \frac{\text{d}\,f(T)}{\text{d}\,T} &= \frac{E_{\text{a}}}{R\cdot {(T / \text{K})}^{2}}
-\end{flalign}  
+\end{flalign}
 
 We would like to clarify that (1) the DIN in the denominator in the solution provided by S16 (their Eq.~A-5) was a typo; (2) replacement of $\hat{\mu}_g$ (in S16, $\hat{\mu}^I$) with $\hat{\mu}_{\text{net}}$ in our model (see K21) results in the appearance of $(1-\hat{\theta} \cdot \zeta_{\text{Chl}})$ when computing $\partial \hat{\mu}_{\text{net}} / \partial \bar{I}$; (3) $L_{\text{D}}$ used to be implicit in S16, now it's explicit (K21 Eq.~21) therefore it appears for $\partial\hat{\mu}_{\text{net}} / \partial \bar{I}$ unlike in S16 \onur{This is what I'm guessing, but maybe it was just forgotten}. %However, since $L_D$ is set to 1 in the current study (Section~\ref{S:DescSetup}), this difference is practically not relevant for our immediate purposes.
 
-The final terms required in Eq.~\eqref{eq:sdin3} are the changes in $\bar{I}$, $L_{\text{D}}$ and $T$ over time, i.e., $\text{d}\,\bar{I} / \text{d}\,t$, $\text{d}\,L_{\text{D}} / \text{d}\,t$ 
-and $\text{d}\,T / \text{d}\,t$. 
+The final terms required in Eq.~\eqref{eq:sdin3} are the changes in $\bar{I}$, $L_{\text{D}}$ and $T$ over time, i.e., $\text{d}\,\bar{I} / \text{d}\,t$, $\text{d}\,L_{\text{D}} / \text{d}\,t$
+and $\text{d}\,T / \text{d}\,t$.
 When the irradiance and temperature are supplied externally, as typically the case in realistic coupled physical-biological models it is not possible to obtain their temporal derivative analytically, therefore they are numerically approximated as the discrete backward difference between its current ($t=i$) and previous ($t=i-1$) values, divided by the size of the integration time step i.e., $\text{d}\, E / \text{d}\, t \approx (E_{i} - E_{i-1}) / \Delta t$ for $E=\{\bar{I},\ T\}$ (see also Section~\ref{S:DescT1} designed to test the sensitivity of the model results and conservation behavior to this approximation for $E=\bar{I}$).
 
 \subsection{Test setups and model operation}\label{S:DescSetup}
@@ -362,13 +362,13 @@ When the irradiance and temperature are supplied externally, as typically the ca
     For the tests T1-T2, the model is operated in a spatially homogeneous `box' setup, using the 0d driver of FABM \citep{Bruggeman2014}. With this 0D setup, numerical solutions are obtained using 4$^\text{th}$ order Runge-Kutta method with a time step of 60 seconds. Model forcing applied in 0D setups vary among different tests, as explained below.
 
     \paragraph{T1}\label{S:DescT1}
-    As simplifications for this test, we assume that temperature, T is fixed at 10$\degree$C, fractional day length, $L_D$ is unity, and ignore light attenuation and albedo effects. We consider two cases with regard to the handling of irradiance and its temporal derivative: 
+    As simplifications for this test, we assume that temperature, T is fixed at 10$\degree$C, fractional day length, $L_D$ is unity, and ignore light attenuation and albedo effects. We consider two cases with regard to the handling of irradiance and its temporal derivative:
     \begin{description}
     \item [PAR:N] in the first case, short wave radiation is supplied externally. For being able to compare this approach with the analytical approach described below, the externally supplied photosynthetically available irradiance is calculated as a sinusoidal function:
     \begin{flalign}\label{eq.I}
     \bar{I}(t) &= \bar{I}_{\min} + (\bar{I}_{\max}-\bar{I}_{\min}) 0.5 \left[ 1 + \sin \left[ 2 \pi t' \right]  \right], \qquad t' = \frac{t}{365} - 0.25
     \end{flalign}
-    where, $\bar{I}_{\min}= 1.6\, \mathrm{mol\,m^{-2}d^{-1}}$  and $\bar{I}_{\max} = \mathrm{110 \, mol\, m^{-2} d^{-1}}$ define the minimum and maximum values throughout the year, $t$ is the day of the year, and $t'$ represents the relative day of the year delayed by a quarter cycle to obtain the peak value at the middle of the year to represent a seasonal cycle representative of a high latitude environment in the northern hemisphere (see Fig.~\ref{f.T1light} for the behavior of the function with these parameters). 
+    where, $\bar{I}_{\min}= 1.6\, \mathrm{mol\,m^{-2}d^{-1}}$  and $\bar{I}_{\max} = \mathrm{110 \, mol\, m^{-2} d^{-1}}$ define the minimum and maximum values throughout the year, $t$ is the day of the year, and $t'$ represents the relative day of the year delayed by a quarter cycle to obtain the peak value at the middle of the year to represent a seasonal cycle representative of a high latitude environment in the northern hemisphere (see Fig.~\ref{f.T1light} for the behavior of the function with these parameters).
     \item [PAR:A] with the numerical approach described above, approximating the derivative with a discrete difference term can lead to inaccuracies. In order to diagnose such a potential source of error, we consider a a second case, where the temporal derivative of short wave radiation is calculated  analytically:
     \begin{flalign}\label{eq.dIdt}
     \frac{\text{d}\,\bar{I}}{\text{d}\,t} &= (\bar{I}_{\max}-\bar{I}_{\min}) \frac{\pi}{365} \cos \left[ 2 \pi t' \right]
@@ -380,21 +380,21 @@ When the irradiance and temperature are supplied externally, as typically the ca
     \caption{Daily average irradiance and its temporal derivative, as extracted from the simulation outputs generated for T1. PAR:N (solid blue line) is the model version where the temporal derivative of irradiance is approximated numerically; PAR:A (dashed orange line): both irradiance and its temporal derivative are calculated analytically.\label{f.T1light}}
     \end{figure}
 
-    
+
     \paragraph{T2}
     For these tests, where one of the aims (T2a) was to try the IA approach in a more realistic setting with multiple time-varying factors, we consider variable day length, $L_D$ as described by \citet{Forsythe2003}, which was used to calculate the daytime average irradiance, based on the externally provided incoming irradiance as described for T1 (i.e., $\bar{I}=\bar{I}_{\text{24h}}/L_D$ as in the original model by \citep{Pahlowetal13}, and as was implemented in K21). \onur{next step: Finally, to account for the seasonal variability in T, it was represented using a sinusoidal function similar to Eq.~\ref{eq.I}, but $T_{\min}$ and $T_{\max}$ set to 2 and 20$\degree$C, respectively.}
-    
+
 \subsubsection{1D setup (T3-T4)}
     \onur{TODO}
 
-%$\bar{I}_{\min}$=1.6 and $\bar{I}_{\max}$=110 
+%$\bar{I}_{\min}$=1.6 and $\bar{I}_{\max}$=110
 
 %\begin{figure}[t]
 %\includegraphics[width=8.3cm,trim=0cm 6mm 0.0cm 10mm, clip]{figures/fI_analytical.png}
 %\caption{Seasonal course of analytically described (Eqs.\eqref{f.Ian}) daily average irradiance (a) and its temporal derivative (b), with $\bar{I}_{\min}$=1.6 and $\bar{I}_{\max}$=110 [mol m$^2$ d$^{-1}$]. \label{f.Ian}}
 %\end{figure}
 
-%and $\frac{\text{d} \text{DIN}}{\text{d} t} \approx \frac{\text{DIN}_{i} - \text{DIN}_{i-1}}{\Delta t}$.  
+%and $\frac{\text{d} \text{DIN}}{\text{d} t} \approx \frac{\text{DIN}_{i} - \text{DIN}_{i-1}}{\Delta t}$.
 
 %\newpage
 
@@ -420,7 +420,8 @@ When the variability in day length is considered, total N is not entirely conser
 \end{figure}
 
 \subsection{Comparison of IA approach to the fully explicit DA approach (T2b)}
-The IA and the fully explicit DA variants produce almost identical outputs (Fig.~\ref{f.T2res}). This similarity is as expected, and in agreement with \citet{Ward2017}. On a closer look, some differences can be detected, such as a slightly higher $\text{Phy}_{\text{N}}$ at the peak of the spring bloom and slightly higher DON and $\text{Det}_{\text{N}}$ after the spring bloom simulated by the DA variant. While tracing the exact mechanisms governing these differences is not straightforward, they are thought to occur due to 1) balancing the changes in $\text{d}\,Q_{\text{N}}/\text{d}\,t$ with fluxes to and from DIN only in the IA variant, whereas in the fully explicit version, the changes in quota is a result of interactions of phytoplankton with DIC, DIN, $\text{Det}_{\text{C}}$ and $\text{Det}_{\text{N}}$ pools; 2) representation of $\text{Phy}_{\text{N}}$ in the DA variant with an explicit state variable resulting in a `memory' effect that tracks the history of the past events, unlike in the IA variant (see also Appendix~\ref{S:appIADA}) \onur{Markus, please reformulate as you see fit}.
+
+The IA and the fully explicit DA variants produce almost identical outputs (Fig.~\ref{f.T2res}). This similarity is expected and in agreement with \citet{Ward2017}. On a closer look, some differences can be detected, such as a slightly higher $\text{Phy}_{\text{N}}$ at the peak of the spring bloom and slightly higher DON and $\text{Det}_{\text{N}}$ after the spring bloom simulated by the DA variant.  The differences are due to the re-allocation of part of the fluxes into and out of $\text{Phy}_{\text{N}}$ to DIN fluxes in Eq.~\eqref{eq:sdin3}.  They remain relatively small because (1) the time scale of the optimal regulation of N uptake in the DA variant is short relative to those of phytoplankton growth and the DIN-changes in our simulations, and (2) the strong interaction between phytoplankton and DIN leads to a negative feed-back between the deviations between the IA and DA variants and the extra DIN fluxes caused by variations in $Q_{\text{N}}$ in the IA variant.
 
 % DISCUSSION
 %\section{Discussion}
@@ -447,29 +448,29 @@ The IA and the fully explicit DA variants produce almost identical outputs (Fig.
 %\clearpage
 
 \appendix
-\section{Relevance of changes in quota for the loss processes}\label{S:appQ4loss}  %% Appendix-A
-\onur{Not sure whether we want to keep this}
-%In our model, we considered a single loss process for phytoplankton. 
-%Recalling from K21 (Table 1) that the associated N flux term was expressed as 
-%\begin{flalign}
-% F_{\text{Phy}_{\text{N}}-\text{Det}_{\text{N}}} &= m \cdot \text{Phy}_{\text{N}}^2 &&
-%\end{flalign}
-%and considering that $\text{Phy}_{\text{N}}=\text{Phy}_{\text{C}} \cdot Q_{\text{N}}$, it can be thought that the changes in $Q_{\text{N}}$ needs to be taken into account for calculating the flux between phytoplankton and detrital N due to mortality. 
-Potential links between cellular quotas and loss processes can be assessed by analyzing the components of the changes in $\text{Phy}_{\text{N}}$ occurring due to loss terms, as was previously done for the case of growth (Eq.~\eqref{eq:dphyNdt}). Observing that the only loss process we considered here is mortality:
-\begin{flalign}
-  \frac{\text{d}\,\text{Phy}_{\text{N}}}{\text{d}\,t} \bigg\rvert_L
-  &=\frac{\text{d}\,\text{Phy}_{\text{C}} Q_{\text{N}}}{\text{d}\,t} \bigg\rvert_M
-  = Q_{\text{N}} \frac{\text{d}\,\text{Phy}_{\text{C}}}{\text{d}\,t} \bigg\rvert_M + \text{Phy}_{\text{N}}\frac{\text{d}\,\text{Q}_{\text{N}}}{\text{d}\,t} \bigg\rvert_M
-\end{flalign}
-Here, in the first term, $\frac{\text{d}\,\text{Phy}_{\text{C}}}{\text{d}\,t} \rvert_M$ represents the C-based mortality rate ($=m \cdot \text{Phy}_{\text{C}}^2$, Eq.~\eqref{eq:mortC}). In the second term, $\frac{\text{d}\,\text{Q}_{\text{N}}}{\text{d}\,t} \rvert_M$ represents the changes occurring in $Q_{\text{N}}$, however, due to mortality only. As in our model, we did not consider any effect of mortality on quota (assuming that when a cell dies, it dies altogether and all of its contents become detritus), this term collapses to 0, therefore reducing the associated flux term to:
-\begin{flalign}
-F_{\text{Phy}_{\text{N}}-\text{Det}_{\text{N}}} &=
-Q_{\text{N}} \frac{\text{d}\,\text{Phy}_{\text{C}}}{\text{d}\,t} \bigg\rvert_M = Q_{\text{N}} \cdot m \cdot \text{Phy}_{\text{C}}^2
-\end{flalign}
-However, in any other model that may consider processes that may affect the cellular quotas, such as excretion of C-rich, N-poor substances, associated consequences on various elemental fluxes can be taken into account following this framework.
+% \section{Relevance of changes in quota for the loss processes}\label{S:appQ4loss}  %% Appendix-A
+% \onur{Not sure whether we want to keep this}
+% %In our model, we considered a single loss process for phytoplankton.
+% %Recalling from K21 (Table 1) that the associated N flux term was expressed as
+% %\begin{flalign}
+% % F_{\text{Phy}_{\text{N}}-\text{Det}_{\text{N}}} &= m \cdot \text{Phy}_{\text{N}}^2 &&
+% %\end{flalign}
+% %and considering that $\text{Phy}_{\text{N}}=\text{Phy}_{\text{C}} \cdot Q_{\text{N}}$, it can be thought that the changes in $Q_{\text{N}}$ needs to be taken into account for calculating the flux between phytoplankton and detrital N due to mortality.
+% Potential links between cellular quotas and loss processes can be assessed by analyzing the components of the changes in $\text{Phy}_{\text{N}}$ occurring due to loss terms, as was previously done for the case of growth (Eq.~\eqref{eq:dphyNdt}). Observing that the only loss process we considered here is mortality:
+% \begin{flalign}
+%   \frac{\text{d}\,\text{Phy}_{\text{N}}}{\text{d}\,t} \bigg\rvert_L
+%   &=\frac{\text{d}\,\text{Phy}_{\text{C}} Q_{\text{N}}}{\text{d}\,t} \bigg\rvert_M
+%   = Q_{\text{N}} \frac{\text{d}\,\text{Phy}_{\text{C}}}{\text{d}\,t} \bigg\rvert_M + \text{Phy}_{\text{N}}\frac{\text{d}\,\text{Q}_{\text{N}}}{\text{d}\,t} \bigg\rvert_M
+% \end{flalign}
+% Here, in the first term, $\frac{\text{d}\,\text{Phy}_{\text{C}}}{\text{d}\,t} \rvert_M$ represents the C-based mortality rate ($=m \cdot \text{Phy}_{\text{C}}^2$, Eq.~\eqref{eq:mortC}). In the second term, $\frac{\text{d}\,\text{Q}_{\text{N}}}{\text{d}\,t} \rvert_M$ represents the changes occurring in $Q_{\text{N}}$, however, due to mortality only. As in our model, we did not consider any effect of mortality on quota (assuming that when a cell dies, it dies altogether and all of its contents become detritus), this term collapses to 0, therefore reducing the associated flux term to:
+% \begin{flalign}
+% F_{\text{Phy}_{\text{N}}-\text{Det}_{\text{N}}} &=
+% Q_{\text{N}} \frac{\text{d}\,\text{Phy}_{\text{C}}}{\text{d}\,t} \bigg\rvert_M = Q_{\text{N}} \cdot m \cdot \text{Phy}_{\text{C}}^2
+% \end{flalign}
+% However, in any other model that may consider processes that may affect the cellular quotas, such as excretion of C-rich, N-poor substances, associated consequences on various elemental fluxes can be taken into account following this framework.
 
-\section{On the differences between the IA and DA variants}\label{S:appIADA}  %% Appendix-B
-\onur{Markus, would you like to draft this section?}
+% \section{On the differences between the IA and DA variants}\label{S:appIADA}  %% Appendix-B
+% \onur{Markus, would you like to draft this section?}
 
 \noappendix%% use this to mark the end of the appendix section. Otherwise the figures might be numbered incorrectly (e.g. 10 instead of 1).
 
@@ -504,13 +505,13 @@ However, in any other model that may consider processes that may affect the cell
 %% The reference list is compiled as follows:
 
 % \begin{thebibliography}{}
-% 
+%
 % \bibitem[AUTHOR(YEAR)]{LABEL1}
 % REFERENCE 1
-% 
+%
 % \bibitem[AUTHOR(YEAR)]{LABEL2}
 % REFERENCE 2
-% 
+%
 % \end{thebibliography}
 
 %% Since the Copernicus LaTeX package includes the BibTeX style file copernicus.bst,
