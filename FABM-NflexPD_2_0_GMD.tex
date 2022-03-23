@@ -9,8 +9,8 @@
 %% Please use the following documentclass and journal abbreviations for preprints and final revised papers.
 
 %% 2-column papers and preprints
+%\documentclass[gmd, manuscript]{copernicus}
 \documentclass[gmd, manuscript]{copernicus}
-%\documentclass[gmd, manuscript, draft]{copernicus}
 
 %% Journal abbreviations (please use the same for preprints and final revised papers)
 
@@ -380,8 +380,9 @@ When the irradiance and temperature are supplied externally, as typically the ca
     \end{flalign}
     \end{description}
     The temporal derivatives found by the numerical and analytical approaches are almost identical, as was targeted (Fig.~\ref{f.T1light}).
+    
     \begin{figure}[ht!]
-    \includegraphics[width=8cm,trim=2.9cm 0mm 20.0cm 0mm, clip]{figures/2022-02-10a_Ld1_T20_ThatVar_PARint_vs_PARext/0D-Highlat_wconst_lext_Ld1_T20_CbasedIA_modular_24h_vs_0D-Highlat_wconst_lint_Ld1_T20_CbasedIA_modular_24h_cont_abio0_1y.png}
+    \includegraphics[width=8cm,trim=0mm 54mm 0cm 0mm, clip]{figures/2022-03-22a_Ld1_T20_ThatVar_PARint_vs_PARext/0D-Highlat_wconst_lext_Ld1_T20_CbasedIA_modular_24h_vs_0D-Highlat_wconst_lint_Ld1_T20_CbasedIA_modular_24h_cont_abio0_1y.png}
     \caption{Daily average irradiance and its temporal derivative, as extracted from the simulation outputs generated for T1. PAR:N (solid blue line) is the model version where the temporal derivative of irradiance is approximated numerically; PAR:A (dashed orange line): both irradiance and its temporal derivative are calculated analytically.\label{f.T1light}}
     \end{figure}
 
@@ -407,7 +408,7 @@ When the irradiance and temperature are supplied externally, as typically the ca
 As shown in Fig.~\ref{f.T1res}, the model is conservative with respect to C and, to a great extent N\@. Total-N as estimated with the numerical approach (PAR:N) slightly (about 0.02 \unit{mmolN\ m^3} increases at the very beginning of the simulation, which is caused by the unknown previous value of $\bar{I}$ during the first day of the simulation (as required by the numerical approximation of $\text{d}\,\bar{I}/\text{d}\,t$), which is set to the current value (such that $\text{d}\,\bar{I}/\text{d}\,t$=0.0), causing therefore a difference between the total N as simulated by the analytical approach (PAR:A). However, after this initial jump, this new baseline is preserved until the end of the simulation.
 
 \begin{figure}[ht!]
-\includegraphics[width=12cm,trim=0cm 16.8cm 0.0cm 5mm, clip]{figures/2022-02-10a_Ld1_T20_ThatVar_PARint_vs_PARext/0D-Highlat_wconst_lext_Ld1_T20_CbasedIA_modular_24h_vs_0D-Highlat_wconst_lint_Ld1_T20_CbasedIA_modular_24h_cont_abio1_1y.png}
+\includegraphics[width=12cm,trim=0cm 16.8cm 0.0cm 5mm, clip]{figures/2022-03-22a_Ld1_T20_ThatVar_PARint_vs_PARext/0D-Highlat_wconst_lext_Ld1_T20_CbasedIA_modular_24h_vs_0D-Highlat_wconst_lint_Ld1_T20_CbasedIA_modular_24h_cont_abio1_1y.png}
 \caption{Results of T1: Carbon (left) and nitrogen (right) pools according to the PAR:N (solid blue line), and PAR:A (dashed orange line) approaches \onur{I think the other panels (din,phy,det,don) are not necessary to include here}.\label{f.T1res}}
 \end{figure}
 
@@ -418,15 +419,7 @@ As shown in Fig.~\ref{f.T1res}, the model is conservative with respect to C and,
 For this test, seasonal variations in $T$ and $L_{\text{D}}$ were considered, as shown in (Fig.~\ref{f.T2env}). It should be noted that, because of the variations in $L_{\text{D}}$, the seasonal course of $\bar{I}$, and $\text{d}\bar{I}/\text{d}t$ are affected.
 
 \begin{figure}[ht!]
-  \centering
-  \setlength{\unitlength}{1mm}
-  \begin{picture}(80,55)(0,0)
-  \put(0,27){\begin{overpic}[width=8cm,trim=23cm 0cm 0.0cm 0mm, clip]{figures/2022-02-10d_Ldvar_Tvar_ThatVar_PARext_IA_vs_DA/0D-Highlat_wconst_lext_Ldvar_Tvar_CbasedIA_modular_24h_vs_0D-Highlat_wconst_lext_Ldvar_Tvar_CbasedDA_modular_24h_cont_abio0_1y.png}\end{overpic}}
-  \put(0,0){\begin{overpic}[width=8cm,trim=2.9cm 0cm 20.0cm 0mm, clip]{figures/2022-02-10d_Ldvar_Tvar_ThatVar_PARext_IA_vs_DA/0D-Highlat_wconst_lext_Ldvar_Tvar_CbasedIA_modular_24h_vs_0D-Highlat_wconst_lext_Ldvar_Tvar_CbasedDA_modular_24h_cont_abio0_1y.png}\end{overpic}}
-    %\put(9,26){\scriptsize{\textsf{(a)}}}
-    %\put(69,26){\scriptsize{\textsf{(b)}}}
-  %\put(0,0){\tiny \grid(80,50)(5,5)[0,0]}
-  \end{picture}
+  \includegraphics[width=8cm,trim=0mm 0mm 0cm 0mm, clip]{figures/2022-03-22d_Ldvar_Tvar_ThatVar_PARext_IA_vs_DA/0D-Highlat_wconst_lext_Ldvar_Tvar_DIN015_CbasedIA_modular_24h_vs_0D-Highlat_wconst_lext_Ldvar_Tvar_DIN015_CbasedDA_modular_24h_cont_abio0_2y.png}
   \caption{Daily average irradiance and its temporal derivative, as extracted from the simulation outputs generated for T1. PAR:N (solid blue line) is the model version where the temporal derivative of irradiance is approximated numerically; PAR:A (dashed orange line): both irradiance and its temporal derivative are calculated analytically.\label{f.T2env}}
 \end{figure}
     
@@ -442,7 +435,7 @@ For this test, seasonal variations in $T$ and $L_{\text{D}}$ were considered, as
 %     \begin{overpic}[width=14cm,trim=0cm 16.8cm 0.0cm 14mm, clip]{figures/2022-02-10c_Ldvar_T20_ThatVar_PARext_IA_vs_DA/0D-Highlat_wconst_lext_Ldvar_T20_CbasedIA_modular_24h_vs_0D-Highlat_wconst_lext_Ldvar_T20_CbasedDA_modular_24h_cont_abio1_1y.png}
 %     \end{overpic}}
 %     \put(0,0){
-%     \begin{overpic}[width=14cm,trim=0cm 16.8cm 0.0cm 14mm, clip]{figures/2022-02-10d_Ldvar_Tvar_ThatVar_PARext_IA_vs_DA/0D-Highlat_wconst_lext_Ldvar_Tvar_CbasedIA_modular_24h_vs_0D-Highlat_wconst_lext_Ldvar_Tvar_CbasedDA_modular_24h_cont_abio1_1y.png}
+%     \begin{overpic}[width=14cm,trim=0cm 16.8cm 0.0cm 14mm, clip]{figures/2022-03-22d_Ldvar_Tvar_ThatVar_PARext_IA_vs_DA/0D-Highlat_wconst_lext_Ldvar_Tvar_CbasedIA_modular_24h_vs_0D-Highlat_wconst_lext_Ldvar_Tvar_CbasedDA_modular_24h_cont_abio1_1y.png}
 %     \end{overpic}}
 %     %\put(9,26){\scriptsize{\textsf{(a)}}}
 %     %\put(69,26){\scriptsize{\textsf{(b)}}}
@@ -457,7 +450,7 @@ For this test, seasonal variations in $T$ and $L_{\text{D}}$ were considered, as
 The IA and the fully explicit DA variants produce almost identical outputs (Fig.~\ref{f.T2res}). This similarity is expected and in agreement with \citet{Ward2017}. On a closer look, some differences can be detected, such as a slightly higher $\text{Phy}_{\text{N}}$ at the peak of the spring bloom and slightly higher DON and $\text{Det}_{\text{N}}$ after the spring bloom simulated by the DA variant.  The differences are due to the re-allocation of part of the fluxes into and out of $\text{Phy}_{\text{N}}$ to DIN fluxes in Eq.~\eqref{eq:sdin3}.  They remain relatively small because (1) the time scale of the optimal regulation of N uptake in the DA variant is short relative to those of phytoplankton growth and the DIN-changes in our simulations, and (2) the strong interaction between phytoplankton and DIN leads to a negative feed-back between the deviations between the IA and DA variants and the extra DIN fluxes caused by variations in $Q_{\text{N}}$ in the IA variant.
 
 \begin{figure}[ht!]
-\includegraphics[width=14cm,trim=0cm 11mm 0.0cm 5mm, clip]{figures/2022-02-10d_Ldvar_Tvar_ThatVar_PARext_IA_vs_DA/0D-Highlat_wconst_lext_Ldvar_Tvar_CbasedIA_modular_24h_vs_0D-Highlat_wconst_lext_Ldvar_Tvar_CbasedDA_modular_24h_cont_abio1_1y.png}
+\includegraphics[width=14cm,trim=0cm 11mm 0.0cm 5mm, clip]{figures/2022-03-22d_Ldvar_Tvar_ThatVar_PARext_IA_vs_DA/0D-Highlat_wconst_lext_Ldvar_Tvar_DIN015_CbasedIA_modular_24h_vs_0D-Highlat_wconst_lext_Ldvar_Tvar_DIN015_CbasedDA_modular_24h_cont_abio1_2y.png}
 \caption{Results of T2: Carbon (left) and nitrogen (right) pools according to the IA (solid blue line) and DA (dashed orange line) approaches under variable $L_{\text{D}}$ and $T$. \onur{Figure is for drafting purposes, I'm not sure if we need all panels here, or maybe need to show some other variables}.\label{f.T2res}}
 \end{figure}
 
@@ -480,7 +473,7 @@ In Fig.~\ref{f.T3res} we present the results of a numerical experiment with 2 ph
 As a technical note regarding the technical implementation is that, using the separate \verb|phy_Cbased.F90| and \verb|abio_Cbased.F90| modules, the number of phytoplankton types can be changed without needing to change and recompile the code, and by adjusting the configuration file in run time (see the \verb|fabm.yaml| examples in the \verb|testcases| folder that were employed to produce the results presented in this study), which is a feature enabled by the modularity of FABM.
 
 \begin{figure}[ht!]
-\includegraphics[width=14cm,trim=0cm 11mm 0.0cm 5mm, clip]{figures/2022-02-14_Ldvar_Tvar_ThatVar_kc_2P_PARext_IA_vs_DA/0D-Highlat_wconst_lext_Ldvar_Tvar_2P_CbasedIA_modular_24h_vs_0D-Highlat_wconst_lext_Ldvar_Tvar_2P_CbasedDA_modular_24h_cont_abio1_1y.png}
+\includegraphics[width=14cm,trim=0cm 11mm 0.0cm 5mm, clip]{figures/2022-03-22e_Ldvar_Tvar_ThatVar_2P_PARext_IA_vs_DA/0D-Highlat_wconst_lext_Ldvar_Tvar_DIN015_2P_CbasedIA_modular_24h_vs_0D-Highlat_wconst_lext_Ldvar_Tvar_DIN015_2P_CbasedDA_modular_24h_cont_abio1_2y.png}
 \caption{Results of T3: Carbon (left) and nitrogen (right) pools according to the IA (solid blue line) and DA (dashed orange line) approaches under variable $L_{\text{D}}$ and $T$ and 2 phytoplankton types. \onur{Figure is for drafting purposes}.\label{f.T3res}}
 \end{figure}
 
