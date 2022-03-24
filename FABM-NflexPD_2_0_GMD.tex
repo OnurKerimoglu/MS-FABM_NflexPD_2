@@ -365,7 +365,7 @@ When the irradiance and temperature are supplied externally, as typically the ca
 
 % Table
 \begin{table*}[htb]
-  \caption{ Descriptions, values and units of model parameters regarding phytoplankton growth. The parameters with prime ($C'$) are given for a cell with an equivalent spherical diameter of 1$\mu$m, which is the size assumed for experiments T1-2. For T3, for which different size classes are simulated, the respective values are obtained according to $C=C'\exp{(S_C \log (ESD))}$, where $S_C$ is the allometric scaling coefficient for this paramater. Values for $C'$ and $S_C$ are as in \citet{Smith2016}, and rest of the parameters as in \citet{Kerimoglu2021}. \label{T.pars}}
+  \caption{ Descriptions, values and units of model parameters regarding phytoplankton growth. The parameters with prime ($C'$) are given for a cell with an ESD of 1$\mu$m, which is the size assumed for experiments T1-2. For T3, for which different size classes are simulated, the respective values are obtained according to $C=C'\exp{(S_C \log (ESD))}$, where $S_C$ is the allometric scaling coefficient for this paramater. Values for $C'$ and $S_C$ are as in \citet{Smith2016}, and rest of the parameters as in \citet{Kerimoglu2021}. \label{T.pars}}
   \begin{tabular}{l l c l}
     \tophline
     Term/Symbol         & Definition                        & Value     & Unit\\
@@ -390,10 +390,10 @@ When the irradiance and temperature are supplied externally, as typically the ca
 \end{table*}
 
 \subsection{Test setups and model operation}\label{S:DescSetup}
-\subsubsection{0D setup (T1-T3)}
-    For the tests T1-T3, the model is operated in a spatially homogeneous `box' setup, using the 0d driver of FABM \citep{Bruggeman2014}. With this 0D setup, numerical solutions are obtained using 4$^\text{th}$ order Runge-Kutta method with a time step of 60 seconds. Model forcing applied in 0D setups vary among different tests, as explained below.
+    %\subsubsection{0D setup (T1-T3)}
+    For all tests, the model is operated in a spatially homogeneous `box' setup, using the 0d driver of FABM \citep{Bruggeman2014}. With this 0D setup, numerical solutions are obtained using 4$^\text{th}$ order Runge-Kutta method with a time step of 60 seconds. Model forcing applied in 0D setups vary among different tests, as explained below.
 
-    \paragraph{T1}\label{S:DescT1}
+    \subsubsection{T1}\label{S:DescT1}
     As simplifications for this test, we assume that temperature, T is fixed at 10$\degree$C, fractional day length, $L_D$ is unity, and ignore light attenuation and albedo effects. We consider two cases with regard to the handling of irradiance and its temporal derivative:
     \begin{description}
     \item [PAR:N] in the first case, short wave radiation is supplied externally. For being able to compare this approach with the analytical approach described below, the externally supplied photosynthetically available irradiance is calculated as a sinusoidal function:
@@ -413,11 +413,14 @@ When the irradiance and temperature are supplied externally, as typically the ca
     \caption{Daily average irradiance and its temporal derivative, as extracted from the simulation outputs generated for T1. PAR:N (solid blue line) is the model version where the temporal derivative of irradiance is approximated numerically; PAR:A (dashed orange line): both irradiance and its temporal derivative are calculated analytically.\label{f.T1light}}
     \end{figure}
 
-    \paragraph{T2-T3}
+    \subsubsection{T2-T3}
     For these tests, we consider variable day length, $L_D$ as described by \citet{Forsythe2003}, which was used to calculate the daytime average irradiance, based on the externally provided incoming irradiance as described for T1 (i.e., $\bar{I}=\bar{I}_{\text{24h}}/L_D$ as in the original model by \citep{Pahlowetal13}, and as was implemented in K21). Moreover, to account for the seasonal variability in T, it was represented using a sinusoidal function similar to Eq.~\ref{eq.I}, but $T_{\min}$ and $T_{\max}$ set to 2 and 20$\degree$C, respectively.
     
-\subsubsection{1D setup (T4)}
-    \onur{I'm not sure if we really need to show these results, although I included them for now }
+    For T3, we simulated 10 phytoplankton groups with the IA and DA variants and compared their predictions. Phytoplankton groups were assumed to represent different size classes spread across 0.2-100 $\mu$m equivalent spherical diameter (ESD) range, uniformly spaced on logarithmic scale. As in \citet{Smith2016}, we assumed 
+    $Q_0$, $\hat{V}_0$ and $\hat{A}_0$ to vary based on allometric relationships  (Table~\ref{T.pars}). Scaling of $Q_0$ and $\hat{V}_0$ are based on a combination of cell-specific scaling of subsistence quotas \citep[][`marine species']{Edwards2012} and maximum uptake rates \citep{Maranon2013}, and cell-specific scaling of C content \citep[][`protist plankton excluding diatoms']{Menden2000}. Scaling of $\hat{A}_0$ is based on heuristically, as explained in \citet{Smith2014a}. A detailed discussion of the allometric scaling of parameters can be found in \citet{Smith2016}.
+    
+%\subsubsection{1D setup (T4)}
+%    \onur{I'm not sure if we really need to show these results, although I included them for now }
 
 %\begin{figure}[t]
 %\includegraphics[width=8.3cm,trim=0cm 6mm 0.0cm 10mm, clip]{figures/fI_analytical.png}
@@ -474,7 +477,7 @@ For this test, seasonal variations in $T$ and $L_{\text{D}}$ were considered, as
 
 %\subsection{Comparison of IA approach to the fully explicit DA approach (T2b)}
 
-The IA and the fully explicit DA variants produce almost identical outputs (Fig.~\ref{f.T2res}). This similarity is expected and in agreement with \citet{Ward2017}. On a closer look, some differences can be detected, such as a slightly higher $\text{Phy}_{\text{N}}$ at the peak of the spring bloom and slightly higher DON and $\text{Det}_{\text{N}}$ after the spring bloom simulated by the DA variant.  The differences are due to the re-allocation of part of the fluxes into and out of $\text{Phy}_{\text{N}}$ to DIN fluxes in Eq.~\eqref{eq:sdin3}.  They remain relatively small because (1) the time scale of the optimal regulation of N uptake in the DA variant is short relative to those of phytoplankton growth and the DIN-changes in our simulations, and (2) the strong interaction between phytoplankton and DIN leads to a negative feed-back between the deviations between the IA and DA variants and the extra DIN fluxes caused by variations in $Q_{\text{N}}$ in the IA variant.
+The IA and the fully explicit DA variants produce almost identical outputs (Fig.~\ref{f.T2res}-\ref{f.T2resbox}). This similarity is expected and in agreement with \citet{Ward2017}. On a closer look, some differences can be detected, such as a slightly higher $\text{Phy}_{\text{N}}$ at the peak of the spring bloom and slightly higher DON and $\text{Det}_{\text{N}}$ after the spring bloom simulated by the DA variant.  The differences are due to the re-allocation of part of the fluxes into and out of $\text{Phy}_{\text{N}}$ to DIN fluxes in Eq.~\eqref{eq:sdin3}.  They remain relatively small because (1) the time scale of the optimal regulation of N uptake in the DA variant is short relative to those of phytoplankton growth and the DIN-changes in our simulations, and (2) the strong interaction between phytoplankton and DIN leads to a negative feed-back between the deviations between the IA and DA variants and the extra DIN fluxes caused by variations in $Q_{\text{N}}$ in the IA variant.
 
 \begin{figure}[ht!]
 \includegraphics[width=14cm,trim=0cm 11mm 0.0cm 5mm, clip]{figures/2022-03-22d_Ldvar_Tvar_ThatVar_PARext_IA_vs_DA/0D-Highlat_wconst_lext_Ldvar_Tvar_DIN015_CbasedIA_modular_24h_vs_0D-Highlat_wconst_lext_Ldvar_Tvar_DIN015_CbasedDA_modular_24h_cont_abio1_2y.png}
@@ -486,11 +489,6 @@ The IA and the fully explicit DA variants produce almost identical outputs (Fig.
 \caption{Results of T2: Carbon (left) and nitrogen (right) pools according to the IA (solid blue line) and DA (dashed orange line) approaches under variable $L_{\text{D}}$ and $T$. \onur{I'm not sure whether this is really better than Fig.~\ref{f.T2res}. Maybe we keep them both?}.\label{f.T2resbox}}
 \end{figure}
 
-
-\begin{figure}[ht!]
-\includegraphics[width=14cm,trim=0cm 0mm 0.0cm 0mm, clip]{figures/2022-03-22d_Ldvar_Tvar_ThatVar_PARext_IA_vs_DA/0D-Highlat_wconst_lext_Ldvar_Tvar_DIN015_CbasedIA_modular_24h_vs_0D-Highlat_wconst_lext_Ldvar_Tvar_DIN015_CbasedDA_modular_24h_cont_phy-4_2y.png}
-\caption{For T2 experiment, total $\textrm{d}Q/\textrm{d}t$ and components of it through the changes in DIN, $\bar{I}$, $\textrm{L}_{\textrm{D}}$ and T.\label{f.T2dQdt}}
-\end{figure}
 
 \FloatBarrier
 \subsection{T3: Comparing DA and IA variants in simulating in simulating multiple PFT's}\label{s.resT3}
@@ -506,17 +504,11 @@ For the case of multiple phytoplankton, Eq.~\ref{eq:sdin3} can be generalized as
 \end{flalign}
 Where, $j$ indexes the different PFTs simulated \onur{maybe it's better to move it right after Eq.~\ref{eq:sdin3}}.
 
-In Fig.~\ref{f.T3res} we present the results of a numerical experiment with 10 phytoplankton size classes, as simulated by IA and DA. A, V and Q0 of each size class were parameterized based on allometric rules (Table~\ref{T.pars}).
+In Fig.~\ref{f.T3res} we present the results of a numerical experiment with 10 phytoplankton size classes, as simulated by IA and DA variants. Simulated C biomass of phytoplankton by the two variants are near-identical. Under the specific setup, we used for this experiment annual average concentrations decrease with cell size, and the larger classes exhibit a stronger seasonal variation. Under different environmental conditions, with respect to, e.g., the initial nutrient concentrations, and temporal stability, different outcomes can emerge \citep[see, e.g.,][]{Taherzadeh2017}, but such an exploration is outside of the scope of the current study.
 
 \begin{figure}[ht!]
 \includegraphics[width=14cm,trim=0cm 0mm 0.0cm 0mm, clip]{figures/2022-03-22f_Ldvar_Tvar_ThatVar_2P_PARext_IA_vs_DA/0D-Highlat_wconst_lext_Ldvar_Tvar_DIN015_10P_Cbased_modular_24h_IAvsDA_boxplot_size.png}
 \caption{Results of T4: Box-whisker plots of C biomass of 10 phytoplankton size classes, as simulated by the IA (dark blue boxes) and DA (orange boxes) approaches under variable $L_{\text{D}}$ and $T$.\label{f.T3res}}
-\end{figure}
-
-\subsection{Assessment of Computational Performance}
-\begin{figure}[ht!]
-\includegraphics[width=14cm,trim=0cm 0mm 0.0cm 0mm, clip]{figures/time_of_run.png}
-\caption{Scaling of simulation time with number of phytoplankton instances being simulated.\label{f.speed}}
 \end{figure}
 
 %In Fig.~\ref{f.T3res} we present the results of a numerical experiment with 2 phytoplankton functional types, as simulated by IA and DA.The first type characterizes a fast growing `opportunist' species, and the second type characterizes a `gleaner' species, with lower growth rate but higher nutrient affinity. As expected, the first type reaches higher C-biomass during the spring bloom, whereas the second type maintains higher concentrations during summer, under low nutrient concentrations. The predictions by the two variants are almost identical.
@@ -528,13 +520,29 @@ In Fig.~\ref{f.T3res} we present the results of a numerical experiment with 10 p
 As a technical note regarding the technical implementation is that, using the separate \verb|phy_Cbased.F90| and \verb|abio_Cbased.F90| modules, the number of phytoplankton types can be changed without needing to change and recompile the code, and by adjusting the configuration file in run time (see the \verb|fabm.yaml| examples in the \verb|testcases| folder that were employed to produce the results presented in this study), which is a feature enabled by the modularity of FABM.
 
 
-
-
 %\include{res1D}
 
-
+\FloatBarrier
 % DISCUSSION
-%\section{Discussion}
+\section{Discussion}
+
+\subsection{Establishing the Mass Balance \onur{alternative header: `An analytical modelling platform to study phytoplankton'. Any other suggestions?}}
+As explained in section~\ref{S:DescFlux}, reducing the errors in mass balance for N required explicitly calculating the changes in N quota in time, i.e., $\textrm{d}Q/\textrm{d}t$, which in turn required calculation of individual components of this change driven by different environmental factors, namely, DIN, $\bar{I}$, T and $\textrm{L}_{\textrm{D}}$.  Under the setup considered for T2, changes occurring in DIN is clearly the dominant source of variation in Q, however contributions by other factors are non-negligible (Fig.~\ref{f.T2dQdt}. In other setups, relative importance of various environmental factors may be different. Relevance of these secondary factors to the elemental stoichiometry of phytoplankton is an often neglected aspect. Our mathematically explicit treatment of this issue in this study is expected to inspire and contribute to future endeavors to establish an analytical framework for investigating the mechanistic underpinnings of plankton physiology.
+
+\begin{figure}[ht!]
+\includegraphics[width=14cm,trim=0cm 0mm 0.0cm 0mm, clip]{figures/2022-03-22d_Ldvar_Tvar_ThatVar_PARext_IA_vs_DA/0D-Highlat_wconst_lext_Ldvar_Tvar_DIN015_CbasedIA_modular_24h_vs_0D-Highlat_wconst_lext_Ldvar_Tvar_DIN015_CbasedDA_modular_24h_cont_phy-4_2y.png}
+\caption{For T2 experiment, total $\textrm{d}Q/\textrm{d}t$ and components of it through the changes in DIN, $\bar{I}$, $\textrm{L}_{\textrm{D}}$ and T.\label{f.T2dQdt}}
+\end{figure}
+
+\subsection{Computational Efficiency and Application Potential}
+Our results demonstrate that a state variable that tracks the elemental content of plankton can be effectively removed, without leading to major issues in mass balance, in a 0D setup. Removing a state variable in such a setup does not seem to result in any advantages in computational efficiency, in comparison to a fully explicit dynamic variant, independent of the number of phytoplankton groups being simulated (Fig.~\ref{f.speed}). This is presumably because any potential reduction in computational costs owed to one less state variable in the instaneous variant is  compensated by the  the additional logic and calculations required (see Appendix-\ref{S:Sol}).
+
+\begin{figure}[ht!]
+\includegraphics[width=14cm,trim=0cm 0mm 0.0cm 0mm, clip]{figures/time_of_run.png}
+\caption{Scaling of simulation time with number of phytoplankton instances being simulated.\onur{I'm not sure whether we need to show this result, or it may be sufficient to mention the results, that there are no obvious speed differences between the IA and DA variants}.\label{f.speed}}
+\end{figure}
+
+The modelling framework, FABM, in which the model was implemented, allows seamless coupling of models with various hydrodynamical hosts \citep{Bruggeman2014}. We already attempted an application in a 1D setup using GOTM \citep{Burchard2006} as the hydrodynamical host, and found out that N is not conserved. This is understandable, because the spatial transport in a spatially explicit setup leads to variations in $Q$, which need to be compensated by variations in another state variable, like DIN, as we have done here for the case of variations in $Q$ that occurred in time (Eq.~\ref{eq:sdin2}). For instance, in a vertical setup with $z$ indicating the only spatial dimension, all environmental factors contributing to $\mathrm{d}Q/\mathrm{d}z$ need to be calculated, and included in the spatial flux terms of DIN, which may have to be handled within the hydrodynamical host (as would be the case in FABM application), depending on the modelling framework.
 
 
 %CONCLUSION
@@ -558,6 +566,7 @@ As a technical note regarding the technical implementation is that, using the se
 %\clearpage
 
 \appendix
+\section{Analytical Solutions}\label{S:Sol}
 % \section{Relevance of changes in quota for the loss processes}\label{S:appQ4loss}  %% Appendix-A
 % \onur{Not sure whether we want to keep this}
 % %In our model, we considered a single loss process for phytoplankton.
