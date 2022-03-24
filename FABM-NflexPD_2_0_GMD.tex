@@ -157,7 +157,7 @@ Here we introduce FABM-NflexPD 2.0, which can resolve C, N and P in DIM pool. We
  \item [T2a] \onur{done} testing the IA approach in a more realistic 0D setup, where irradiance is supplied externally, temperature and day length are allowed to vary, and attenuation of light by phytoplankton is accounted for.
  \item [T2b] \onur{done} comparison of the fully explicit version (the `dynamic acclimation' (DA) variant in K21) vs the instantaneously acclimating (IA) variant of the model 
  \item [T3] \onur{done} demonstration of a model run with multiple phytoplanton groups.
- \item [T4] \onur{done} application of the model in an idealistic 1D setup and assessment of mass conservation \textcolor{red}{\{Onur: this test failed: in 1D, model does not seem to be mass conservative, see Section~\ref{s.resT4}.\}} 
+ %\item [T4] \onur{done} application of the model in an idealistic 1D setup and assessment of mass conservation \textcolor{red}{\{Onur: this test failed: in 1D, model does not seem to be mass conservative, see Section~\ref{s.resT4}.\}} 
 \end{description}
 
 % \begin{figure}[htb]
@@ -365,22 +365,25 @@ When the irradiance and temperature are supplied externally, as typically the ca
 
 % Table
 \begin{table*}[htb]
-  \caption{ Descriptions, values and units of model parameters regarding phytoplankton growth. All parameter values are taken from within the published range \citep{Pahlowetal13,Smith2016}, without particular reference to species.\label{T:params}}
-  \begin{tabular}{l l c l l}
+  \caption{ Descriptions, values and units of model parameters regarding phytoplankton growth. The parameters with prime ($C'$) are given for a cell with an equivalent spherical diameter of 1$\mu$m, which is the size assumed for experiments T1-2. For T3, for which different size classes are simulated, the respective values are obtained according to $C=C'\exp{(S_C \log (ESD))}$, where $S_C$ is the allometric scaling coefficient for this paramater. Values for $C'$ and $S_C$ are as in \citet{Smith2016}, and rest of the parameters as in \citet{Kerimoglu2021}. \label{T.pars}}
+  \begin{tabular}{l l c l}
     \tophline
-    Term/Symbol         & Definition                        & Value     & Unit                                  &Used by\\
+    Term/Symbol         & Definition                        & Value     & Unit\\
     \middlehline
-    $\hat{\mu}_0$   & Potential maximum growth rate         & 5.0       & \unit{d^{-1}}                         & all\\
-    $Q_0|_{\textrm{ESD}=1\mu\textrm{m}}$  & Subsistence quota                     & 0.039     & \unit{mmolN\ molC^{-1}}               & IA, DA\\
-    $\alpha_{Q_0}$  & Allometric scaling coefficient of $Q_0$       & ?     & \unit{mmolN\ molC^{-1}}               & IA, DA\\
-    $\hat{A}_0|_{\textrm{ESD}=1\mu\textrm{m}}$     & Potential maximum nutrient affinity   & 0.15       & \unit{m^3\ mmolC^{-1}\ d^{-1}}        & IA, DA\\
-    $\alpha_{A_0}$  & Allometric scaling coefficient of $\hat{A}_0$        & ?     & \unit{mmolN\ molC^{-1}}               & IA, DA\\
-    $\hat{V}_0|_{\textrm{ESD}=1\mu\textrm{m}}$     & Potential maximum N uptake rate       & 5.0       & \unit{molN\ molC^{-1}\ d^{-1}}        & IA, DA\\
-    $\alpha_{V_0}$  & Allometric scaling coefficient of $\hat{V}_0$        & ?     & \unit{mmolN\ molC^{-1}}               & IA, DA\\
-    $\alpha$           & Chl-specific slope of P-I curve    & 1.0       & \unit{m^2\ E\ molC gChl^{-1}\ d^{-1}} & all\\
-    $R^{\text{Chl}}_{\text{M}}$     & Cost of chlorophyll maintenance   & 0.1       & \unit{d^{-1}}             & all\\
-    $\zeta_{\text{Chl}}$   & Cost of chlorophyll synthesis  & 0.5       & \unit{mmolC\ gChl^{-1}}               & all\\
-    $\zeta_{\text{N}}$     & Cost of N uptake               & 0.6       & \unit{molC\ molN^{-1}}                & all\\
+    $\hat{\mu}_0$   & Potential maximum growth rate         & 5.0       & \unit{d^{-1}}\\
+    $Q_0'$  & Subsistence quota                     & 0.039     & \unit{mmolN\ molC^{-1}}\\
+    $S_{Q_0}$  & Allometric scaling coefficient of $Q_0$       & -0.18     & \unit{mmolN\ molC^{-1}}\\
+    $\hat{A}_0'$     & Potential maximum nutrient affinity   & 0.15       & \unit{m^3\ mmolC^{-1}\ d^{-1}}\\
+    $S_{A_0}$  & Allometric scaling coefficient of $\hat{A}_0$        & -0.8     & \unit{mmolN\ molC^{-1}}\\
+    $\hat{V}_0'$     & Potential maximum N uptake rate       & 5.0       & \unit{molN\ molC^{-1}\ d^{-1}}\\
+    $S_{V_0}$  & Allometric scaling coefficient of $\hat{V}_0$        & 0.2     & \unit{mmolN\ molC^{-1}}\\
+    $\alpha$           & Chl-specific slope of P-I curve    & 1.0       & \unit{m^2\ E\ molC gChl^{-1}\ d^{-1}}\\
+    $R^{\text{Chl}}_{\text{M}}$     & Cost of chlorophyll maintenance   & 0.1       & \unit{d^{-1}}\\
+    $\zeta_{\text{Chl}}$   & Cost of chlorophyll synthesis  & 0.5       & \unit{mmolC\ gChl^{-1}}\\
+    $\zeta_{\text{N}}$     & Cost of N uptake               & 0.6       & \unit{molC\ molN^{-1}}\\
+    $m$                & Mortality rate coefficient        & 0.1   & \unit{m^{3} mmolN^{-1} d^{-1}} \\
+    $r_{\text{hyd}}$   & Hydrolysis rate constant          & 0.1   & \unit{d^{-1}} \\
+    $r_{\text{rem}}$   & Remineralization rate constant    & 0.1   & \unit{d^{-1}} \\
     \bottomhline
   \end{tabular}
   \belowtable{} % Table Footnotes
@@ -406,7 +409,7 @@ When the irradiance and temperature are supplied externally, as typically the ca
     The temporal derivatives found by the numerical and analytical approaches are almost identical, as was targeted (Fig.~\ref{f.T1light}).
     
     \begin{figure}[ht!]
-    \includegraphics[width=8cm,trim=0mm 54mm 0cm 0mm, clip]{figures/2022-03-22a_Ld1_T20_ThatVar_PARint_vs_PARext/0D-Highlat_wconst_lext_Ld1_T20_CbasedIA_modular_24h_vs_0D-Highlat_wconst_lint_Ld1_T20_CbasedIA_modular_24h_cont_abio0_1y.png}
+    \includegraphics[width=12cm,trim=0mm 54mm 0cm 0mm, clip]{figures/2022-03-22a_Ld1_T20_ThatVar_PARint_vs_PARext/0D-Highlat_wconst_lext_Ld1_T20_CbasedIA_modular_24h_vs_0D-Highlat_wconst_lint_Ld1_T20_CbasedIA_modular_24h_cont_abio0_1y.png}
     \caption{Daily average irradiance and its temporal derivative, as extracted from the simulation outputs generated for T1. PAR:N (solid blue line) is the model version where the temporal derivative of irradiance is approximated numerically; PAR:A (dashed orange line): both irradiance and its temporal derivative are calculated analytically.\label{f.T1light}}
     \end{figure}
 
@@ -443,7 +446,7 @@ As shown in Fig.~\ref{f.T1res}, the model is conservative with respect to C and,
 For this test, seasonal variations in $T$ and $L_{\text{D}}$ were considered, as shown in (Fig.~\ref{f.T2env}). It should be noted that, because of the variations in $L_{\text{D}}$, the seasonal course of $\bar{I}$, and $\text{d}\bar{I}/\text{d}t$ are affected.
 
 \begin{figure}[ht!]
-  \includegraphics[width=8cm,trim=0mm 0mm 0cm 0mm, clip]{figures/2022-03-22d_Ldvar_Tvar_ThatVar_PARext_IA_vs_DA/0D-Highlat_wconst_lext_Ldvar_Tvar_DIN015_CbasedIA_modular_24h_vs_0D-Highlat_wconst_lext_Ldvar_Tvar_DIN015_CbasedDA_modular_24h_cont_abio0_2y.png}
+  \includegraphics[width=12cm,trim=0mm 0mm 0cm 0mm, clip]{figures/2022-03-22d_Ldvar_Tvar_ThatVar_PARext_IA_vs_DA/0D-Highlat_wconst_lext_Ldvar_Tvar_DIN015_CbasedIA_modular_24h_vs_0D-Highlat_wconst_lext_Ldvar_Tvar_DIN015_CbasedDA_modular_24h_cont_abio0_2y.png}
   \caption{Daily average irradiance and its temporal derivative, as extracted from the simulation outputs generated for T1. PAR:N (solid blue line) is the model version where the temporal derivative of irradiance is approximated numerically; PAR:A (dashed orange line): both irradiance and its temporal derivative are calculated analytically.\label{f.T2env}}
 \end{figure}
     
@@ -513,7 +516,7 @@ In Fig.~\ref{f.T3res} we present the results of a numerical experiment with 10 p
 \subsection{Assessment of Computational Performance}
 \begin{figure}[ht!]
 \includegraphics[width=14cm,trim=0cm 0mm 0.0cm 0mm, clip]{figures/time_of_run.png}
-\caption{Scaling of simulation time with number of phytoplankton instances being simulated.\label{f.T3res}}
+\caption{Scaling of simulation time with number of phytoplankton instances being simulated.\label{f.speed}}
 \end{figure}
 
 %In Fig.~\ref{f.T3res} we present the results of a numerical experiment with 2 phytoplankton functional types, as simulated by IA and DA.The first type characterizes a fast growing `opportunist' species, and the second type characterizes a `gleaner' species, with lower growth rate but higher nutrient affinity. As expected, the first type reaches higher C-biomass during the spring bloom, whereas the second type maintains higher concentrations during summer, under low nutrient concentrations. The predictions by the two variants are almost identical.
