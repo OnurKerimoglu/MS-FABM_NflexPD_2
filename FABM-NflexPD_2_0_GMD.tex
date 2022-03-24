@@ -275,93 +275,11 @@ While this, rather arbitrary, measure for achieving N mass balance violates the 
 % \end{equation}
 As a technical remark regarding the FABM implementation of the model: Eq.~\eqref{eq:sdin3} requires a combination of terms, which, in K21, used to be calculated by separate abiotic ($F_{\text{DON}-\text{DIN}}$) and phytoplankton modules (all other terms), therefore in the current implementation, in order to avoid a circular-dependency error, an intermediate module collects the necessary terms from the two modules, and sets the right hand sides for DIN at once.
 
-In Eq.~\eqref{eq:sdin3}, partial derivatives of $Q_{\text{N}}$ with respect to DIN, $\bar{I}$, $L_{\text{D}}$ and $T$ are obtained by canonical application of the chain rule. As in \citet{Smith2016}, we introduce a new variable $Z$ and re-write Eq.~\eqref{eq:Qopt} in terms of $Z$:
-\begin{flalign}
-  \label{eq.Z}
-  Q_{\text{N}} &= \frac{Q_{\text{N},0}}{2} \left( 1 + \sqrt{1 + \frac{1}{Z}}  \right), \qquad Z = \frac{Q_{\text{N},0}}{2}\left( \frac{\hat{\mu}_{\text{net}}}{\hat{V}_{\text{N}}} + \zeta_{\text{N}} \right) \\
-  \label{eq.delQdelN}
- \frac{\partial Q_{\text{N}}}{\partial \text{DIN}} &= \frac{\partial Q_{\text{N}}}{\partial Z} \frac{\partial Z}{\partial \text{DIN}}, \qquad
- \frac{\partial Q_{\text{N}}}{\partial \bar{I}}  = \frac{\partial Q_{\text{N}}}{\partial Z} \frac{\partial Z}{\partial \bar{I}}, \qquad
- \frac{\partial Q_{\text{N}}}{\partial L_{\text{D}}} = \frac{\partial Q_{\text{N}}}{\partial Z} \frac{\partial Z}{\partial L_{\text{D}}}, \qquad
- \frac{\partial Q_{\text{N}}}{\partial T} = \frac{\partial Q_{\text{N}}}{\partial Z} \frac{\partial Z}{\partial T}
-\end{flalign}
-In Eqs.~\eqref{eq.delQdelN}, the common term $\partial Q_{\text{N}} / \partial Z$, as in S16, is:
-\begin{equation} \label{eq:delQdelZ}
- \frac{\partial Q_{\text{N}}}{\partial Z} = \frac{-Q_{\text{N,0}}}{4 \cdot Z \cdot \sqrt{Z\cdot(1+Z)}}
-\end{equation}
-Recalling $\hat{V}_{\text{N}}$ from K21, Eq.~(17):
-\begin{flalign}
-  \hat{V}_{\text{N}} &= \frac{(1-f_{\text{A}})\hat{V}_{0} f_{\text{A}} \hat{A}_{0} \text{DIN}}{(1-f_{\text{A}})\hat{V}_{0} + f_{\text{A}} \hat{A}_{0} \text{DIN}}
-  = \frac{\hat{V}_{0}\cdot \hat{A}_{0}\cdot\text{DIN}}{{(\sqrt{\hat{V}_{0}} + \sqrt{\hat{A}_{0}\cdot \text{DIN}})}^{2}}, \qquad
-  f_{\text{A}} = \frac{1}{\displaystyle 1 + \sqrt{\frac{\hat{A}_{0}\cdot\text{DIN}}{\hat{V}_{0}}}} \\
-  \intertext{We set the potential maximum rates of N and C acquisition numerically equal to the maximum-rate parameter $\mu_{0}$ \citep{Pahlowetal13}:}
-  \label{eq:v0mu0}
-  \hat{V}_{0} &= \hat{\mu}_{0} = \mu_{0} \cdot f(T) \qquad f(T) = \exp\left[ -\frac{E_{\text{a}}}{R}\left( \frac{1}{T / \text{K}} - \frac{1}{T_{\text{ref}} / \text{K}} \right) \right]
-\end{flalign}
-the partial derivative of $Z$ with respect to DIN is:
-\begin{flalign}
-  \frac{\partial Z}{\partial \text{DIN}} = \frac{\partial Z}{\partial \hat{V}_{\text{N}}} \frac{\mathrm{d}\, \hat{V}_{\text{N}}}{\mathrm{d}\, \text{DIN}}
-  = -\frac{\hat{\mu}_{\text{net}} \cdot Q_{\text{N},0}}{2 \cdot\hat{A}_{0}\cdot \text{DIN}^{2}} \left( 1 + \sqrt{\frac{\hat{A}_{0}\cdot \text{DIN}}{\hat{V}_{0}}} \right)
-\end{flalign}
-
-For calculating the partial derivative of $Z$ with respect to $\bar{I}$, ${\partial Z}/{\partial \bar{I}}$, we recall $\hat{\mu}_{\text{net}}$, $L_{\text{I}}$ and $\hat{\theta}$ from K21, Eqs.~(20)--(23) \& (26):
-\begin{flalign}
-  \hat{\mu}_{\text{net}} &= L_{\text{D}}\hat{\mu}_{0} L_{\text{I}} (1-\zeta_{\text{Chl}}\hat{\theta})- R^{\text{Chl}}, \qquad
-    R^{\text{Chl}} = f(T) \cdot R_{\text{M}}^{\text{Chl}} \zeta_{\text{Chl}}\hat{\theta} \\
-  L_{\text{I}} &= 1 - \exp \left( \frac{-\alpha \hat{\theta} \bar{I}}{\hat{\mu}_{0}} \right), \qquad
-  \hat{\theta} = \frac{1}{\zeta_{\text{Chl}}} + \frac{\hat{\mu}_{0}}{\alpha\cdot \bar{I}} \cdot (1 - W), \qquad
-  W = \mathrm{W}_{0} \left[ \left( 1 + \frac{f(T) \cdot R_{\text{M}}^{{\text{Chl}}}}{L_{\text{D}} \cdot \hat{\mu}_{0}} \right)
-   \cdot \exp \left( 1 + \frac{\alpha \cdot \bar{I}}{\hat{\mu}_{0} \cdot \zeta_{\text{Chl}}} \right) \right]
-\end{flalign}
-where $\mathrm{W}_{0}$ is the 0-branch of Lambert's W-function, and $\alpha$ and $\zeta_{\text{Chl}}$ are model parameters (initial Chl-specific slope of P-I curve and cost of chlorophyll synthesis, respectively, Table~3 in K21). %  $\hat{\theta}$ is the optimal chlorophyll density in the chloroplast.\\
-$\partial Z/ \partial \bar{I}$ can then be derived by canonical application of the chain rule:
-\begin{flalign}
- \frac{\partial Z}{\partial \bar{I}} &=
- \frac{\partial Z}{\partial \hat{\mu}_{\text{net}}} \left( \frac{\partial \hat{\mu}_{\text{net}}}{\partial\bar{I}}
-   + \frac{\partial \hat{\mu}_{\text{net}}}{\partial\hat{\theta}} \frac{\mathrm{d}\, \hat{\theta}}{\mathrm{d}\,\bar{I}} \right)
- = \frac{\partial Z}{\partial \hat{\mu}_{\text{net}}} \frac{\partial \hat{\mu}_{\text{net}}}{\partial\bar{I}}
- \qquad  (\text{because}~ \frac{\partial{\hat{\mu}_{\text{net}}}}{\partial \hat{\theta}} = 0 ~ \text{by definition}) \\
- \frac{\partial Z}{\partial \hat{\mu}_{\text{net}}} &= \frac{Q_{\text{N,0}}}{2 \cdot \hat{V}_{\text{N}}} \\
- \frac{\partial \hat{\mu}_{\text{net}}}{\partial\bar{I}} &= L_{\text{D}} \cdot (1-\hat{\theta} \cdot \zeta_{\text{Chl}})  \cdot \alpha \cdot \hat{\theta} \cdot (1-L_{\text{I}}) \\
-% \frac{\partial \hat{\mu}_{\text{net}}}{\partial\hat{\theta}} &= L_{\text{D}} \cdot [ \alpha \cdot \bar{I} \cdot ( 1 - L_{\text{I}} ) \cdot (1 - \zeta_{\text{Chl}} \cdot \hat{\theta}) - L_{\text{I}} \cdot \zeta_{\text{Chl}} \cdot \hat{\mu}_{0} ] - R_{\text{M}}^{\text{Chl}} \cdot \zeta_{\text{Chl}} \\
-% \frac{\mathrm{d}\, \hat{\theta}}{\mathrm{d}\, \bar{I}} &= -\frac{\hat{\mu}_{0}}{\alpha\cdot \bar{I}^{2}} (1 - W) - \frac{W}{1 + W} \frac{1}{\bar{I}\cdot \zeta_{\text{Chl}}}
- \intertext{The day-length derivatives are}
- \frac{\partial Z}{\partial L_{\text{D}}} &= \frac{\partial Z}{\partial \hat{\mu}_{\text{net}}} \left( \frac{\partial \hat{\mu}_{\text{net}}}{\partial L_{\text{D}}}
-   + \frac{\partial \hat{\mu}_{\text{net}}}{\partial\hat{\theta}} \frac{\mathrm{d}\, \hat{\theta}}{\mathrm{d}\,\bar{I}} \right)
- = \frac{\partial Z}{\partial \hat{\mu}_{\text{net}}} \frac{\partial \hat{\mu}_{\text{net}}}{\partial L_{\text{D}}} \\
- \frac{\partial \hat{\mu}_{\text{net}}}{\partial L_{\text{D}}} &= \hat{\mu}_{0} \cdot L_{\text{I}} \cdot (1 - \zeta_{\text{Chl}} \hat{\theta})
-\end{flalign}
-%The partial derivatives of $T$ Eq.~\eqref{eq:sdin3} are approximated numerically, as the analytical solution of $\partial Q_{\text{N}}/\partial T$ is unwieldy, given the temperature dependence of $\hat{\mu}_0$,  $\hat{V}_0$ and $R_{\text{M}}^{\text{Chl}}$, and numerous occurrence of these terms in intermediate quantities $\hat{\theta}$ and $L_{\text{I}}$ when $Q_{\text{N}}$ (Eq.~\ref{eq:Qopt}) is fully expanded. The numerical difference approximation is achieved by storing the value of $T$ in the previous integration step ($t=i-1$), calculating $Q_{\text{N}}$ based on this previous value of $T$ (but the values of DIN, $\bar{I}$ and $L_{\text{D}}$ in the current time step ($t=i$)), and substracting this from the current value of $Q_{\text{N}}$, i.e.,
-%\begin{align}
-% \frac{\partial Q_{\text{N}}}{\partial T} & \approx
-% \frac{Q_{\text{N}}(\text{DIN}_{i},\ \bar{I}_{i},\ L_{\text{D}_i},\ T_{i}) - Q_{\text{N}}(\text{DIN}_{i},\ \bar{I}_{i},\ L_{\text{D}_i},T_{i-1})} {T_{i} - T_{i-1}} 
-%\end{align}
-The temperature-derivative of $Z$ is obtained via the derivatives with respect to $\hat{\mu}_{0}$, $\hat{V}_{0}$ and $R^{\text{Chl}}$:
-\begin{flalign}
-  \begin{split}
-    \frac{\partial Z}{\partial T}
-    &=   \frac{\partial Z}{\partial \hat{\mu}_{\text{net}}}
-      \left( \frac{\partial \hat{\mu}_{\text{net}}}{\partial \hat{\mu}_{0}} \frac{\partial \hat{\mu}_{0}}{\partial T}
-        + \frac{\partial \hat{\mu}_{\text{net}}}{\partial R^{\text{Chl}}} \frac{\partial R^{\text{Chl}}}{\partial T} \right)
-      + \frac{\partial Z}{\partial \hat{V}_{\text{N}}} \frac{\partial \hat{V}_{\text{N}}}{\partial \hat{V}_{0}} \frac{\partial \hat{V}_{0}}{\partial T} \\ &
-    = \left[ \frac{\partial Z}{\partial \hat{\mu}_{\text{net}}}
-      \left( \frac{\partial \hat{\mu}_{\text{net}}}{\partial \hat{\mu}_{0}} \cdot \hat{\mu}_{0} - R^{\text{Chl}} \right)
-      + \frac{\partial Z}{\partial \hat{V}_{0}} \cdot \hat{V}_{0}
-    \right] \frac{1}{f(T)} \frac{\text{d}\,f(T)}{\text{d}\,T}
-  \end{split}
-  \\
-  \frac{\partial \hat{\mu}_{net}}{\partial \hat{\mu}_{0}} &= L_{\text{D}} \cdot (1 - \zeta_{\text{Chl}} \hat{\theta})
-  \left[ L_{\text{I}} - (1 - L_{\text{I}}) \frac{\alpha \cdot \bar{I}}{\hat{\mu}_{0}} \hat{\theta} \right] \qquad
-  \frac{\partial Z}{\partial \hat{V}_{0}} = -\hat{\mu}_{\text{net}} \frac{Q_{\text{N},0}}{2 \hat{\mu}_{0} \sqrt{\hat{\mu}_{0} \cdot \hat{V}_{\text{N}}}} \\
-  \frac{1}{f(T)} \frac{\text{d}\,f(T)}{\text{d}\,T} &= \frac{E_{\text{a}}}{R\cdot {(T / \text{K})}^{2}}
-\end{flalign}
-
-We would like to clarify that (1) the DIN in the denominator in the solution provided by S16 (their Eq.~A-5) was a typo; (2) replacement of $\hat{\mu}_g$ (in S16, $\hat{\mu}^I$) with $\hat{\mu}_{\text{net}}$ in our model (see K21) results in the appearance of $(1-\hat{\theta} \cdot \zeta_{\text{Chl}})$ when computing $\partial \hat{\mu}_{\text{net}} / \partial \bar{I}$; (3) $L_{\text{D}}$ used to be implicit in S16, now it's explicit (K21 Eq.~21) therefore it appears for $\partial\hat{\mu}_{\text{net}} / \partial \bar{I}$ unlike in S16 \onur{This is what I'm guessing, but maybe it was just forgotten}. %However, since $L_D$ is set to 1 in the current study (Section~\ref{S:DescSetup}), this difference is practically not relevant for our immediate purposes.
+In Eq.~\eqref{eq:sdin3}, partial derivatives of $Q_{\text{N}}$ with respect to DIN, $\bar{I}$, $L_{\text{D}}$ and $T$ are obtained by canonical application of the chain rule, as detailed in Appendix~\ref{S:Sol}.  
 
 The final terms required in Eq.~\eqref{eq:sdin3} are the changes in $\bar{I}$, $L_{\text{D}}$ and $T$ over time, i.e., $\text{d}\,\bar{I} / \text{d}\,t$, $\text{d}\,L_{\text{D}} / \text{d}\,t$
 and $\text{d}\,T / \text{d}\,t$.
 When the irradiance and temperature are supplied externally, as typically the case in realistic coupled physical-biological models it is not possible to obtain their temporal derivative analytically, therefore they are numerically approximated as the discrete backward difference between its current ($t=i$) and previous ($t=i-1$) values, divided by the size of the integration time step i.e., $\text{d}\, E / \text{d}\, t \approx (E_{i} - E_{i-1}) / \Delta t$ for $E=\{\bar{I},\ T\}$ (see also Section~\ref{S:DescT1} designed to test the sensitivity of the model results and conservation behavior to this approximation for $E=\bar{I}$).
-
 
 % Table
 \begin{table*}[htb]
@@ -567,6 +485,92 @@ The modelling framework, FABM, in which the model was implemented, allows seamle
 
 \appendix
 \section{Analytical Solutions}\label{S:Sol}
+To facilitate the solutions of the $\partial Q/\partial E$ ($E=\{\mathrm{DIN},\bar{I},\mathrm{T},\mathrm{L}_\mathrm{D}\}$ in Eq.~\ref{eq:sdin3}, we introduce a new variable $Z$ and re-write Eq.~\eqref{eq:Qopt} in terms of $Z$, as in \citet{Smith2016}:
+\begin{flalign}
+  \label{eq.Z}
+  Q_{\text{N}} &= \frac{Q_{\text{N},0}}{2} \left( 1 + \sqrt{1 + \frac{1}{Z}}  \right), \qquad Z = \frac{Q_{\text{N},0}}{2}\left( \frac{\hat{\mu}_{\text{net}}}{\hat{V}_{\text{N}}} + \zeta_{\text{N}} \right) \\
+  \label{eq.delQdelN}
+ \frac{\partial Q_{\text{N}}}{\partial \text{DIN}} &= \frac{\partial Q_{\text{N}}}{\partial Z} \frac{\partial Z}{\partial \text{DIN}}, \qquad
+ \frac{\partial Q_{\text{N}}}{\partial \bar{I}}  = \frac{\partial Q_{\text{N}}}{\partial Z} \frac{\partial Z}{\partial \bar{I}}, \qquad
+ \frac{\partial Q_{\text{N}}}{\partial L_{\text{D}}} = \frac{\partial Q_{\text{N}}}{\partial Z} \frac{\partial Z}{\partial L_{\text{D}}}, \qquad
+ \frac{\partial Q_{\text{N}}}{\partial T} = \frac{\partial Q_{\text{N}}}{\partial Z} \frac{\partial Z}{\partial T}
+\end{flalign}
+In Eqs.~\eqref{eq.delQdelN}, the common term $\partial Q_{\text{N}} / \partial Z$, as in S16, is:
+\begin{equation} \label{eq:delQdelZ}
+ \frac{\partial Q_{\text{N}}}{\partial Z} = \frac{-Q_{\text{N,0}}}{4 \cdot Z \cdot \sqrt{Z\cdot(1+Z)}}
+\end{equation}
+Recalling $\hat{V}_{\text{N}}$ from K21, Eq.~(17):
+\begin{flalign}
+  \hat{V}_{\text{N}} &= \frac{(1-f_{\text{A}})\hat{V}_{0} f_{\text{A}} \hat{A}_{0} \text{DIN}}{(1-f_{\text{A}})\hat{V}_{0} + f_{\text{A}} \hat{A}_{0} \text{DIN}}
+  = \frac{\hat{V}_{0}\cdot \hat{A}_{0}\cdot\text{DIN}}{{(\sqrt{\hat{V}_{0}} + \sqrt{\hat{A}_{0}\cdot \text{DIN}})}^{2}}, \qquad
+  f_{\text{A}} = \frac{1}{\displaystyle 1 + \sqrt{\frac{\hat{A}_{0}\cdot\text{DIN}}{\hat{V}_{0}}}} \\
+  \intertext{We set the potential maximum rates of N and C acquisition numerically equal to the maximum-rate parameter $\mu_{0}$ \citep{Pahlowetal13}:}
+  \label{eq:v0mu0}
+  \hat{V}_{0} &= \hat{\mu}_{0} = \mu_{0} \cdot f(T) \qquad f(T) = \exp\left[ -\frac{E_{\text{a}}}{R}\left( \frac{1}{T / \text{K}} - \frac{1}{T_{\text{ref}} / \text{K}} \right) \right]
+\end{flalign}
+the partial derivative of $Z$ with respect to DIN is:
+\begin{flalign}
+  \frac{\partial Z}{\partial \text{DIN}} = \frac{\partial Z}{\partial \hat{V}_{\text{N}}} \frac{\mathrm{d}\, \hat{V}_{\text{N}}}{\mathrm{d}\, \text{DIN}}
+  = -\frac{\hat{\mu}_{\text{net}} \cdot Q_{\text{N},0}}{2 \cdot\hat{A}_{0}\cdot \text{DIN}^{2}} \left( 1 + \sqrt{\frac{\hat{A}_{0}\cdot \text{DIN}}{\hat{V}_{0}}} \right)
+\end{flalign}
+
+For calculating the partial derivative of $Z$ with respect to $\bar{I}$, ${\partial Z}/{\partial \bar{I}}$, we recall $\hat{\mu}_{\text{net}}$, $L_{\text{I}}$ and $\hat{\theta}$ from K21, Eqs.~(20)--(23) \& (26):
+\begin{flalign}
+  \hat{\mu}_{\text{net}} &= L_{\text{D}}\hat{\mu}_{0} L_{\text{I}} (1-\zeta_{\text{Chl}}\hat{\theta})- R^{\text{Chl}}, \qquad
+    R^{\text{Chl}} = f(T) \cdot R_{\text{M}}^{\text{Chl}} \zeta_{\text{Chl}}\hat{\theta} \\
+  L_{\text{I}} &= 1 - \exp \left( \frac{-\alpha \hat{\theta} \bar{I}}{\hat{\mu}_{0}} \right), \qquad
+  \hat{\theta} = \frac{1}{\zeta_{\text{Chl}}} + \frac{\hat{\mu}_{0}}{\alpha\cdot \bar{I}} \cdot (1 - W), \qquad
+  W = \mathrm{W}_{0} \left[ \left( 1 + \frac{f(T) \cdot R_{\text{M}}^{{\text{Chl}}}}{L_{\text{D}} \cdot \hat{\mu}_{0}} \right)
+   \cdot \exp \left( 1 + \frac{\alpha \cdot \bar{I}}{\hat{\mu}_{0} \cdot \zeta_{\text{Chl}}} \right) \right]
+\end{flalign}
+where $\mathrm{W}_{0}$ is the 0-branch of Lambert's W-function, and $\alpha$ and $\zeta_{\text{Chl}}$ are model parameters (initial Chl-specific slope of P-I curve and cost of chlorophyll synthesis, respectively, Table~3 in K21). %  $\hat{\theta}$ is the optimal chlorophyll density in the chloroplast.\\
+$\partial Z/ \partial \bar{I}$ can then be derived by canonical application of the chain rule:
+\begin{flalign}
+ \frac{\partial Z}{\partial \bar{I}} &=
+ \frac{\partial Z}{\partial \hat{\mu}_{\text{net}}} \left( \frac{\partial \hat{\mu}_{\text{net}}}{\partial\bar{I}}
+   + \frac{\partial \hat{\mu}_{\text{net}}}{\partial\hat{\theta}} \frac{\mathrm{d}\, \hat{\theta}}{\mathrm{d}\,\bar{I}} \right)
+ = \frac{\partial Z}{\partial \hat{\mu}_{\text{net}}} \frac{\partial \hat{\mu}_{\text{net}}}{\partial\bar{I}}
+ \qquad  (\text{because}~ \frac{\partial{\hat{\mu}_{\text{net}}}}{\partial \hat{\theta}} = 0 ~ \text{by definition}) \\
+ \frac{\partial Z}{\partial \hat{\mu}_{\text{net}}} &= \frac{Q_{\text{N,0}}}{2 \cdot \hat{V}_{\text{N}}} \\
+ \frac{\partial \hat{\mu}_{\text{net}}}{\partial\bar{I}} &= L_{\text{D}} \cdot (1-\hat{\theta} \cdot \zeta_{\text{Chl}})  \cdot \alpha \cdot \hat{\theta} \cdot (1-L_{\text{I}}) \\
+% \frac{\partial \hat{\mu}_{\text{net}}}{\partial\hat{\theta}} &= L_{\text{D}} \cdot [ \alpha \cdot \bar{I} \cdot ( 1 - L_{\text{I}} ) \cdot (1 - \zeta_{\text{Chl}} \cdot \hat{\theta}) - L_{\text{I}} \cdot \zeta_{\text{Chl}} \cdot \hat{\mu}_{0} ] - R_{\text{M}}^{\text{Chl}} \cdot \zeta_{\text{Chl}} \\
+% \frac{\mathrm{d}\, \hat{\theta}}{\mathrm{d}\, \bar{I}} &= -\frac{\hat{\mu}_{0}}{\alpha\cdot \bar{I}^{2}} (1 - W) - \frac{W}{1 + W} \frac{1}{\bar{I}\cdot \zeta_{\text{Chl}}}
+ \intertext{The day-length derivatives are}
+ \frac{\partial Z}{\partial L_{\text{D}}} &= \frac{\partial Z}{\partial \hat{\mu}_{\text{net}}} \left( \frac{\partial \hat{\mu}_{\text{net}}}{\partial L_{\text{D}}}
+   + \frac{\partial \hat{\mu}_{\text{net}}}{\partial\hat{\theta}} \frac{\mathrm{d}\, \hat{\theta}}{\mathrm{d}\,\bar{I}} \right)
+ = \frac{\partial Z}{\partial \hat{\mu}_{\text{net}}} \frac{\partial \hat{\mu}_{\text{net}}}{\partial L_{\text{D}}} \\
+ \frac{\partial \hat{\mu}_{\text{net}}}{\partial L_{\text{D}}} &= \hat{\mu}_{0} \cdot L_{\text{I}} \cdot (1 - \zeta_{\text{Chl}} \hat{\theta})
+\end{flalign}
+%The partial derivatives of $T$ Eq.~\eqref{eq:sdin3} are approximated numerically, as the analytical solution of $\partial Q_{\text{N}}/\partial T$ is unwieldy, given the temperature dependence of $\hat{\mu}_0$,  $\hat{V}_0$ and $R_{\text{M}}^{\text{Chl}}$, and numerous occurrence of these terms in intermediate quantities $\hat{\theta}$ and $L_{\text{I}}$ when $Q_{\text{N}}$ (Eq.~\ref{eq:Qopt}) is fully expanded. The numerical difference approximation is achieved by storing the value of $T$ in the previous integration step ($t=i-1$), calculating $Q_{\text{N}}$ based on this previous value of $T$ (but the values of DIN, $\bar{I}$ and $L_{\text{D}}$ in the current time step ($t=i$)), and substracting this from the current value of $Q_{\text{N}}$, i.e.,
+%\begin{align}
+% \frac{\partial Q_{\text{N}}}{\partial T} & \approx
+% \frac{Q_{\text{N}}(\text{DIN}_{i},\ \bar{I}_{i},\ L_{\text{D}_i},\ T_{i}) - Q_{\text{N}}(\text{DIN}_{i},\ \bar{I}_{i},\ L_{\text{D}_i},T_{i-1})} {T_{i} - T_{i-1}} 
+%\end{align}
+The temperature-derivative of $Z$ is obtained via the derivatives with respect to $\hat{\mu}_{0}$, $\hat{V}_{0}$ and $R^{\text{Chl}}$:
+\begin{flalign}
+  \begin{split}
+    \frac{\partial Z}{\partial T}
+    &=   \frac{\partial Z}{\partial \hat{\mu}_{\text{net}}}
+      \left( \frac{\partial \hat{\mu}_{\text{net}}}{\partial \hat{\mu}_{0}} \frac{\partial \hat{\mu}_{0}}{\partial T}
+        + \frac{\partial \hat{\mu}_{\text{net}}}{\partial R^{\text{Chl}}} \frac{\partial R^{\text{Chl}}}{\partial T} \right)
+      + \frac{\partial Z}{\partial \hat{V}_{\text{N}}} \frac{\partial \hat{V}_{\text{N}}}{\partial \hat{V}_{0}} \frac{\partial \hat{V}_{0}}{\partial T} \\ &
+    = \left[ \frac{\partial Z}{\partial \hat{\mu}_{\text{net}}}
+      \left( \frac{\partial \hat{\mu}_{\text{net}}}{\partial \hat{\mu}_{0}} \cdot \hat{\mu}_{0} - R^{\text{Chl}} \right)
+      + \frac{\partial Z}{\partial \hat{V}_{0}} \cdot \hat{V}_{0}
+    \right] \frac{1}{f(T)} \frac{\text{d}\,f(T)}{\text{d}\,T}
+  \end{split}
+  \\
+  \frac{\partial \hat{\mu}_{net}}{\partial \hat{\mu}_{0}} &= L_{\text{D}} \cdot (1 - \zeta_{\text{Chl}} \hat{\theta})
+  \left[ L_{\text{I}} - (1 - L_{\text{I}}) \frac{\alpha \cdot \bar{I}}{\hat{\mu}_{0}} \hat{\theta} \right] \qquad
+  \frac{\partial Z}{\partial \hat{V}_{0}} = -\hat{\mu}_{\text{net}} \frac{Q_{\text{N},0}}{2 \hat{\mu}_{0} \sqrt{\hat{\mu}_{0} \cdot \hat{V}_{\text{N}}}} \\
+  \frac{1}{f(T)} \frac{\text{d}\,f(T)}{\text{d}\,T} &= \frac{E_{\text{a}}}{R\cdot {(T / \text{K})}^{2}}
+\end{flalign}
+
+We would like to clarify that
+%(1) the DIN in the denominator in the solution provided by S16 (their Eq.~A-5) was a typo; 
+(1) replacement of $\hat{\mu}_g$ (in S16, $\hat{\mu}^I$) with $\hat{\mu}_{\text{net}}$ in our model (see K21) results in the appearance of $(1-\hat{\theta} \cdot \zeta_{\text{Chl}})$ when computing $\partial \hat{\mu}_{\text{net}} / \partial \bar{I}$; 
+(2) $L_{\text{D}}$ used to be implicit in S16, now it's explicit (K21 Eq.~21) therefore it appears for $\partial\hat{\mu}_{\text{net}} / \partial \bar{I}$ unlike in S16.
+
 % \section{Relevance of changes in quota for the loss processes}\label{S:appQ4loss}  %% Appendix-A
 % \onur{Not sure whether we want to keep this}
 % %In our model, we considered a single loss process for phytoplankton.
