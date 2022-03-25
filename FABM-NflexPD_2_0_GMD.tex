@@ -216,7 +216,7 @@ $Q_{\text{N}}$ changes over time, which contributes to the rate of change of $\t
   = \frac{\mathrm{d}\,\text{Phy}_{\text{C}}}{\mathrm{d}\,t} \cdot Q_{\text{N}} + \text{Phy}_{\text{C}} \cdot \frac{\mathrm{d}\,Q_{\text{N}}}{\mathrm{d}\,t}
   = V_{\text{N}} - F_{\text{Phy}_{\text{C}}-\text{Det}_{\text{C}}}\cdot Q_{\text{N}} + \text{Phy}_{\text{C}} \cdot \frac{\mathrm{d}\,Q_{\text{N}}}{\mathrm{d}\,t}
 \end{equation}
-The right-most term in Eq.~\eqref{eq:phyn}, $\text{Phy}_{\text{C}}\cdot \mathrm{d}\,Q_{\text{N}} / \mathrm{d}\, t$, is not accounted for because $\text{Phy}_{\text{N}}$ is not a state variable.  Hence, total N is not conserved.  If $\text{Phy}_{\text{N}}$ was a state variable, this term would not appear and mass balance would be ensured by tracking the temporal evolution of $\text{Phy}_{\text{N}}$.  Owing to the instantaneous acclimation (IA) of $Q_{\text{N}}$, we must explicitly account for this term in order to maintain mass balance for N\@.  It is impossible to do this mechanistically because that would require tracking the corresponding N flux in the (nonexistent) state variable $\text{Phy}_{\text{N}}$.  Instead, we have to account for this term by modifying the rate of change of one or more of the N-containing state variables of our IA model.  As done by \citet{Smith2016}, we subtract it from the differential equation for DIN\@:
+The right-most term in Eq.~\eqref{eq:phyn}, $\text{Phy}_{\text{C}}\cdot \mathrm{d}\,Q_{\text{N}} / \mathrm{d}\, t$, is not accounted for because $\text{Phy}_{\text{N}}$ is not a state variable.  \onur{I wonder whether some of this might be better in Discussion: `Hence, total N is not conserved.  If $\text{Phy}_{\text{N}}$ was a state variable, this term would not appear and mass balance would be ensured by tracking the temporal evolution of $\text{Phy}_{\text{N}}$.  Owing to the instantaneous acclimation (IA) of $Q_{\text{N}}$, we must explicitly account for this term in order to maintain mass balance for N\@.  It is impossible to do this mechanistically because that would require tracking the corresponding N flux in the (nonexistent) state variable $\text{Phy}_{\text{N}}$.  Instead, we have to account for this term by modifying the rate of change of one or more of the N-containing state variables of our IA model.'}  As done by \citet{Smith2016}, we subtract it from the differential equation for DIN\@:
 \begin{flalign}\label{eq:sdin2}
   \begin{split}
     \frac{\text{d}\,\text{DIN}}{\text{d}\, t} &= F_{\text{DON}-\text{DIN}} - V_{\text{N}} - \text{Phy}_{\text{C}} \cdot \frac{\mathrm{d}\, Q_{\text{N}}}{\mathrm{d}\, t} \\
@@ -441,9 +441,16 @@ As a technical note regarding the technical implementation is that, using the se
 % DISCUSSION
 \section{Discussion}
 
-Here a general paragraph on what has been achieved.
+In this study, we presented FABM-NflexPD 2.0, the FABM implementation of the model introduced by \citet{Smith2016} after a few minor corrections (see the notes at the end of Appendix~\ref{S:Sol}). The precursor version of the model, FABM-NflexPD 1.0 \citep{Kerimoglu2021}, allowed resolving only the N cycle, and the C-cycle was not closed. The version 2.0 described here can resolve both N- and C-cycles in a 0D setup, owed to the flux terms required to satisfy the mass balance (Sections~\ref{S:DescFlux} and Appendix~\ref{S:Sol}). 
 
-\subsection{Re-establishing the Mass Balance \onur{alternative header: `An analytical modelling platform to study phytoplankton'. Any other suggestions?}}
+\subsection{Re-establishing the Mass Balance}
+
+Two variants of the model were elaborated here. The `Dynamic Acclimation' variant is fully explicit in its treatment of C and N content of phytoplankton and is based on the model by \citet{Pahlowetal13}. The `Instantaneous Acclimation' variant aims to track the phytoplankton dynamics with a single state variable, based on a balanced growth approximation \citep{Burmaster1979}, that is, assuming that cells reach to the equilibrium state instantaneously. 
+
+\onur{Could some of the text between Eq.~\ref{eq:phyn} and Eq.~\ref{eq:sdin2} placed here?}
+
+Through detailed tests, we show that the C is fully conserved by the model, whereas N is conserved to a very large degree (error: $<$0.0001\% for all tests we conducted). We also show that the predictions of the IA and DA variants are mostly indistinguishable. Finally, with an example where we simulated 10 phytoplankton size classes with the two model variants, we demonstrated that the model is well aligned with the modular coupling philosophy of FABM \citep{Bruggeman2014}.  
+
 As explained in section~\ref{S:DescFlux}, reducing the errors in mass balance for N required explicitly calculating the changes in N quota in time, i.e., $\textrm{d}Q/\textrm{d}t$, which in turn required calculation of individual components of this change driven by different environmental factors, namely, DIN, $\bar{I}$, T and $\textrm{L}_{\textrm{D}}$.  Under the idealized setup considered for T2, changes occurring in DIN is clearly the dominant source of variation in Q, however contributions by other factors are non-negligible (Fig.~\ref{f.T2dQdt}). In other setups, relative importance of various environmental factors may be different. Relevance of these secondary factors to the elemental stoichiometry of phytoplankton is an often neglected aspect. Our mathematically explicit treatment of this issue in this study is expected to inspire and contribute to future endeavors to establish an analytical framework for investigating the mechanistic underpinnings of plankton physiology.
 
 \begin{figure}[ht!]
@@ -452,11 +459,11 @@ As explained in section~\ref{S:DescFlux}, reducing the errors in mass balance fo
 \end{figure}
 
 \subsection{Computational Efficiency and Application Potential}
-Our results demonstrate that a state variable that tracks the elemental content of plankton can be effectively removed, without leading to major issues in mass balance, in a 0D setup. Removing a state variable in such a setup does not seem to result in any advantages in computational efficiency, in comparison to a fully explicit dynamic variant, independent of the number of phytoplankton groups being simulated (Fig.~\ref{f.speed}). This is presumably because any potential reduction in computational costs owed to one less state variable in the instantaneous variant is  compensated by the  the additional logic and calculations required (see Appendix-\ref{S:Sol}).
+Our results demonstrate that a state variable that tracks the elemental content of plankton can be effectively removed, without leading to major issues in mass balance, in a 0D setup. Removing a state variable in such a setup does not seem to result in any advantages in computational efficiency \onur{statement subject to change according to the experiment with 50pfts}, in comparison to a fully explicit dynamic variant, independent of the number of phytoplankton groups being simulated (Fig.~\ref{f.speed}). This is presumably because any potential reduction in computational costs owed to one less state variable in the instantaneous variant is  compensated by the  the additional logic and calculations required (see Appendix-\ref{S:Sol}).
 
 \begin{figure}[ht!]
 \includegraphics[width=14cm,trim=0cm 0mm 0.0cm 0mm, clip]{figures/time_of_run.png}
-\caption{Scaling of simulation time with number of phytoplankton instances being simulated.\onur{I'm not sure whether we need to show this result, or it may be sufficient to mention the results, that there are no obvious speed differences between the IA and DA variants}.\label{f.speed}}
+\caption{Scaling of simulation time with number of phytoplankton instances being simulated.\onur{Prima is trying a run with 50pfts, but if we still don't see any real difference between IA and DA in that run, perhaps we don't have to show this figure and it may just be sufficient to mention that there are no obvious speed differences between the IA and DA variants}.\label{f.speed}}
 \end{figure}
 
 The modelling framework, FABM, in which the model was implemented, allows seamless coupling of models with various hydrodynamical hosts \citep{Bruggeman2014}. We already attempted an application in a 1D setup using GOTM \citep{Burchard2006} as the hydrodynamical host, and found out that N is not conserved. This is understandable, because the spatial transport in a spatially explicit setup leads to variations in $Q$, which need to be compensated by variations in another state variable, like DIN, as we have done here for the case of variations in $Q$ that occurred in time (Eq.~\ref{eq:sdin2}). For instance, in a vertical setup with $z$ indicating the only spatial dimension, all environmental factors contributing to $\mathrm{d}Q/\mathrm{d}z$ need to be calculated, and included in the spatial flux terms of DIN, which may have to be handled within the hydrodynamical host (as would be the case in FABM application), depending on the modelling framework. Such additional fluxes need to be calculated for each spatial dimension across which material transport is described. It is not clear, whether the resulting model would be faster than the fully explicit variant: on one hand, reduced number of state variables in a spatially explicit setup means smaller transport matrices, on the other, calculation of fluxes associated with changes in $Q$ implies additional logic and calculations. As mentioned above, in the 0D setup, no clear performance advantage of the instantaneous acclimation approach was found presumably for this reason, however, in a spatially explicit setups, calculation of transport can easily become computationally more demanding than calculating the right hand sides of a biogeochemical model, therefore reduction of a state variable might indeed lead to some computational advantages.
@@ -480,7 +487,7 @@ The modelling framework, FABM, in which the model was implemented, allows seamle
 
 %\videosupplement{TEXT} %% use this section when having video supplements available
 
-\clearpage
+%\clearpage
 \appendix
 \section{Analytical Solutions}\label{S:Sol}
 To facilitate the solutions of the $\partial Q/\partial E$ ($E=\{\mathrm{DIN},\bar{I},\mathrm{T},\mathrm{L}_\mathrm{D}\}$ in Eq.~\ref{eq:sdin3}, we introduce a new variable $Z$ and re-write Eq.~\eqref{eq:Qopt} in terms of $Z$, as in \citet{Smith2016}:
@@ -567,7 +574,7 @@ The temperature-derivative of $Z$ is obtained via the derivatives with respect t
 We would like to clarify that
 %(1) the DIN in the denominator in the solution provided by S16 (their Eq.~A-5) was a typo; 
 (1) replacement of $\hat{\mu}_g$ (in S16, $\hat{\mu}^I$) with $\hat{\mu}_{\text{net}}$ in our model (see K21) results in the appearance of $(1-\hat{\theta} \cdot \zeta_{\text{Chl}})$ when computing $\partial \hat{\mu}_{\text{net}} / \partial \bar{I}$; 
-(2) $L_{\text{D}}$ used to be implicit in S16, now it's explicit (K21 Eq.~21) therefore it appears for $\partial\hat{\mu}_{\text{net}} / \partial \bar{I}$ unlike in S16.
+(2) $L_{\text{D}}$ used to be implicit in S16, now it's explicit (K21 Eq.~21) therefore it appears for $\partial\hat{\mu}_{\text{net}} / \partial \bar{I}$ unlike in S16; (3) Changes in $Q$ due to T were not accounted for by \citet{Smith2016}.
 
 % \section{Relevance of changes in quota for the loss processes}\label{S:appQ4loss}  %% Appendix-A
 % \onur{Not sure whether we want to keep this}
@@ -609,7 +616,7 @@ We would like to clarify that
 
 %% Please add \clearpage between each table and/or figure. Further guidelines on figures and tables can be found below.
 
-\authorcontribution{OK and MP extended the model with fluxes required to satisfy the mass balance; OK implemented the model in FABM; PA performed the model runs with multiple phytoplankton; OK drafted the manuscript; MP and SLS contributed to writing and revision of the text.} %% this section is mandatory
+\authorcontribution{OK and MP extended the model with fluxes required to satisfy the mass balance; OK implemented the model in FABM; PA performed the model runs with multiple phytoplankton; OK drafted the manuscript; MP and SLS contributed to writing and revision of the text. \onur{anything I might have missed?}} %% this section is mandatory
 
 %\competinginterests{No competing interests are present.} %% this section is mandatory even if you declare that no competing interests are present
 
