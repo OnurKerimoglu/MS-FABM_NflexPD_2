@@ -72,7 +72,7 @@
 %\usepackage{subfig}
 %\usepackage{rotating}
 
-%Additional packages: 
+%Additional packages:
 \usepackage{mathrsfs} %provides calligraphic Fonts
 \usepackage{placeins}
 \usepackage[percent]{overpic}
@@ -152,7 +152,7 @@ The version of the model presented by \citet{Kerimoglu2021} can only resolve N i
  \item [T1] an assessment of the conservation of the C and and N by a simplified version of the model in a 0D setup, where temperature and day length were held constant, and light and temporal changes in light were provided either externally and numerically approximated respectively, and both calculated analytically.
  \item [T2a] testing the IA approach in a more realistic setup, where irradiance is supplied externally, temperature and day length are allowed to vary, and attenuation of light by phytoplankton is accounted for.
  \item [T2b] comparison of the fully explicit version (the `dynamic acclimation' (DA) variant in K21) vs the instantaneously acclimating (IA) variant of the model 
- \item [T3] demonstration of a model run with multiple phytoplanton groups.
+ \item [T3] demonstration of a model run with multiple phytoplankton groups.
  %\item [T4] \onur{done} application of the model in an idealistic 1D setup and assessment of mass conservation \textcolor{red}{\{Onur: this test failed: in 1D, model does not seem to be mass conservative, see Section~\ref{s.resT4}.\}} 
 \end{description}
 
@@ -367,7 +367,7 @@ For this test, seasonal variations in $T$ and $L_{\text{D}}$ were considered, as
   \includegraphics[width=12cm,trim=0mm 0mm 0cm 0mm, clip]{figures/2022-03-22d_Ldvar_Tvar_ThatVar_PARext_IA_vs_DA/0D-Highlat_wconst_lext_Ldvar_Tvar_DIN015_CbasedIA_modular_24h_vs_0D-Highlat_wconst_lext_Ldvar_Tvar_DIN015_CbasedDA_modular_24h_cont_abio0_2y.png}
   \caption{Daily average irradiance and its temporal derivative, as extracted from the simulation outputs generated for T1. PAR:N (solid blue line) is the model version where the temporal derivative of irradiance is approximated numerically; PAR:A (dashed orange line): both irradiance and its temporal derivative are calculated analytically.\label{f.T2env}}
 \end{figure}
-    
+
 
 % \begin{figure}[ht!]
 % \centering
@@ -386,7 +386,7 @@ For this test, seasonal variations in $T$ and $L_{\text{D}}$ were considered, as
 %     %\put(69,26){\scriptsize{\textsf{(b)}}}
 %   \put(0,0){\tiny \grid(140,70)(5,5)[0,0]}
 %   \end{picture}
-% 
+%
 % \caption{Results of T2: Carbon (left) and nitrogen (right) pools according to the IA (solid blue line) and DA (dashed orange line) approaches, (a-b) under constant $L_{\text{D}}=1$ and $T=20^{\circ}C$;  (c-d) variable $L_{\text{D}}$; (e-f) constant $T=20^{\circ}C$;  variable $L_{\text{D}}$ and$T$; . \onur{Again, I think no other panels required here}.\label{f.T2ares}}
 % \end{figure}
 
@@ -410,14 +410,14 @@ The IA and the fully explicit DA variants produce almost identical outputs (Fig.
 
 For the case of multiple phytoplankton, Eq.~\ref{eq:sdin3} can be generalized as follows:
 \begin{flalign}\label{eq:sdin4}
-\frac{\text{d}\,\text{DIN}}{\text{d}\,t} &= \frac{\displaystyle F_{\text{DON}-\text{DIN}} - 
+\frac{\text{d}\,\text{DIN}}{\text{d}\,t} &= \frac{\displaystyle F_{\text{DON}-\text{DIN}} -
   \sum_j \left[ V_{\text{N}}^j - \text{Phy}_{\text{C}}^j \cdot
   \left( \frac{\partial Q_{\text{N}}^j}{\partial \bar{I}} \frac{\text{d}\, \bar{I}}{\text{d}\, t}
     + \frac{\partial Q_{\text{N}}^j}{\partial L_{\text{D}}} \frac{\text{d}\, L_{\text{D}}}{\text{d}\, t}
     + \frac{\partial Q_{\text{N}}^j}{\partial T} \frac{\text{d}\, T}{\text{d}\, t} \right) \right]} %
 {\displaystyle 1+ \sum_j \left[ \text{Phy}_{\text{C}}^j\frac{\partial Q_{\text{N}}^j}{\partial \text{DIN}} \right]}
 \end{flalign}
-Where, $j$ indexes the different PFTs simulated \onur{maybe it's better to move it right after Eq.~\ref{eq:sdin3}}.
+Where $j$ indexes the different PFTs simulated \onur{maybe it's better to move it right after Eq.~\ref{eq:sdin3}}.
 
 In Fig.~\ref{f.T3res} we present the results of a numerical experiment with 10 phytoplankton size classes, as simulated by IA and DA variants. Simulated C biomass of phytoplankton by the two variants are near-identical. Under the specific setup, we used for this experiment annual average concentrations decrease with cell size, and the larger classes exhibit a stronger seasonal variation. Under different environmental conditions, with respect to, e.g., the initial nutrient concentrations, and temporal stability, different outcomes can emerge \citep[see, e.g.,][]{Taherzadeh2017}, but such an exploration is outside of the scope of the current study.
 
@@ -433,7 +433,6 @@ In Fig.~\ref{f.T3res} we present the results of a numerical experiment with 10 p
 % \end{figure}
 
 As a technical note regarding the technical implementation is that, using the separate \verb|phy_Cbased.F90| and \verb|abio_Cbased.F90| modules, the number of phytoplankton types can be changed without needing to change and recompile the code, and by adjusting the configuration file in run time (see the \verb|fabm.yaml| examples in the \verb|testcases| folder that were employed to produce the results presented in this study), which is a feature enabled by the modularity of FABM.
-
 
 %\include{res1D}
 

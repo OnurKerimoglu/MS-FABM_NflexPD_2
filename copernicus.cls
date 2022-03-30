@@ -1734,7 +1734,7 @@
 \let\bibfont\small
 \NAT@numbersfalse
 \NAT@set@cites
-\let\NAT@set@cites\relax
+%\let\NAT@set@cites\relax
 \AtBeginDocument{\let\@citex\NAT@citex}
 \newcommand\urlprefix{}
 \renewenvironment{thebibliography}[1]
