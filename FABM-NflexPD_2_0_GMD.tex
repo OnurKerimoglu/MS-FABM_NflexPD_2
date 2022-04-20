@@ -240,7 +240,7 @@ However, $Q$ changes over time, which also contributes to the rate of change of 
 %  = V_{\text{N}} - F_{\text{Phy}_{\text{C}}-\text{Det}_{\text{C}}}\cdot Q + \text{Phy}_{\text{C}} \cdot \frac{\mathrm{d}\,Q}{\mathrm{d}\,t}
 \end{equation}
 \end{subequations}
-Thus, the right-most term in Eq.~\eqref{eq:phyn}, $\text{Phy}_{\text{C}}\cdot \mathrm{d}\,Q / \mathrm{d}\, t$, is not accounted for by our system of Eqs.~\eqref{eq:dic} --~\eqref{eq:sDetN} because $\text{Phy}_{\text{N}}$ is not a state variable.  \onur{I wonder whether some of this might be better in Discussion: `Hence, total N is not conserved.  If $\text{Phy}_{\text{N}}$ was a state variable, this term would not appear and mass balance would be ensured by tracking the temporal evolution of $\text{Phy}_{\text{N}}$.  Owing to the instantaneous acclimation (IA) of $Q$, we must explicitly account for this term in order to maintain mass balance for N\@.  It is impossible to do this mechanistically because that would require tracking the corresponding N flux in the (nonexistent) state variable $\text{Phy}_{\text{N}}$.  Instead, we have to account for this term by modifying the rate of change of one or more of the N-containing state variables of our IA model.'}  Folowing \citet{Smith2016}, we subtract it from the differential equation for DIN\@:
+Thus, the right-most term in Eq.~\eqref{eq:phyn}, $\text{Phy}_{\text{C}}\cdot \mathrm{d}\,Q / \mathrm{d}\, t$, is not accounted for by our system of Eqs.~\eqref{eq:dic} --~\eqref{eq:sDetN} because $\text{Phy}_{\text{N}}$ is not a state variable.  Following \citet{Smith2016}, we subtract it from the differential equation for DIN\@:
 \begin{flalign}\label{eq:sdin2}
   \begin{split}
     \frac{\text{d}\,\text{DIN}}{\text{d}\, t} &= F_{\text{Det}_{\text{N}}-\text{DIN}} - F_{\text{DIN}-\text{Phy}_\text{N}} - \text{Phy}_{\text{C}} \cdot \frac{\mathrm{d}\, Q}{\mathrm{d}\, t} \\
@@ -262,7 +262,19 @@ Thus, the right-most term in Eq.~\eqref{eq:phyn}, $\text{Phy}_{\text{C}}\cdot \m
     + \frac{\partial Q}{\partial T} \frac{\text{d}\, T}{\text{d}\, t} \right)}%
 {\displaystyle 1+ \text{Phy}_{\text{C}}\frac{\partial Q}{\partial \text{DIN}}}\tag{\ref{eq:sdin}b}
 \end{flalign}
-While this, rather arbitrary, measure for achieving N mass balance violates the assumptions behind the model by assigning part of $\text{Phy}_{\text{N}}$ to DIN, the resulting differences compared to explicitly resolving $\text{Phy}_{\text{N}}$ are relatively small \citep{Ward2017}.  The partial derivatives of $Q$ with respect to DIN, $\bar{I}$, $L_{\text{D}}$ and $T$ are obtained by canonical application of the chain rule, as detailed in Appendix~\ref{S:Sol}.
+The partial derivatives of $Q$ with respect to DIN, $\bar{I}$, $L_{\text{D}}$ and $T$ are obtained by canonical application of the chain rule, as detailed in Appendix~\ref{S:Sol}.
+
+For the case of multiple phytoplankton functional types (PFTs), Eq.~\ref{eq:sdin3} can be generalized as follows:
+\begin{flalign}\label{eq:sdin4}
+\frac{\text{d}\,\text{DIN}}{\text{d}\,t} &= \frac{\displaystyle F_{\text{Det}_{\text{N}}-\text{DIN}} -
+  \sum_j \left[ V_{\text{N}}^j + \text{Phy}_{\text{C}}^j \cdot
+  \left( \frac{\partial Q^j}{\partial \bar{I}} \frac{\text{d}\, \bar{I}}{\text{d}\, t}
+    + \frac{\partial Q^j}{\partial L_{\text{D}}} \frac{\text{d}\, L_{\text{D}}}{\text{d}\, t}
+    + \frac{\partial Q^j}{\partial T} \frac{\text{d}\, T}{\text{d}\, t} \right) \right]} %
+{\displaystyle 1+ \sum_j \left[ \text{Phy}_{\text{C}}^j\frac{\partial Q^j}{\partial \text{DIN}} \right]} \tag{\ref{eq:sdin}c}
+\end{flalign}
+Where $j$ indexes the different PFTs simulated.
+
 
 % Here, $\frac{\text{d} \text{Phy}_{\text{C}}}{\text{d} t} \big\rvert_G$ corresponds to gross growth of phytoplankton C biomass, i.e., $F_{\text{DIC}-\text{Phy}_{\text{C}}}$ in Eq.~\eqref{eq:sPhyC}. Substituting therefore Eq.~\eqref{eq:fdicphyc} in Eq.~\eqref{eq:dphyNdt}:
 % \begin{equation} \label{eq:dphyNdt2}
@@ -426,34 +438,23 @@ The IA and the fully explicit DA variants produce almost identical results (Figs
 
 \begin{figure}[htb!]
 \includegraphics[width=14cm,trim=0cm 11mm 0.0cm 5mm, clip]{figures/2022-03-22d_Ldvar_Tvar_ThatVar_PARext_IA_vs_DA/0D-Highlat_wconst_lext_Ldvar_Tvar_DIN015_CbasedIA_modular_24h_vs_0D-Highlat_wconst_lext_Ldvar_Tvar_DIN015_CbasedDA_modular_24h_cont_abio1_2y.png}
-\caption{Results of T2: Carbon (left) and nitrogen (right) pools according to the IA (solid blue line) and DA (dashed orange line) approaches under variable $L_{\text{D}}$ and $T$. \onur{We had planned to show box-whisker plots instead of this, but looking at that plot (Fig.~\ref{f.T2resbox}), I feel like we may want to keep this}.\label{f.T2res}}
+\caption{Results of T2: Carbon (left) and nitrogen (right) pools according to the IA (solid blue line) and DA (dashed orange line) approaches under variable $L_{\text{D}}$ and $T$. \onur{We had planned to show box-whisker plots instead of this, but looking at that plot (Fig.~\ref{f.T2resbox}), I feel like we may want to keep this} \markus{I don't get the large discrepancy in the top-right panel in my calculations, maybe check the initial conditions?  I would suggest to include the first row in Fig.~\ref{f.T2env}.  Then (without DOM) we could show 6 rows (PhyC etc.) and two columns (DA and (IA - DA)/DA).  This would show clearly the extent of the differences along with the actual model behaviour, so we don't need the box-and-whisker plots.}\label{f.T2res}}
 \end{figure}
 
 \begin{figure}[htb!]
 \includegraphics[width=14cm,trim=0cm 0mm 0.0cm 0mm, clip]{figures/2022-03-22d_Ldvar_Tvar_ThatVar_PARext_IA_vs_DA/0D-Highlat_wconst_lext_Ldvar_Tvar_DIN015_Cbased_modular_24h_IAvsDA_boxplot_CN.png}
-\caption{Results of T2: Carbon (left) and nitrogen (right) pools according to the IA (solid blue line) and DA (dashed orange line) approaches under variable $L_{\text{D}}$ and $T$. \onur{I'm not sure whether this is really better than Fig.~\ref{f.T2res}. Maybe we keep them both?}.\label{f.T2resbox}}
+\caption{Results of T2: Carbon (left) and nitrogen (right) pools according to the IA (solid blue line) and DA (dashed orange line) approaches under variable $L_{\text{D}}$ and $T$. \onur{I'm not sure whether this is really better than Fig.~\ref{f.T2res}. Maybe we keep them both?} \markus{No, I would modify Fig.~\ref{f.T2res} and leave this one out (I don't really see anything here).}.\label{f.T2resbox}}
 \end{figure}
 
 
 \FloatBarrier%
 \subsection{T3: Comparing DA and IA variants in simulating in simulating multiple PFT's}\label{s.resT3}
 
-For the case of multiple phytoplankton, Eq.~\ref{eq:sdin3} can be generalized as follows:
-\begin{flalign}\label{eq:sdin4}
-\frac{\text{d}\,\text{DIN}}{\text{d}\,t} &= \frac{\displaystyle F_{\text{Det}_{\text{N}}-\text{DIN}} -
-  \sum_j \left[ V_{\text{N}}^j - \text{Phy}_{\text{C}}^j \cdot
-  \left( \frac{\partial Q^j}{\partial \bar{I}} \frac{\text{d}\, \bar{I}}{\text{d}\, t}
-    + \frac{\partial Q^j}{\partial L_{\text{D}}} \frac{\text{d}\, L_{\text{D}}}{\text{d}\, t}
-    + \frac{\partial Q^j}{\partial T} \frac{\text{d}\, T}{\text{d}\, t} \right) \right]} %
-{\displaystyle 1+ \sum_j \left[ \text{Phy}_{\text{C}}^j\frac{\partial Q^j}{\partial \text{DIN}} \right]} \tag{\ref{eq:sdin}c}
-\end{flalign}
-Where $j$ indexes the different PFTs simulated. \onur{maybe it's better to move it right after Eq.~\ref{eq:sdin3}} \markus{Yes, I agree}
-
 Fig.~\ref{f.T3res} shows results of a numerical experiment with 10 phytoplankton size classes for our IA and DA variants. C biomass of phytoplankton by the two variants is near-identical. In this experiment annual average concentrations decrease with cell size, and the larger classes exhibit stronger seasonal relative variations. Under different environmental conditions, with respect to, e.g., the initial nutrient concentrations, and temporal stability, different outcomes can emerge \citep[see, e.g.,][]{Taherzadeh2017}, but such an exploration is outside of the scope of the current study.
 
 \begin{figure}[ht!]
 \includegraphics[width=14cm,trim=0cm 0mm 0.0cm 0mm, clip]{figures/2022-03-22f_Ldvar_Tvar_ThatVar_2P_PARext_IA_vs_DA/0D-Highlat_wconst_lext_Ldvar_Tvar_DIN015_10P_Cbased_modular_24h_IAvsDA_boxplot_size.png}
-\caption{Results of T4: Box-whisker plots of C biomass of 10 phytoplankton size classes, as simulated by the IA (dark blue boxes) and DA (orange boxes) approaches under variable $L_{\text{D}}$ and $T$.\label{f.T3res}}
+\caption{Results of T4: Box-whisker plots of C biomass of 10 phytoplankton size classes, as simulated by the IA (dark blue boxes) and DA (orange boxes) approaches under variable $L_{\text{D}}$ and $T$.  \markus{Here I would suggest two panels.  One for the DA results with log(ESD) on the y-axis, divided into similarly-spaced sections, time on the x-axis and concentration shown as colour.  The other panel would have the same layout but with the colour showing (again) (IA - DA)/DA.}\label{f.T3res}}
 \end{figure}
 
 %In Fig.~\ref{f.T3res} we present the results of a numerical experiment with 2 phytoplankton functional types, as simulated by IA and DA.The first type characterizes a fast growing `opportunist' species, and the second type characterizes a `gleaner' species, with lower growth rate but higher nutrient affinity. As expected, the first type reaches higher C-biomass during the spring bloom, whereas the second type maintains higher concentrations during summer, under low nutrient concentrations. The predictions by the two variants are almost identical.
@@ -476,7 +477,7 @@ In this study, we present FABM-NflexPD 2.0, a FABM implementation of the FlexPFT
 
 Two variants of the model are elaborated here. The `Dynamic Acclimation' (DA) variant is fully explicit in its treatment of the C and N content of phytoplankton and is based on the model by \citet{Pahlowetal13}. The `Instantaneous Acclimation' (IA) variant aims to track the phytoplankton dynamics with a single state variable, based on a balanced growth approximation \citep{Burmaster1979}, that is, assuming that cells reach the equilibrium state instantaneously.
 
-\onur{Could some of the text between Eq.~\ref{eq:phyn} and Eq.~\ref{eq:sdin2} placed here?}
+\markus{Owing to the lack of a state variable $\text{Phy}_{\text{N}}$, Eqs.~\eqref{eq:dic} --~\eqref{eq:sDetN} do not preserve mass (total N) because they ignore the contribution of the rate of change of $Q$ to the rate of change of $\text{Phy}_{\text{N}}$.  It is impossible to maintain mass balance mechanistically without adding a state variable $\text{Phy}_{\text{N}}$.  We can re-establish mass balance for N, however, by assigning the missing N flux to the DIN compartment in Eq.~\eqref{eq:sdin3}.  While this may be a rather arbitrary measure for achieving N mass balance and also violates the assumptions behind the model by assigning part of $\text{Phy}_{\text{N}}$ to DIN, the resulting differences compared to explicitly resolving $\text{Phy}_{\text{N}}$ are relatively small \citep{Ward2017}.}
 
 Through detailed tests, we show that C is fully conserved, whereas N is conserved to a very large degree (error: $<0.0001\%$ for all tests we conducted). We also show that the predictions of the IA and DA variants are mostly indistinguishable. Finally, with an example where we simulate 10 phytoplankton size classes with our two model variants, we demonstrate that the model is well aligned with the modular coupling philosophy of FABM \citep{Bruggeman2014}.
 
