@@ -153,6 +153,7 @@ FABM-NflexPD 1.0 only tracks N, which may be sufficient for some ecological appl
  \item [T2a] test of the IA approach in a more realistic setup, where temperature and day length also vary over time, and light attenuation by phytoplankton is accounted for
  \item [T2b] comparison of the fully explicit (DA) and IA model variants
  \item [T3] simulation with multiple phytoplankton groups
+ \item [T4] simulation in an open system where N and C are not conserved
  %\item [T4] \onur{done} application of the model in an idealistic 1D setup and assessment of mass conservation \textcolor{red}{\{Onur: this test failed: in 1D, model does not seem to be mass conservative, see Section~\ref{s.resT4}.\}}
 \end{description}
 
@@ -168,25 +169,25 @@ FABM-NflexPD 1.0 only tracks N, which may be sufficient for some ecological appl
 
 \markus{Do we need DOM?  Including DOC and DON in the detritus and reducing the rate of hydrolysis by 1/2 yields almost the same results.  So, in 0D including DOM makes no difference.}
 
-FABM-NflexPD 2.0 differs from FABM-NflexPD 1.0 (K21) in two major respects.  (1) The new version maintains mass balance for both C and N, instead of only N\@.  (2) We restrict this version to 0D for simplicity, which allows subsuming the DOM compartment in the detritus compartment, leaving 5 state variables to represent dissolved inorganic C and N (DIC and DIN), phytoplankton C ($\text{Phy}_{\text{C}}$), and detritus C and N ($\text{Det}_{\text{C}}$ and $\text{Det}_{\text{N}}$).  The rates of change of the state variables are
+FABM-NflexPD 2.0 differs from FABM-NflexPD 1.0 (K21) in two major respects.  (1) The new version maintains mass balance for both C and N, instead of only N\@.  (2) We restrict this version to 0D for simplicity, which allows subsuming the DOM compartment in the detritus compartment, leaving 5 state variables to represent dissolved inorganic C and N (DIC and DIN), phytoplankton C ($\text{Phy}_{\text{C}}$), and detritus C and N ($\text{Det}_{\text{C}}$ and $\text{Det}_{\text{N}}$). Moreover, we consider a dilution term for being able to simulate a non-mass-conserving system, such as a chemostat or a surface mixed layer (SML). The rates of change of the state variables are
 \begin{flalign}
   \label{eq:dic}
-  \frac{\mathrm{d}\, \text{DIC}}{\mathrm{d}\, t} &= \underbrace{F_{\text{Det}_{\text{C}}-\text{DIC}}}_{\textrm{Remineralization}} - \underbrace{F_{\text{DIC}-\text{Phy}_{\text{C}}}}_{\textrm{Net C uptake}} \\
+  \frac{\mathrm{d}\, \text{DIC}}{\mathrm{d}\, t} &= \underbrace{F_{\text{Det}_{\text{C}}-\text{DIC}}}_{\textrm{Remineralization}} - \underbrace{F_{\text{DIC}-\text{Phy}_{\text{C}}}}_{\textrm{Net C uptake}} - \underbrace{D \cdot(\text{DIC}-\text{DIC}_{in})}_{\text{Dilution}} \\
   \label{eq:sdin}
-  \frac{\mathrm{d}\,\text{DIN}}{\mathrm{d}\,t} &= \underbrace{F_{\text{Det}_{\text{N}}-\text{DIN}}}_{\textrm{Remineralization}} - \underbrace{F_{\text{DIN}-\text{Phy}_{\text{N}}}}_{\textrm{Net N uptake}} \\
+  \frac{\mathrm{d}\,\text{DIN}}{\mathrm{d}\,t} &= F_{\text{Det}_{\text{N}}-\text{DIN}} - F_{\text{DIN}-\text{Phy}_{\text{N}}} - D \cdot (\text{DIN}-\text{DIN}_{in}) \\
   \label{eq:sPhyC}
-  \frac{\mathrm{d}\, \text{Phy}_{\text{C}}}{\mathrm{d}\, t} &= F_{\text{DIC}-\text{Phy}_{\text{C}}} - F_{\text{Phy}_{\text{C}}-\text{Det}_{\text{C}}} \\
+  \frac{\mathrm{d}\, \text{Phy}_{\text{C}}}{\mathrm{d}\, t} &= F_{\text{DIC}-\text{Phy}_{\text{C}}} - F_{\text{Phy}_{\text{C}}-\text{Det}_{\text{C}}} - D \cdot \text{Phy}_{\text{C}}\\
   \label{eq:sDetC}
-  \frac{\mathrm{d}\, \text{Det}_{\text{C}}}{\mathrm{d}\, t} &= F_{\text{Phy}_{\text{C}}-\text{Det}_{\text{C}}} - F_{\text{Det}_{\text{C}}-\text{DIC}} \\
+  \frac{\mathrm{d}\, \text{Det}_{\text{C}}}{\mathrm{d}\, t} &= F_{\text{Phy}_{\text{C}}-\text{Det}_{\text{C}}} - F_{\text{Det}_{\text{C}}-\text{DIC}}  - D \cdot \text{Det}_{\text{C}} - \underbrace{\frac{w_{Det}}{H_{SML}} \cdot \text{Det}_{\text{C}}}_{\text{Sinking}} \\
   \label{eq:sDetN}
-  \frac{\mathrm{d}\, \text{Det}_{\text{N}}}{\mathrm{d}\, t} &= F_{\text{Phy}_{\text{N}}-\text{Det}_{\text{N}}} - F_{\text{Det}_{\text{N}}-\text{DIN}}
+  \frac{\mathrm{d}\, \text{Det}_{\text{N}}}{\mathrm{d}\, t} &= F_{\text{Phy}_{\text{N}}-\text{Det}_{\text{N}}} - F_{\text{Det}_{\text{N}}-\text{DIN}} - D \cdot \text{Det}_{\text{N}} - \frac{w_{Det}}{H_{SML}} \cdot \text{Det}_{\text{N}}
 \end{flalign}
 where $F_{x-y}$ is the flux from $x$ to $y$ and $x$ and $y$ are state variables, except $\text{Phy}_{\text{N}}$, which is defined as
 \begin{equation}
   \label{eq:Q}
   \text{Phy}_{\text{N}} = \text{Phy}_{\text{C}} \cdot Q
 \end{equation}
-where $Q$ is the phytoplankton N quota (N:C ratio).
+where $Q$ is the phytoplankton N quota (N:C ratio). Dilution and sinking terms describe fluxes in and out of the system, and non-zero only for T4 (see below).
 
 \subsection{C and N content of Phytoplankton}
 
@@ -334,6 +335,11 @@ As a technical remark regarding the FABM implementation of the model: Eq.~\eqref
     $m$                & Mortality rate coefficient        & 0.1   & \unit{m^{3} mmolN^{-1} d^{-1}} \\
     $r_{\text{hyd}}$   & Hydrolysis rate constant          & 0.1   & \unit{d^{-1}} \\
     $r_{\text{rem}}$   & Remineralization rate constant    & 0.1   & \unit{d^{-1}} \\
+    $D$   & Dilution rate    & 0 (T1-T3), 0.1 (T4)   & \unit{d^{-1}} \\
+    DIC$_{in}$   & DIC concentration in the inflow medium  & 1000   & \unit{molC\ m^{-3}} \\
+    DIN$_{in}$   & DIN concentration in the inflow medium  & 5   & \unit{molN\ m^{-3}} \\
+    $w_{Det}$   & Sinking rate of detritus    & 0 (T1-T3); 0.2 (T4)   & \unit{m\  d^{-1}} \\
+    $H_{SML}$   & Height of the SML    & 20   & \unit{m} \\
     \bottomhline
   \end{tabular}
   \belowtable{} % Table Footnotes
@@ -375,7 +381,17 @@ As a technical remark regarding the FABM implementation of the model: Eq.~\eqref
     For T3, we simulated 10 phytoplankton groups with the IA and DA variants and compared their predictions. Phytoplankton groups were assumed to represent different size classes spread across 0.2--100 \unit{{\mu}m} equivalent spherical diameter (ESD) range, uniformly spaced on logarithmic scale. As in \citet{Smith2016}, we assumed that $Q_0$, $\hat{V}_0$ and $\hat{A}_0$ vary according to allometric relationships  (Table~\ref{T.pars}). Scalings of $Q_0$ and $\hat{V}_0$ are based on a combination of cell-specific scalings of subsistence quotas \citep[][`marine species']{Edwards2012}, maximum uptake rates \citep{Maranon2013}, and cell-specific C content \citep[][`protist plankton excluding diatoms']{Menden2000}. Scaling of $\hat{A}_0$ is based on heuristics, as explained in \citet{Smith2014a}. A detailed discussion of the allometric scaling of parameters can be found in \citet{Smith2016}.
 
     \markus{I have recently analysed compilations of N subsistence quotas from the literature (though not including \citet{Edwards2012}) and found that many of those were not really subsistence quotas.  When I exclude those not being subsistence quotas and whose ESD > 100\unit{{\mu}m}, there is no size dependence.}
-
+    
+    \subsubsection{T4}
+    Aim of this test is to test the model in a non-closed system, such as a chemostat system using a non-zero $D$ in Eqs.~\ref{eq:dic}-\ref{eq:sDetN} to represent dilution; or the dynamics within an SML, using non-zero $D$ and $w_{\text{Det}}$, to represent mixing with the layer below the SML and sinking out of the SML, respectively. \onur{do we need to tell about the motivation to include such a test (i.e., that in a closed system, DIN does not need to be dynamically traced, but can be found simply by substracting Q*PhyC, DON and DetN from the initial $\sum{N}$)? Imo we better tell this in the discussion.}
+    
+    In order to check the consistency of the model in such a setup, we introduce the state variables C$_{out}$ and N$_{out}$, whose sole aim is to trace the dilution and sinking fluxes:
+    \begin{flalign}
+    \label{eq:Xout}
+    \frac{\mathrm{d}\,\text{X}_{out}}{\mathrm{d}\,t} &= D \cdot \left( (\text{DIX}-\text{DIX}_{in}) + \text{Phy}_{\text{X}} + \text{Det}_{\text{X}} \right) + \frac{w_{Det}}{H_{SML}} \cdot \text{Det}_{\text{x}}, \ \text{X}=\{\text{C},\text{N}\}
+    \end{flalign}
+    such that the when sum of these variables with the respective C and N variables in Eqs.~\ref{eq:dic}-\ref{eq:sDetN}, total N and C should be still conserved, which we demonstrate with a simulation (see Table~\ref{T.pars} for the values of the additional parameters that describe the dilution and sinking fluxes).
+    
 %\subsubsection{1D setup (T4)}
 %    \onur{I'm not sure if we really need to show these results, although I included them for now }
 
