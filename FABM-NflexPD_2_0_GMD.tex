@@ -145,7 +145,7 @@ Elemental stoichiometry and pigment density of phytoplankton exhibit strong vari
 
 The potential relevance of such variability in the cellular composition of phytoplankton for biogeochemical cycles has been recognized decades ago \citet{Redfield1934,Redfield1958}, and evidence have been building ever since \citep{Lenton2007,Bonachela2016,Pahlow2020}.  Accounting for the acclimative capacity of phytoplankton in models is relevant for predicting the response of ecosystems to environmental change \citep{Kwiatkowski2018,Kerimoglu2018} and for model performance \citep{Ayata2013, Kerimoglu2017, Chen2018a}.  It also can endow models with desirable properties, such as improved model portability \citep{Anugerahanti2021}. However, mechanistic acclimative models typically require additional state variables, usually one for chlorophyll and one for each of the resolved nutrients \citep[e.g.,][]{Geider1998, Flynn2003}, but possibly even more \citep{Bonachela2013, Wirtz2016, Inomura2020} \onur{Check again Inomura2020}.
 
-However, additional state variables can increase the computational costs significantly in spatially explicit setups \citep{Fulton2003}, especially for models with multiple phytoplankton groups, that nowadays can contain 100s of groups \citep[e.g.,][]{Dutkiewicz2020}. As a potential remedy to this problem, the `Instantaneous Acclimation' (IA) approach can be used, where the changes in cellular composition are not dynamically tracked, but are assumed to adjust instantaneously to the resource environment. For instance, \citet{Pahlowetal13} described a model where the Chl:C ratio is adjusted to the ambient irradiance level based on a trade-off between a higher CO$_{2}$ fixation rate as a benefit of a higher Chl:C ratio and the additional respiratory costs of synthesizing and maintaining the pigments.  The FlexPTF model \citep{Smith2016} follows an IA approach, where the Chl:C and C:N ratios are adjusted instantaneously to the optimal ratios for balanced growth \citep{Burmaster1979}.  \citet{Ward2017} compared a fully explicit, classical Caperon/Droop model \citep{Caperon1968,Droop1968} to its IA counterpart, and found that across a range of environmental settings, the predictions of the two approaches matched closely in a 0D setup.  \citet{Kerimoglu2021} introduced FABM-NflexPD 1.0, a 1D setup of the FlexPFT model in the Framework of Aquatic Biogeochemical Models \citep[FABM,][]{Bruggeman2014} and showed that the predictions of the IA variant of the model largely matched those of the fully explicit `Dynamic Acclimation' (DA) counterpart, except during the transitions winter -- spring and autumn -- winter.
+However, additional state variables can increase the computational costs significantly in spatially explicit setups \citep{Fulton2003}, especially for models with multiple phytoplankton groups, that can contain 100s of groups \citep[e.g.,][]{Dutkiewicz2020}. As a potential remedy to this problem, the `Instantaneous Acclimation' (IA) approach can be used, where the changes in cellular composition are not dynamically tracked, but are assumed to adjust instantaneously to the resource environment. For instance, \citet{Pahlowetal13} described a model where the Chl:C ratio is adjusted to the ambient irradiance level based on a trade-off between a higher CO$_{2}$ fixation rate as a benefit of a higher Chl:C ratio and the additional respiratory costs of synthesizing and maintaining the pigments.  The FlexPTF model \citep{Smith2016} follows an IA approach, where the Chl:C and C:N ratios are adjusted instantaneously to the optimal ratios for balanced growth \citep{Burmaster1979}.  \citet{Ward2017} compared a fully explicit, classical Caperon/Droop model \citep{Caperon1968,Droop1968} to its IA counterpart, and found that across a range of environmental settings, the predictions of the two approaches matched closely in a 0D setup.  \citet{Kerimoglu2021} introduced FABM-NflexPD 1.0, a 1D setup of the FlexPFT model in the Framework of Aquatic Biogeochemical Models \citep[FABM,][]{Bruggeman2014} and showed that the predictions of the IA variant of the model largely matched those of the fully explicit `Dynamic Acclimation' (DA) counterpart, except during the transitions winter -- spring and autumn -- winter.
 
 FABM-NflexPD 1.0 only tracks N, which may be sufficient for some ecological applications, but not for applications that require mass balance for (multiple) nutrients and carbon.  Here we introduce FABM-NflexPD 2.0, which tracks both C and N\@.  We present a detailed description of a C-based version, which is extended to account also for N fluxes resulting from instantaneous changes in cell quotas, such that mass balance is maintained for both C and N\@.  We evaluate the consistency and robustness of the model by means of the following formal tests:
 \begin{description}
@@ -171,7 +171,7 @@ FABM-NflexPD 1.0 only tracks N, which may be sufficient for some ecological appl
 
 FABM-NflexPD 2.0 differs from FABM-NflexPD 1.0 (K21) 
 %in two major respects.  (1) The new version maintains mass balance for both C and N, instead of only N\@.  (2) We restrict this version to 0D for simplicity, which allows subsuming the DOM compartment in the detritus compartment, leaving 5 state variables to represent dissolved inorganic C and N (DIC and DIN), phytoplankton C ($\text{Phy}_{\text{C}}$), and detritus C and N ($\text{Det}_{\text{C}}$ and $\text{Det}_{\text{N}}$). 
-mainly by tracing the dissolved inorganic carbon pool, DIC, such that now the model can ideally conserve both the total C and N in the system, and not only N as in K21. Moreover, we consider a dilution term for being able to simulate an open (non-mass-conserving) system, such as a chemostat or a surface mixed layer (SML). The rates of change of the state variables are
+mainly by tracing the dissolved inorganic carbon pool, DIC, such that now the model can ideally conserve both the total C and N in the system, and not only N as in K21. Moreover, we consider a dilution term for simulating an open (non-mass-conserving) system, such as a chemostat or a surface mixed layer (SML). The rates of change of the state variables are
 
 \begin{flalign} \label{eq:sPhyC}
   \frac{\mathrm{d}\, \text{Phy}_{\text{C}}}{\mathrm{d}\, t} &= \underbrace{F_{\text{DIC}-\text{Phy}_{\text{C}}}}_{\text{Net uptake}} - \underbrace{F_{\text{Phy}_{\text{C}}-\text{Det}_{\text{C}}}}_{\text{Mortality}} - \underbrace{D \cdot \text{Phy}_{\text{C}}}_{\text{Dilution}}
@@ -179,9 +179,9 @@ mainly by tracing the dissolved inorganic carbon pool, DIC, such that now the mo
 \begin{subequations}\label{eq:det}
   \begin{flalign}
   \label{eq:sDetC}
-  \frac{\mathrm{d}\, \text{Det}_{\text{C}}}{\mathrm{d}\, t} &= F_{\text{Phy}_{\text{C}}-\text{Det}_{\text{C}}} - F_{\text{Det}_{\text{C}}-\text{DOC}}  - D \cdot \text{Det}_{\text{C}} - \frac{w_{Det}}{H_{SML}} \cdot \text{Det}_{\text{C}} \\
+  \frac{\mathrm{d}\, \text{Det}_{\text{C}}}{\mathrm{d}\, t} &= F_{\text{Phy}_{\text{C}}-\text{Det}_{\text{C}}} - F_{\text{Det}_{\text{C}}-\text{DOC}}  - D \cdot \text{Det}_{\text{C}} - \frac{w_{\text{Det}}}{H_{\text{SML}}} \cdot \text{Det}_{\text{C}} \\
   \label{eq:sDetN}
-  \frac{\mathrm{d}\, \text{Det}_{\text{N}}}{\mathrm{d}\, t} &= F_{\text{Phy}_{\text{N}}-\text{Det}_{\text{N}}} - \underbrace{F_{\text{Det}_{\text{N}}-\text{DON}}}_\textrm{Hydrolysis} - D \cdot \text{Det}_{\text{N}} - \underbrace{\frac{w_{Det}}{H_{SML}} \cdot \text{Det}_{\text{N}}}_{\text{Sinking}}
+  \frac{\mathrm{d}\, \text{Det}_{\text{N}}}{\mathrm{d}\, t} &= F_{\text{Phy}_{\text{N}}-\text{Det}_{\text{N}}} - \underbrace{F_{\text{Det}_{\text{N}}-\text{DON}}}_\textrm{Hydrolysis} - D \cdot \text{Det}_{\text{N}} - \underbrace{\frac{w_{\text{Det}}}{H_{\text{SML}}} \cdot \text{Det}_{\text{N}}}_{\text{Sinking}}
 \end{flalign}  
 \end{subequations}
 \begin{subequations}\label{eq:dom}
@@ -195,9 +195,9 @@ mainly by tracing the dissolved inorganic carbon pool, DIC, such that now the mo
 \begin{subequations}\label{eq:dim}
 \begin{flalign}
   \label{eq:dic}
-  \frac{\mathrm{d}\, \text{DIC}}{\mathrm{d}\, t} &= F_{\text{DOC}-\text{DIC}} - F_{\text{DIC}-\text{Phy}_{\text{C}}} - D \cdot(\text{DIC}-\text{DIC}_{in}) \\
+  \frac{\mathrm{d}\, \text{DIC}}{\mathrm{d}\, t} &= F_{\text{DOC}-\text{DIC}} - F_{\text{DIC}-\text{Phy}_{\text{C}}} - D \cdot(\text{DIC}-\text{DIC}_{\text{in}}) \\
   \label{eq:sdin}
-  \frac{\mathrm{d}\,\text{DIN}}{\mathrm{d}\,t} &= F_{\text{DON}-\text{DIN}} - F_{\text{DIN}-\text{Phy}_{\text{N}}} - D \cdot (\text{DIN}-\text{DIN}_{in})
+  \frac{\mathrm{d}\,\text{DIN}}{\mathrm{d}\,t} &= F_{\text{DON}-\text{DIN}} - F_{\text{DIN}-\text{Phy}_{\text{N}}} - D \cdot (\text{DIN}-\text{DIN}_{\text{in}})
 \end{flalign}  
 \end{subequations}
 
@@ -206,7 +206,7 @@ where $F_{x-y}$ is the flux from $x$ to $y$, where $x$ and $y$ are state variabl
   \label{eq:Q}
   \text{Phy}_{\text{N}} = \text{Phy}_{\text{C}} \cdot Q
 \end{equation}
-where $Q$ is the phytoplankton N quota (N:C ratio). Dilution and sinking terms describe fluxes in and out of the system, and non-zero only for T4 (see below).
+where $Q$ is the phytoplankton N quota (N:C ratio). Dilution ($D$) and sinking terms (sinking velocity $w_{\text{Det}}$) describe fluxes in and out of the system, and are non-zero only for T4 (see below).
 
 \subsection{C and N content of Phytoplankton}
 
@@ -355,10 +355,10 @@ As a technical remark regarding the FABM implementation of the model: Eq.~\eqref
     $r_{\text{hyd}}$   & Hydrolysis rate constant          & 0.1   & \unit{d^{-1}} \\
     $r_{\text{rem}}$   & Remineralization rate constant    & 0.1   & \unit{d^{-1}} \\
     $D$   & Dilution rate    & 0 (T1-T3), 0.1 (T4)   & \unit{d^{-1}} \\
-    DIC$_{in}$   & DIC concentration in the inflow medium  & 1000   & \unit{molC\ m^{-3}} \\
-    DIN$_{in}$   & DIN concentration in the inflow medium  & 5   & \unit{molN\ m^{-3}} \\
+    DIC$_{\text{in}}$   & DIC concentration in the inflow medium  & 1000   & \unit{molC\ m^{-3}} \\
+    DIN$_{\text{in}}$   & DIN concentration in the inflow medium  & 5   & \unit{molN\ m^{-3}} \\
     $w_{Det}$   & Sinking rate of detritus    & 0 (T1-T3); 0.2 (T4)   & \unit{m\  d^{-1}} \\
-    $H_{SML}$   & Height of the SML    & 20   & \unit{m} \\
+    $H_{\text{SML}}$   & Height of the SML    & 20   & \unit{m} \\
     \bottomhline
   \end{tabular}
   \belowtable{} % Table Footnotes
@@ -402,14 +402,14 @@ As a technical remark regarding the FABM implementation of the model: Eq.~\eqref
     \markus{I have recently analysed compilations of N subsistence quotas from the literature (though not including \citet{Edwards2012}) and found that many of those were not really subsistence quotas.  When I exclude those not being subsistence quotas and whose ESD > 100\unit{{\mu}m}, there is no size dependence.}
     
     \subsubsection{T4}
-    Aim of this test is to evaluate the behavior of the model in a non-closed system, such as a chemostat system using a non-zero $D$ in Eqs.~\ref{eq:dic}-\ref{eq:sDetN} to represent dilution; or the dynamics within an SML, using non-zero $D$ and $w_{\text{Det}}$, to represent mixing with the layer below the SML and sinking out of the SML, respectively. \onur{do we need to tell about the motivation to include such a test (i.e., that in a closed system, DIN does not need to be dynamically traced, but can be found simply by substracting Q*PhyC, DON and DetN from the initial $\sum{N}$)? Imo we better tell this in the discussion.}
+    The aim of this test is to evaluate the behavior of the model in an open system, such as a chemostat, using a non-zero $D$ in Eqs.~\eqref{eq:sDetN}--\eqref{eq:dic} to represent dilution, or the dynamics within a SML, using non-zero $D$ and $w_{\text{Det}}$, to represent mixing with the layer below the SML and sinking out of the SML, respectively. \onur{do we need to tell about the motivation to include such a test (i.e., that in a closed system, DIN does not need to be dynamically traced, but can be found simply by substracting Q*PhyC, DON and DetN from the initial $\sum{N}$)? Imo we better tell this in the discussion.}
     
-    In order to check the consistency of the model in such a setup, we introduce the state variables $\text{Ext}_{\text{C}}$ and $\text{Ext}_{\text{N}}$, purpose of which are to trace the amount of N and C exported from and imported into the  system:
+    In order to check the mass balance of the model in such a setup, we introduce two new state variables, $\text{Ext}_{\text{C}}$ and $\text{Ext}_{\text{N}}$, which trace the amounts of N and C exported from and imported into the  system:
     \begin{flalign}
     \label{eq:Xext}
-    \frac{\mathrm{d}\,\text{Ext}_{\text{X}}}{\mathrm{d}\,t} &= D \cdot \left(\text{Phy}_{\text{X}} + \text{Det}_{\text{X}}  + \text{DOX} + (\text{DIX}-\text{DIX}_{in}) \right) + \frac{w_{Det}}{H_{SML}} \cdot \text{Det}_{\text{X}}\ \text{, X}=\{\text{C},\text{N}\}
+    \frac{\mathrm{d}\,\text{Ext}_{\text{X}}}{\mathrm{d}\,t} &= D \cdot \left(\text{Phy}_{\text{X}} + \text{Det}_{\text{X}}  + \text{DOX} + (\text{DIX}-\text{DIX}_{\text{in}}) \right) + \frac{w_{\text{Det}}}{H_{\text{SML}}} \cdot \text{Det}_{\text{X}}\ \text{, X} \in \{\text{C},\text{N}\}
     \end{flalign}
-    such that the global amount of N and C that can be obtained by the sum of these variables with the respective C and N variables in Eqs.~\ref{eq:sPhyC}-\ref{eq:dim}, should be ideally conserved. We examine the consistency of the model in this regard with a simulation (see Table~\ref{T.pars} for the values of the additional parameters that describe the dilution and sinking fluxes).
+    such that the global amounts of N and C, i.e., the sums of these variables and the corresponding C and N variables in Eqs.~\ref{eq:sPhyC}-\ref{eq:dim}, should be conserved. We examine the consistency of the model in this regard with a simulation (see Table~\ref{T.pars} for the values of the additional parameters that describe the dilution and sinking fluxes).
     
 %\subsubsection{1D setup (T4)}
 %    \onur{I'm not sure if we really need to show these results, although I included them for now }
