@@ -402,14 +402,14 @@ As a technical remark regarding the FABM implementation of the model: Eq.~\eqref
     \markus{I have recently analysed compilations of N subsistence quotas from the literature (though not including \citet{Edwards2012}) and found that many of those were not really subsistence quotas.  When I exclude those not being subsistence quotas and whose ESD > 100\unit{{\mu}m}, there is no size dependence.}
     
     \subsubsection{T4}
-    Aim of this test is to test the model in a non-closed system, such as a chemostat system using a non-zero $D$ in Eqs.~\ref{eq:dic}-\ref{eq:sDetN} to represent dilution; or the dynamics within an SML, using non-zero $D$ and $w_{\text{Det}}$, to represent mixing with the layer below the SML and sinking out of the SML, respectively. \onur{do we need to tell about the motivation to include such a test (i.e., that in a closed system, DIN does not need to be dynamically traced, but can be found simply by substracting Q*PhyC, DON and DetN from the initial $\sum{N}$)? Imo we better tell this in the discussion.}
+    Aim of this test is to evaluate the behavior of the model in a non-closed system, such as a chemostat system using a non-zero $D$ in Eqs.~\ref{eq:dic}-\ref{eq:sDetN} to represent dilution; or the dynamics within an SML, using non-zero $D$ and $w_{\text{Det}}$, to represent mixing with the layer below the SML and sinking out of the SML, respectively. \onur{do we need to tell about the motivation to include such a test (i.e., that in a closed system, DIN does not need to be dynamically traced, but can be found simply by substracting Q*PhyC, DON and DetN from the initial $\sum{N}$)? Imo we better tell this in the discussion.}
     
-    In order to check the consistency of the model in such a setup, we introduce the state variables $\text{Ext}_{\text{C}}$ and $\text{Ext}_{\text{N}}$, purpose of which are to trace the amount of N and C exported from and imported to the system:
+    In order to check the consistency of the model in such a setup, we introduce the state variables $\text{Ext}_{\text{C}}$ and $\text{Ext}_{\text{N}}$, purpose of which are to trace the amount of N and C exported from and imported into the  system:
     \begin{flalign}
     \label{eq:Xext}
-    \frac{\mathrm{d}\,\text{Ext}_{X}}{\mathrm{d}\,t} &= D \cdot \left(\text{Phy}_{\text{X}} + \text{Det}_{\text{X}}  + \text{DOX} + (\text{DIX}-\text{DIX}_{in}) \right) + \frac{w_{Det}}{H_{SML}} \cdot \text{Det}_{\text{X}}\ \text{, X}=\{\text{C},\text{N}\}
+    \frac{\mathrm{d}\,\text{Ext}_{\text{X}}}{\mathrm{d}\,t} &= D \cdot \left(\text{Phy}_{\text{X}} + \text{Det}_{\text{X}}  + \text{DOX} + (\text{DIX}-\text{DIX}_{in}) \right) + \frac{w_{Det}}{H_{SML}} \cdot \text{Det}_{\text{X}}\ \text{, X}=\{\text{C},\text{N}\}
     \end{flalign}
-    such that the global N and C in the system, that can be obtained by the sum of these variables with the respective C and N variables in Eqs.~\ref{eq:sPhyC}-\ref{eq:dim}, should be ideally conserved. We examine the consistency of the model in this regard with a simulation (see Table~\ref{T.pars} for the values of the additional parameters that describe the dilution and sinking fluxes).
+    such that the global amount of N and C that can be obtained by the sum of these variables with the respective C and N variables in Eqs.~\ref{eq:sPhyC}-\ref{eq:dim}, should be ideally conserved. We examine the consistency of the model in this regard with a simulation (see Table~\ref{T.pars} for the values of the additional parameters that describe the dilution and sinking fluxes).
     
 %\subsubsection{1D setup (T4)}
 %    \onur{I'm not sure if we really need to show these results, although I included them for now }
