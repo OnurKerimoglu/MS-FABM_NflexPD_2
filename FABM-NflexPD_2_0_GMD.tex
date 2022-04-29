@@ -167,22 +167,41 @@ FABM-NflexPD 1.0 only tracks N, which may be sufficient for some ecological appl
 %MODEL DESCRIPTION
 \section{Model Description}
 
-\markus{Do we need DOM?  Including DOC and DON in the detritus and reducing the rate of hydrolysis by 1/2 yields almost the same results.  So, in 0D including DOM makes no difference.}
+%\markus{Do we need DOM?  Including DOC and DON in the detritus and reducing the rate of hydrolysis by 1/2 yields almost the same results.  So, in 0D including DOM makes no difference.}
 
-FABM-NflexPD 2.0 differs from FABM-NflexPD 1.0 (K21) in two major respects.  (1) The new version maintains mass balance for both C and N, instead of only N\@.  (2) We restrict this version to 0D for simplicity, which allows subsuming the DOM compartment in the detritus compartment, leaving 5 state variables to represent dissolved inorganic C and N (DIC and DIN), phytoplankton C ($\text{Phy}_{\text{C}}$), and detritus C and N ($\text{Det}_{\text{C}}$ and $\text{Det}_{\text{N}}$). Moreover, we consider a dilution term for being able to simulate a non-mass-conserving system, such as a chemostat or a surface mixed layer (SML). The rates of change of the state variables are
+FABM-NflexPD 2.0 differs from FABM-NflexPD 1.0 (K21) 
+%in two major respects.  (1) The new version maintains mass balance for both C and N, instead of only N\@.  (2) We restrict this version to 0D for simplicity, which allows subsuming the DOM compartment in the detritus compartment, leaving 5 state variables to represent dissolved inorganic C and N (DIC and DIN), phytoplankton C ($\text{Phy}_{\text{C}}$), and detritus C and N ($\text{Det}_{\text{C}}$ and $\text{Det}_{\text{N}}$). 
+mainly by tracing the dissolved inorganic carbon pool, DIC, such that now the model can ideally conserve both the total C and N in the system, and not only N as in K21. Moreover, we consider a dilution term for being able to simulate an open (non-mass-conserving) system, such as a chemostat or a surface mixed layer (SML). The rates of change of the state variables are
+
+\begin{flalign} \label{eq:sPhyC}
+  \frac{\mathrm{d}\, \text{Phy}_{\text{C}}}{\mathrm{d}\, t} &= \underbrace{F_{\text{DIC}-\text{Phy}_{\text{C}}}}_{\text{Net uptake}} - \underbrace{F_{\text{Phy}_{\text{C}}-\text{Det}_{\text{C}}}}_{\text{Mortality}} - \underbrace{D \cdot \text{Phy}_{\text{C}}}_{\text{Dilution}}
+\end{flalign}  
+\begin{subequations}\label{eq:det}
+  \begin{flalign}
+  \label{eq:sDetC}
+  \frac{\mathrm{d}\, \text{Det}_{\text{C}}}{\mathrm{d}\, t} &= F_{\text{Phy}_{\text{C}}-\text{Det}_{\text{C}}} - F_{\text{Det}_{\text{C}}-\text{DOC}}  - D \cdot \text{Det}_{\text{C}} - \frac{w_{Det}}{H_{SML}} \cdot \text{Det}_{\text{C}} \\
+  \label{eq:sDetN}
+  \frac{\mathrm{d}\, \text{Det}_{\text{N}}}{\mathrm{d}\, t} &= F_{\text{Phy}_{\text{N}}-\text{Det}_{\text{N}}} - \underbrace{F_{\text{Det}_{\text{N}}-\text{DON}}}_\textrm{Hydrolysis} - D \cdot \text{Det}_{\text{N}} - \underbrace{\frac{w_{Det}}{H_{SML}} \cdot \text{Det}_{\text{N}}}_{\text{Sinking}}
+\end{flalign}  
+\end{subequations}
+\begin{subequations}\label{eq:dom}
+  \begin{align}
+   \label{eq:doc}
+   \frac{\mathrm{d}\, \text{DOC}}{\mathrm{d}\, t} &= F_{Det_{\text{C}}-DOC} - F_{DOC-DIC}\\
+   \label{eq:doc}
+   \frac{\mathrm{d}\, \text{DON}}{\mathrm{d}\, t} &= F_{Det_{\text{N}}-DON} - \underbrace{F_{DON-DIN}}_\textrm{Remineralization}
+  \end{align}
+\end{subequations}
+\begin{subequations}\label{eq:dim}
 \begin{flalign}
   \label{eq:dic}
-  \frac{\mathrm{d}\, \text{DIC}}{\mathrm{d}\, t} &= \underbrace{F_{\text{Det}_{\text{C}}-\text{DIC}}}_{\textrm{Remineralization}} - \underbrace{F_{\text{DIC}-\text{Phy}_{\text{C}}}}_{\textrm{Net C uptake}} - \underbrace{D \cdot(\text{DIC}-\text{DIC}_{in})}_{\text{Dilution}} \\
+  \frac{\mathrm{d}\, \text{DIC}}{\mathrm{d}\, t} &= F_{\text{DOC}-\text{DIC}} - F_{\text{DIC}-\text{Phy}_{\text{C}}} - D \cdot(\text{DIC}-\text{DIC}_{in}) \\
   \label{eq:sdin}
-  \frac{\mathrm{d}\,\text{DIN}}{\mathrm{d}\,t} &= F_{\text{Det}_{\text{N}}-\text{DIN}} - F_{\text{DIN}-\text{Phy}_{\text{N}}} - D \cdot (\text{DIN}-\text{DIN}_{in}) \\
-  \label{eq:sPhyC}
-  \frac{\mathrm{d}\, \text{Phy}_{\text{C}}}{\mathrm{d}\, t} &= F_{\text{DIC}-\text{Phy}_{\text{C}}} - F_{\text{Phy}_{\text{C}}-\text{Det}_{\text{C}}} - D \cdot \text{Phy}_{\text{C}}\\
-  \label{eq:sDetC}
-  \frac{\mathrm{d}\, \text{Det}_{\text{C}}}{\mathrm{d}\, t} &= F_{\text{Phy}_{\text{C}}-\text{Det}_{\text{C}}} - F_{\text{Det}_{\text{C}}-\text{DIC}}  - D \cdot \text{Det}_{\text{C}} - \underbrace{\frac{w_{Det}}{H_{SML}} \cdot \text{Det}_{\text{C}}}_{\text{Sinking}} \\
-  \label{eq:sDetN}
-  \frac{\mathrm{d}\, \text{Det}_{\text{N}}}{\mathrm{d}\, t} &= F_{\text{Phy}_{\text{N}}-\text{Det}_{\text{N}}} - F_{\text{Det}_{\text{N}}-\text{DIN}} - D \cdot \text{Det}_{\text{N}} - \frac{w_{Det}}{H_{SML}} \cdot \text{Det}_{\text{N}}
-\end{flalign}
-where $F_{x-y}$ is the flux from $x$ to $y$ and $x$ and $y$ are state variables, except $\text{Phy}_{\text{N}}$, which is defined as
+  \frac{\mathrm{d}\,\text{DIN}}{\mathrm{d}\,t} &= F_{\text{DON}-\text{DIN}} - F_{\text{DIN}-\text{Phy}_{\text{N}}} - D \cdot (\text{DIN}-\text{DIN}_{in})
+\end{flalign}  
+\end{subequations}
+
+where $F_{x-y}$ is the flux from $x$ to $y$, where $x$ and $y$ are state variables, except for $\text{Phy}_{\text{N}}$, which is defined as
 \begin{equation}
   \label{eq:Q}
   \text{Phy}_{\text{N}} = \text{Phy}_{\text{C}} \cdot Q
@@ -210,11 +229,11 @@ The second term in Eq.~\eqref{eq:sPhyC}, $F_{\text{Phy}_{\text{C}}-\text{Det}_{\
   F_{\text{Phy}_{\text{N}}-\text{Det}_{\text{N}}} &= F_{\text{Phy}_{\text{C}}-\text{Det}_{\text{C}}} \cdot Q
 \end{flalign}
 where $m_{\text{C}}$ [\unit{m^3\ mmolC^{-1}\ d^{-1}}] is the C-based specific mortality rate.
-The remineralization fluxes are calculated as first-order reactions:
+The hydrolysis and remineralization fluxes are calculated as first-order reactions:
 \begin{flalign}
   \label{eq:remiC}
-  F_{\text{Det}_{\text{C}}-\text{DIC}} &= r_{\text{hyd}} \cdot \text{Det}_{\text{C}} \\
-  F_{\text{Det}_{\text{N}}-\text{DIN}} &= r_{\text{hyd}} \cdot \text{Det}_{\text{N}}
+  F_{\text{Det}_{\text{X}}-\text{DOX}} &= r_{\text{hyd}} \cdot \text{Det}_{\text{X}}\ \text{, X}=\{\text{C,N}\} \\
+  F_{\text{DOX}-\text{DIX}} &= r_{\text{rem}} \cdot \text{DOX}\ \text{, X}=\{\text{C,N}\}
 \end{flalign}
 
 %given by the division of N flux from phytoplankton to detritus, $F_{\text{Phy}_{\text{N}}-\text{Det}_{\text{N}}}$ by $Q$
