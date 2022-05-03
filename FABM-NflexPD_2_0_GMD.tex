@@ -9,8 +9,8 @@
 %% Please use the following documentclass and journal abbreviations for preprints and final revised papers.
 
 %% 2-column papers and preprints
-%\documentclass[gmd, manuscript]{copernicus}
-\documentclass[gmd, manuscript,draft]{copernicus}
+\documentclass[gmd, manuscript]{copernicus}
+%\documentclass[gmd, manuscript,draft]{copernicus}
 
 %% Journal abbreviations (please use the same for preprints and final revised papers)
 
@@ -356,7 +356,7 @@ As a technical remark regarding the FABM implementation of the model: Eq.~\eqref
     $r_{\text{rem}}$   & Remineralization rate constant    & 0.1   & \unit{d^{-1}} \\
     $D$   & Dilution rate    & 0 (T1-T3), 0.1 (T4)   & \unit{d^{-1}} \\
     DIC$_{\text{in}}$   & DIC concentration in the inflow medium  & 1000   & \unit{molC\ m^{-3}} \\
-    DIN$_{\text{in}}$   & DIN concentration in the inflow medium  & 5   & \unit{molN\ m^{-3}} \\
+    DIN$_{\text{in}}$   & DIN concentration in the inflow medium  & 25   & \unit{molN\ m^{-3}} \\
     $w_{Det}$   & Sinking rate of detritus    & 0 (T1-T3); 0.2 (T4)   & \unit{m\  d^{-1}} \\
     $H_{\text{SML}}$   & Height of the SML    & 20   & \unit{m} \\
     \bottomhline
@@ -402,7 +402,12 @@ As a technical remark regarding the FABM implementation of the model: Eq.~\eqref
     \markus{I have recently analysed compilations of N subsistence quotas from the literature (though not including \citet{Edwards2012}) and found that many of those were not really subsistence quotas.  When I exclude those not being subsistence quotas and whose ESD > 100\unit{{\mu}m}, there is no size dependence.}
     
     \subsubsection{T4}
-    The aim of this test is to evaluate the behavior of the model in an open system, such as a chemostat, using a non-zero $D$ in Eqs.~\eqref{eq:sDetN}--\eqref{eq:dic} to represent dilution, or the dynamics within a SML, using non-zero $D$ and $w_{\text{Det}}$, to represent mixing with the layer below the SML and sinking out of the SML, respectively. \onur{do we need to tell about the motivation to include such a test (i.e., that in a closed system, DIN does not need to be dynamically traced, but can be found simply by substracting Q*PhyC, DON and DetN from the initial $\sum{N}$)? Imo we better tell this in the discussion.}
+    The aim of this test is to evaluate the behavior of the model in an open system, such as a chemostat, using a non-zero $D$ in Eqs.~\eqref{eq:sPhyC}--\eqref{eq:dic} to represent dilution, or the dynamics within a SML, using non-zero $D$ and $w_{\text{Det}}$, to represent mixing with the layer below the SML and sedimentation of detritus out of the SML, respectively. \onur{do we need to tell about the motivation to include such a test (i.e., that in a closed system, DIN does not need to be dynamically traced, but can be found simply by substracting Q*PhyC, DON and DetN from the initial $\sum{N}$)? In my opinion we better tell this in the discussion.} In order to characterize an aquatic environment in temperate climate zone that undergoes thermal stratification in summer, we considered a cyclic seasonal pattern in $D$, with values approaching to $D_{\max}=1.0$ during winter and $D_{\min}=0.001$ during summer according to: 
+    \begin{flalign}
+      D = D_{\min}+ 0.25 (D_{\max} - D_{\min}) \left[ 1 - \sin(2 \pi t')\right]^2, \qquad t'=\frac{t}{365} - 0.15  
+    \end{flalign}
+
+    \noindent where $t'$ is the relative day of the year, adjusted to mimic initiation of stratification by the beginning of April. 
     
     In order to check the mass balance of the model in such a setup, we introduce two new state variables, $\text{Ext}_{\text{C}}$ and $\text{Ext}_{\text{N}}$, which trace the amounts of N and C exported from and imported into the  system:
     \begin{flalign}
@@ -489,7 +494,7 @@ Fig.~\ref{f.T3res} shows results of a numerical experiment with 10 phytoplankton
 
 \begin{figure}[ht!]
 \includegraphics[width=14cm,trim=0cm 0mm 0.0cm 0mm, clip]{figures/2022-03-22f_Ldvar_Tvar_ThatVar_2P_PARext_IA_vs_DA/0D-Highlat_wconst_lext_Ldvar_Tvar_DIN015_10P_Cbased_modular_24h_IAvsDA_boxplot_size.png}
-\caption{Results of T4: Box-whisker plots of C biomass of 10 phytoplankton size classes, as simulated by the IA (dark blue boxes) and DA (orange boxes) approaches under variable $L_{\text{D}}$ and $T$.  \markus{Here I would suggest two panels.  One for the DA results with log(ESD) on the y-axis, divided into similarly-spaced sections, time on the x-axis and concentration shown as colour.  The other panel would have the same layout but with the colour showing (again) (IA - DA)/DA.}\label{f.T3res}}
+\caption{Results of T3: Box-whisker plots of C biomass of 10 phytoplankton size classes, as simulated by the IA (dark blue boxes) and DA (orange boxes) approaches under variable $L_{\text{D}}$ and $T$.  \markus{Here I would suggest two panels.  One for the DA results with log(ESD) on the y-axis, divided into similarly-spaced sections, time on the x-axis and concentration shown as colour.  The other panel would have the same layout but with the colour showing (again) (IA - DA)/DA.}\label{f.T3res}}
 \end{figure}
 
 %In Fig.~\ref{f.T3res} we present the results of a numerical experiment with 2 phytoplankton functional types, as simulated by IA and DA.The first type characterizes a fast growing `opportunist' species, and the second type characterizes a `gleaner' species, with lower growth rate but higher nutrient affinity. As expected, the first type reaches higher C-biomass during the spring bloom, whereas the second type maintains higher concentrations during summer, under low nutrient concentrations. The predictions by the two variants are almost identical.
@@ -499,6 +504,20 @@ Fig.~\ref{f.T3res} shows results of a numerical experiment with 10 phytoplankton
 % \end{figure}
 
 As a technical note regarding the technical implementation, using the \verb|phy_Cbased.F90| and \verb|abio_Cbased.F90| modules, the number of phytoplankton types can be changed without needing to change and recompile the code, by adjusting the configuration file (see the \verb|fabm.yaml| examples in the \verb|testcases| folder that were employed to produce the results presented in this study), which is a feature of the modularity of FABM\@.
+
+
+\FloatBarrier%
+\subsection{T4: Comparing DA and IA variants in a non-closed system}\label{s.resT4}
+
+In T4, we considered a non-closed system forced by fluxes to and from an external environment. In particular, we described a SML, where mixing with the deeper layer can potentially introduce  fresh nutrients (DIN and DIC) while diluting all other variables; and sedimentation exports detrital C and N out of the system. As typically observed in aquatic environments located in temperate climate zone, we described mixing rate coefficient to follow a seasonal pattern, with lower values during summer due to thermal stratification. 
+
+Under such a mixing regime and sedimentation fluxes, the system captures the characteristic features of a temperate aquatic environment, with low phytoplankton biomass during winter, a strong spring bloom, and depletion of DIN within the SML. Accordingly, the total N in the system shows a strong seasonal pattern (Fig.~\ref{f.T4res}). However, when the external N is taken into account, the global amount of N is conserved by the model, demonstrating that the model behavior is consistent in such a non-mass conserving system.
+
+\begin{figure}[ht!]
+\includegraphics[width=6cm,trim=12cm 0mm 0.0cm 0mm, clip]{figures/2022-05-03_Ldvar_Tvar_ThatVar_PARext_D01_wdet02_IA_vs_DA/0D-Highlat_wconst_lext_Ldvar_Tvar_DIN015_D01_wdet02_CbasedIA_modular_24h_vs_0D-Highlat_wconst_lext_Ldvar_Tvar_DIN015_D01_wdet02_CbasedDA_modular_24h_cont_abio1_2y.png}
+\caption{Results of T4: under a seasonally varying mixing regime (see the text) and sedimentation fluxes to/from an external environment is considered, annual variation of global N (total N + Ext$_{\text{N}}$), total N (Phy$_{\text{N}}$+DIN+DON+Det$_{\text{N}}$) and other state variables that trace N in individiual pools.\label{f.T4res}}
+\end{figure}
+
 
 %\include{res1D}
 
