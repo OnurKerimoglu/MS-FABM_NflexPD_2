@@ -171,7 +171,7 @@ FABM-NflexPD 1.0 only tracks N, which may be sufficient for some ecological appl
 
 FABM-NflexPD 2.0 differs from FABM-NflexPD 1.0 (K21) 
 %in two major respects.  (1) The new version maintains mass balance for both C and N, instead of only N\@.  (2) We restrict this version to 0D for simplicity, which allows subsuming the DOM compartment in the detritus compartment, leaving 5 state variables to represent dissolved inorganic C and N (DIC and DIN), phytoplankton C ($\text{Phy}_{\text{C}}$), and detritus C and N ($\text{Det}_{\text{C}}$ and $\text{Det}_{\text{N}}$). 
-mainly by tracing the dissolved inorganic carbon pool, DIC, such that now the model can ideally conserve both the total C and N in the system, and not only N as in K21. Moreover, we consider a dilution term for simulating an open (non-mass-conserving) system, such as a chemostat or a surface mixed layer (SML). The rates of change of the state variables are
+mainly by tracing the dissolved inorganic carbon pool, DIC, such that now the model is ideally able to conserve both the total C and N in the system, and not only N as in K21. Moreover, we consider a dilution term for simulating an open (non-mass-conserving) system, such as a chemostat or a surface mixed layer (SML). The rates of change of the state variables are
 
 \begin{flalign} \label{eq:sPhyC}
   \frac{\mathrm{d}\, \text{Phy}_{\text{C}}}{\mathrm{d}\, t} &= \underbrace{F_{\text{DIC}-\text{Phy}_{\text{C}}}}_{\text{Net uptake}} - \underbrace{F_{\text{Phy}_{\text{C}}-\text{Det}_{\text{C}}}}_{\text{Mortality}} - \underbrace{D \cdot \text{Phy}_{\text{C}}}_{\text{Dilution}}
@@ -250,24 +250,24 @@ The rate of change of $\text{Phy}_{\text{N}}$ resulting from Eqs.~\eqref{eq:dic}
 \begin{subequations}
 \begin{equation}
   \label{eq:phyn_def}
-  \frac{\mathrm{d}\,\text{Phy}_{\text{N}}}{\mathrm{d}\,t} = F_{\text{DIN}-\text{Phy}_{\text{N}}} - F_{\text{Phy}_{\text{N}}-\text{Det}_{\text{N}}} = \frac{\mathrm{d}\,\text{Phy}_{\text{C}}}{\mathrm{d}\,t} \cdot Q
+  \frac{\mathrm{d}\,\text{Phy}_{\text{N}}}{\mathrm{d}\,t} = F_{\text{DIN}-\text{Phy}_{\text{N}}} - F_{\text{Phy}_{\text{N}}-\text{Det}_{\text{N}}}  - D \cdot \text{Phy}_{\text{N}} %= \frac{\mathrm{d}\,\text{Phy}_{\text{C}}}{\mathrm{d}\,t} \cdot Q
 \end{equation}
 However, $Q$ changes over time, which also contributes to the rate of change of $\text{Phy}_{\text{N}}$.  This becomes clear when we write the rate of change of $\text{Phy}_{\text{N}}$ in terms of the product rule of differentiation:
 \begin{equation}
   \label{eq:phyn}
   \frac{\mathrm{d}\,\text{Phy}_{\text{N}}}{\mathrm{d}\,t} = \frac{\mathrm{d}\,(\text{Phy}_{\text{C}}\cdot Q)}{\mathrm{d}\,t}
-  = \frac{\mathrm{d}\,\text{Phy}_{\text{C}}}{\mathrm{d}\,t} \cdot Q + \text{Phy}_{\text{C}} \cdot \frac{\mathrm{d}\,Q}{\mathrm{d}\,t}
+  = \frac{\mathrm{d}\,\text{Phy}_{\text{C}}}{\mathrm{d}\,t} \cdot Q + \text{Phy}_{\text{C}} \cdot \frac{\mathrm{d}\,Q}{\mathrm{d}\,t} - D \cdot \text{Phy}_{\text{C}} \cdot Q
 %  = V_{\text{N}} - F_{\text{Phy}_{\text{C}}-\text{Det}_{\text{C}}}\cdot Q + \text{Phy}_{\text{C}} \cdot \frac{\mathrm{d}\,Q}{\mathrm{d}\,t}
 \end{equation}
 \end{subequations}
 Thus, the right-most term in Eq.~\eqref{eq:phyn}, $\text{Phy}_{\text{C}}\cdot \mathrm{d}\,Q / \mathrm{d}\, t$, is not accounted for by our system of Eqs.~\eqref{eq:dic} --~\eqref{eq:sDetN} because $\text{Phy}_{\text{N}}$ is not a state variable.  Following \citet{Smith2016}, we subtract it from the differential equation for DIN\@:
 \begin{flalign}\label{eq:sdin2}
   \begin{split}
-    \frac{\text{d}\,\text{DIN}}{\text{d}\, t} &= F_{\text{Det}_{\text{N}}-\text{DIN}} - F_{\text{DIN}-\text{Phy}_\text{N}} - \text{Phy}_{\text{C}} \cdot \frac{\mathrm{d}\, Q}{\mathrm{d}\, t} \\
+    \frac{\text{d}\,\text{DIN}}{\text{d}\, t} &= F_{\text{Det}_{\text{N}}-\text{DIN}} - F_{\text{DIN}-\text{Phy}_\text{N}} - \text{Phy}_{\text{C}} \cdot \frac{\mathrm{d}\, Q}{\mathrm{d}\, t} - D \cdot (\text{DIN}-\text{DIN}_{\text{in}}) \\
     &= F_{\text{Det}_{\text{N}}-\text{DIN}} - V_{\text{N}} - \text{Phy}_{\text{C}} \cdot \left(\frac{\partial Q}{\partial \text{DIN}} \frac{\text{d}\, \text{DIN}}{\text{d}\, t}
       + \frac{\partial Q}{\partial \bar{I}} \frac{\text{d}\, \bar{I}}{\text{d}\, t}
       + \frac{\partial Q}{\partial L_{\text{D}}} \frac{\text{d}\, L_{\text{D}}}{\text{d}\, t}
-      + \frac{\partial Q}{\partial T} \frac{\text{d}\, T}{\text{d}\, t} \right)
+      + \frac{\partial Q}{\partial T} \frac{\text{d}\, T}{\text{d}\, t} \right) - D \cdot (\text{DIN}-\text{DIN}_{\text{in}})
   \end{split}
   \tag{\ref{eq:sdin}a}\\
   \intertext{and reorganizing:}
@@ -279,7 +279,7 @@ Thus, the right-most term in Eq.~\eqref{eq:phyn}, $\text{Phy}_{\text{C}}\cdot \m
 \frac{\text{d}\,\text{DIN}}{\text{d}\,t} &= \frac{\displaystyle F_{\text{Det}_{\text{N}}-\text{DIN}} - V_{\text{N}} - \text{Phy}_{\text{C}} \cdot
   \left( \frac{\partial Q}{\partial \bar{I}} \frac{\text{d}\, \bar{I}}{\text{d}\, t}
     + \frac{\partial Q}{\partial L_{\text{D}}} \frac{\text{d}\, L_{\text{D}}}{\text{d}\, t}
-    + \frac{\partial Q}{\partial T} \frac{\text{d}\, T}{\text{d}\, t} \right)}%
+    + \frac{\partial Q}{\partial T} \frac{\text{d}\, T}{\text{d}\, t} \right) - D \cdot (\text{DIN}-\text{DIN}_{\text{in}})}%
 {\displaystyle 1+ \text{Phy}_{\text{C}}\frac{\partial Q}{\partial \text{DIN}}}\tag{\ref{eq:sdin}b}
 \end{flalign}
 The partial derivatives of $Q$ with respect to DIN, $\bar{I}$, $L_{\text{D}}$ and $T$ are obtained by canonical application of the chain rule, as detailed in Appendix~\ref{S:Sol}.
@@ -290,7 +290,7 @@ For the case of multiple phytoplankton functional types (PFTs), Eq.~\ref{eq:sdin
   \sum_j \left[ V_{\text{N}}^j + \text{Phy}_{\text{C}}^j \cdot
   \left( \frac{\partial Q^j}{\partial \bar{I}} \frac{\text{d}\, \bar{I}}{\text{d}\, t}
     + \frac{\partial Q^j}{\partial L_{\text{D}}} \frac{\text{d}\, L_{\text{D}}}{\text{d}\, t}
-    + \frac{\partial Q^j}{\partial T} \frac{\text{d}\, T}{\text{d}\, t} \right) \right]} %
+    + \frac{\partial Q^j}{\partial T} \frac{\text{d}\, T}{\text{d}\, t} \right) \right] - D \cdot (\text{DIN}-\text{DIN}_{\text{in}})} %
 {\displaystyle 1+ \sum_j \left[ \text{Phy}_{\text{C}}^j\frac{\partial Q^j}{\partial \text{DIN}} \right]} \tag{\ref{eq:sdin}c}
 \end{flalign}
 Where $j$ indexes the different PFTs simulated.
@@ -515,7 +515,7 @@ Under such a mixing regime and sedimentation fluxes, the system captures the cha
 
 \begin{figure}[ht!]
 \includegraphics[width=12cm,trim=0cm 11mm 0.0cm 5mm, clip]{figures/2022-05-03_Ldvar_Tvar_ThatVar_PARext_Dvar_sdet01_IA_vs_DA/0D-Highlat_wconst_lext_Ldvar_Tvar_DIN015_Dvar_sdet01_CbasedIA_modular_24h_vs_0D-Highlat_wconst_lext_Ldvar_Tvar_DIN015_D01_wdet02_CbasedDA_modular_24h_cont_abio1_2y.png}
-\caption{Results of T4: under a seasonally varying mixing regime (see the text) and sedimentation fluxes to/from an external environment is considered, annual variation of global N (total N + Ext$_{\text{N}}$), total N (Phy$_{\text{N}}$+DIN+DON+Det$_{\text{N}}$) and other state variables that trace N in individiual pools.\label{f.T4res}}
+\caption{Results of T4: under a seasonally varying mixing regime (see the text) and sedimentation fluxes to/from an external environment is considered, annual variation of global C/N (total C/N + Ext$_{\text{C/N}}$), total C/N (Phy + DIM + DOM + Det) and other state variables that trace N in individiual pools.\label{f.T4res}}
 \end{figure}
 
 
@@ -557,7 +557,7 @@ The modelling framework FABM, in which the model is implemented, allows seamless
 %\section{Conclusions}
 
 
-\codeavailability{For running the model and reproducing the results presented in this study, FABM and GOTM need to be installed. See \url{https://github.com/fabm-model/fabm/wiki/GOTM} for the instructions. The version of the FABM-NflexPD used in this manuscript has been stored in a Zenodo repository \onur{todo}. Instructions for compiling FABM-NflexPD for GOTM-FABM and our 0D setup are provided in README.md. The \texttt{src} folder contains the Fortran code. The model was implemented as two separate modules: the \texttt{phy.F90} module that describes phytoplankton growth and the \texttt{abio.F90} module that describes everything other than phytoplankton (See Fig.~1 in \citet{Kerimoglu2021}). The phytoplankton module can reproduce the behavior of both the IA and DA variants considered in the manuscript by setting model parameters. The \texttt{testcases} folder contains the configuration (yaml) file that was used to produce the results for T1 -- T2 in this manuscript, and with two phytoplankton groups.}
+\codeavailability{For running the model and reproducing the results presented in this study, FABM and GOTM need to be installed. See \url{https://github.com/fabm-model/fabm/wiki/GOTM} for the instructions. The version of the FABM-NflexPD used in this manuscript has been stored in a Zenodo repository \onur{todo}. Instructions for compiling FABM-NflexPD for GOTM-FABM and our 0D setup are provided in README.md. The \texttt{src} folder contains the Fortran code. The model was implemented as two separate modules: the \texttt{phy.F90} module that describes phytoplankton growth and the \texttt{abio.F90} module that describes everything other than phytoplankton (See Fig.~1 in \citet{Kerimoglu2021}). The phytoplankton module can reproduce the behavior of both the IA and DA variants considered in the manuscript by setting model parameters. The \texttt{testcases} folder contains the configuration (yaml) file that was used to produce the results for T1, T2 and T4 in this manuscript, that allow running these tests optionally with one or two phytoplankton groups.}
 
 
 %\dataavailability{TEXT} %% use this section when having only data sets available
