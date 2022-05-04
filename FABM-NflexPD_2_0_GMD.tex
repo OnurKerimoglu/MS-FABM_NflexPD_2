@@ -246,7 +246,7 @@ The flux from DIN to $\text{Phy}_{\text{N}}$ is given by phytoplankton N uptake,
 \begin{equation} \label{eq:dphyNdt}
   F_{\text{DIN}-\text{Phy}_{\text{N}}} = V_{\text{N}} = F_{\text{DIC -- Phy}_{\text{C}}} \cdot Q = \mu \cdot \text{Phy}_{\text{C}} \cdot Q
 \end{equation}
-The rate of change of $\text{Phy}_{\text{N}}$ resulting from Eqs.~\eqref{eq:sPhyC} --~\eqref{eq:dim}  is the complement of the sum of Eqs.~\eqref{eq:sDetN} and ~\eqref{eq:sdin}:
+The rate of change of $\text{Phy}_{\text{N}}$ resulting from Eqs.~\eqref{eq:sPhyC} --~\eqref{eq:dim}  is the complement of the sum of Eqs.~\eqref{eq:sDetN} and ~\eqref{eq:sdin}, apart from the dilution term:
 \begin{equation}
   \label{eq:phyn_def}
   \frac{\mathrm{d}\,\text{Phy}_{\text{N}}}{\mathrm{d}\,t} = F_{\text{DIN}-\text{Phy}_{\text{N}}} - F_{\text{Phy}_{\text{N}}-\text{Det}_{\text{N}}}  - D \cdot \text{Phy}_{\text{N}} %= \frac{\mathrm{d}\,\text{Phy}_{\text{C}}}{\mathrm{d}\,t} \cdot Q
@@ -281,20 +281,7 @@ Thus, the right-most term in Eq.~\eqref{eq:phyn_def2}, $\text{Phy}_{\text{C}}\cd
     + \frac{\partial Q}{\partial T} \frac{\text{d}\, T}{\text{d}\, t} \right) - D \cdot (\text{DIN}-\text{DIN}_{\text{in}})}%
 {\displaystyle 1+ \text{Phy}_{\text{C}}\frac{\partial Q}{\partial \text{DIN}}}\tag{\ref{eq:sdin}.3}
 \end{flalign}
-The partial derivatives of $Q$ with respect to DIN, $\bar{I}$, $L_{\text{D}}$ and $T$ are obtained by canonical application of the chain rule, as detailed in Appendix~\ref{S:Sol}.
-
-For the case of multiple phytoplankton functional types (PFTs), Eq.~\ref{eq:sdin3} can be generalized as follows:
-\begin{flalign}\label{eq:sdin4}
-\frac{\text{d}\,\text{DIN}}{\text{d}\,t} &= \frac{\displaystyle F_{\text{Det}_{\text{N}}-\text{DIN}} -
-  \sum_j \left[ V_{\text{N}}^j + \text{Phy}_{\text{C}}^j \cdot
-  \left( \frac{\partial Q^j}{\partial \bar{I}} \frac{\text{d}\, \bar{I}}{\text{d}\, t}
-    + \frac{\partial Q^j}{\partial L_{\text{D}}} \frac{\text{d}\, L_{\text{D}}}{\text{d}\, t}
-    + \frac{\partial Q^j}{\partial T} \frac{\text{d}\, T}{\text{d}\, t} \right) \right] - D \cdot (\text{DIN}-\text{DIN}_{\text{in}})} %
-{\displaystyle 1+ \sum_j \left[ \text{Phy}_{\text{C}}^j\frac{\partial Q^j}{\partial \text{DIN}} \right]} \tag{\ref{eq:sdin}.4}
-\end{flalign}
-Where $j$ indexes the different PFTs simulated.
-
-
+The partial derivatives of $Q$ with respect to DIN, $\bar{I}$, $L_{\text{D}}$ and $T$ are obtained by canonical application of the chain rule, as detailed in Appendix~\ref{S:Sol}. The final terms required in Eq.~\eqref{eq:sdin3} are the changes in $\bar{I}$, $L_{\text{D}}$ and $T$ over time, i.e., $\text{d}\,\bar{I} / \text{d}\,t$, $\text{d}\,L_{\text{D}} / \text{d}\,t$ and $\text{d}\,T / \text{d}\,t$. When the irradiance and temperature are supplied externally, as typically the case in realistic coupled physical-biological models, it is not possible to obtain their temporal derivatives analytically.  Hence they are numerically approximated as the discrete backward difference between their current ($t=i$) and previous ($t=i-1$) values, divided by the integration time step, i.e., $\text{d}\, E / \text{d}\, t \approx (E_{i} - E_{i-1}) / \Delta t$ for $E=\{\bar{I},\ L_{\text{D}},\ T\}$ (see also Section~\ref{S:DescT1}).
 % Here, $\frac{\text{d} \text{Phy}_{\text{C}}}{\text{d} t} \big\rvert_G$ corresponds to gross growth of phytoplankton C biomass, i.e., $F_{\text{DIC}-\text{Phy}_{\text{C}}}$ in Eq.~\eqref{eq:sPhyC}. Substituting therefore Eq.~\eqref{eq:fdicphyc} in Eq.~\eqref{eq:dphyNdt}:
 % \begin{equation} \label{eq:dphyNdt2}
 %   \frac{\text{d}\text{Phy}_{\text{N}}}{\text{d}t} \bigg\rvert_G= Q \cdot \mu \cdot \text{Phy}_{\text{C}} + \text{Phy}_{\text{C}} \frac{\text{d} Q}{\text{d} t}
@@ -303,12 +290,9 @@ Where $j$ indexes the different PFTs simulated.
 % \begin{equation} \label{eq:dphyNdt3}
 %   \frac{\text{d}\text{Phy}_{\text{N}}}{\text{d}t} \bigg\rvert_G=  \text{Phy}_{\text{C}} \left( V_{\text{N}} + \frac{\text{d} Q}{\text{d} t} \right)
 % \end{equation}
-
 % %\onur{In the N-based version, we had (K21, Eq.~5): $F_{DIN-%\text{Phy}_{\text{N}}} = V_{\text{N}} \cdot \text{Phy}_{\text{C}}$. i.e., excluding the $%\frac{\text{d} Q}{\text{d} t}$ term in Eq.~\eqref{eq:dphyNdt3}. %As we discussed, this apparent difference %(apparent, because maybe there is a mistake in the notation? Also note that $F_{DIN-\text{Phy}_{\text{N}}}$ is not used anywhere, and in the C-based version of the model it is only saved as a diagnostic quantity)
 % %doesn't violate the internal consistency of the N-based version, but it would be great if we could explain what this really is. For instance, is this a `real deviation' in model formulations that contributes (among other sources) to quantitative differences in results?}
-
 % According to Eq.~\eqref{eq:dphyNdt3}, the N flux between the DIM pool and phytoplankton can be intuitively understood as the sum of uptake due to growth of C biomass, and the change in the N quota. % It should be noted that this cumulative change can become negative. (?)
-
 % Given that the terms $\hat{V}_{\text{N}}$ and $\hat{\mu}_{\text{net}}$ required for calculating $Q$ (Eq.~\ref{eq:Qopt}) are respectively functions of DIN (Eq.~16 in K21) and daytime average irradiance, $\bar{I}$ (Eqs.~20--22 in K21), the total time derivative of $Q$ in Eq.~\eqref{eq:dphyNdt3} can be computed as the sum of partial derivatives with respect to DIN and $\bar{I}$ using chain rule:
 % \begin{equation} \label{eq:dqdt}
 %  \frac{\text{d} Q}{\text{d} t} = \frac{\partial Q}{\partial \text{DIN}} \frac{\text{d} \text{DIN}}{\text{d} t} +  \frac{\partial Q}{\partial \bar{I}} \frac{\text{d} \bar{I}}{\text{d} t}
@@ -326,11 +310,18 @@ Where $j$ indexes the different PFTs simulated.
 %  s(\text{DIN}) = \frac{\text{d}\text{DIN}}{\text{d}t} = \frac{F_{\text{DON}-\text{DIN}} - \text{Phy}_{\text{C}} \left(V_{\text{N}} +  \frac{\partial Q}{\partial \bar{I}} \frac{\text{d} \bar{I}}{\text{d} t} \right)}{ 1+\text{Phy}_{\text{C}}\frac{\partial Q}{\partial \text{DIN}}}
 % \end{equation}
 
-The final terms required in Eq.~\eqref{eq:sdin3} are the changes in $\bar{I}$, $L_{\text{D}}$ and $T$ over time, i.e., $\text{d}\,\bar{I} / \text{d}\,t$, $\text{d}\,L_{\text{D}} / \text{d}\,t$
-and $\text{d}\,T / \text{d}\,t$.
-When the irradiance and temperature are supplied externally, as typically the case in realistic coupled physical-biological models, it is not possible to obtain their temporal derivatives analytically.  Hence they are numerically approximated as the discrete backward difference between their current ($t=i$) and previous ($t=i-1$) values, divided by the integration time step, i.e., $\text{d}\, E / \text{d}\, t \approx (E_{i} - E_{i-1}) / \Delta t$ for $E=\{\bar{I},\ L_{\text{D}},\ T\}$ (see also Section~\ref{S:DescT1}).
+Finally, for the case of multiple phytoplankton functional types (PFTs), Eq.~\ref{eq:sdin3} can be generalized as follows:
+\begin{flalign}\label{eq:sdin4}
+\frac{\text{d}\,\text{DIN}}{\text{d}\,t} &= \frac{\displaystyle F_{\text{Det}_{\text{N}}-\text{DIN}} -
+  \sum_j \left[ V_{\text{N}}^j + \text{Phy}_{\text{C}}^j \cdot
+  \left( \frac{\partial Q^j}{\partial \bar{I}} \frac{\text{d}\, \bar{I}}{\text{d}\, t}
+    + \frac{\partial Q^j}{\partial L_{\text{D}}} \frac{\text{d}\, L_{\text{D}}}{\text{d}\, t}
+    + \frac{\partial Q^j}{\partial T} \frac{\text{d}\, T}{\text{d}\, t} \right) \right] - D \cdot (\text{DIN}-\text{DIN}_{\text{in}})} %
+{\displaystyle 1+ \sum_j \left[ \text{Phy}_{\text{C}}^j\frac{\partial Q^j}{\partial \text{DIN}} \right]} \tag{\ref{eq:sdin}.4}
+\end{flalign}
+Where $j$ indexes the different PFTs simulated.
 
-As a technical remark regarding the FABM implementation of the model: Eq.~\eqref{eq:sdin3} requires a combination of terms which are calculated by separate abiotic and phytoplankton modules in K21.  Therefore, in order to avoid a circular-dependency error in the current implementation, an intermediate module collects the necessary terms from the two modules, and sets the right-hand sides for DIN at once.
+As a technical remark regarding the FABM implementation of the model: Eqs.~\eqref{eq:sdin3}--\eqref{eq:sdin4} require combination of terms which are calculated by separate abiotic and phytoplankton modules in K21.  Therefore, in order to avoid a circular-dependency error in the current implementation, an intermediate module collects the necessary terms from the two modules, and sets the right-hand sides for DIN at once.
 
 % Table
 \begin{table*}[htb]
