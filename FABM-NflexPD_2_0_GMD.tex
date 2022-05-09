@@ -9,8 +9,8 @@
 %% Please use the following documentclass and journal abbreviations for preprints and final revised papers.
 
 %% 2-column papers and preprints
-\documentclass[gmd, manuscript]{copernicus}
-%\documentclass[gmd, manuscript,draft]{copernicus}
+%\documentclass[gmd, manuscript]{copernicus}
+\documentclass[gmd, manuscript,draft]{copernicus}
 
 %% Journal abbreviations (please use the same for preprints and final revised papers)
 
@@ -489,11 +489,11 @@ The IA and the fully explicit DA variants produce almost identical results (Figs
 \FloatBarrier%
 \subsection{T3: Comparing DA and IA variants in simulating in simulating multiple PFT's}\label{s.resT3}
 
-Fig.~\ref{f.T3res} shows results of a numerical experiment with 10 phytoplankton size classes for our IA and DA variants. C biomass of phytoplankton by the two variants is near-identical. In this experiment annual average concentrations decrease with cell size, and the larger classes exhibit stronger seasonal relative variations. Under different environmental conditions, with respect to, e.g., the initial nutrient concentrations, and temporal stability, different outcomes can emerge \citep[see, e.g.,][]{Taherzadeh2017}, but such an exploration is outside of the scope of the current study.
+Fig.~\ref{f.T3res} shows results of a numerical experiment with 10 phytoplankton size classes for our IA and DA variants. In this experiment annual average concentrations decrease with cell size, and the larger classes exhibit stronger seasonal relative variations. Under different environmental conditions, with respect to, e.g., the initial nutrient concentrations, and temporal stability, different outcomes can emerge \citep[see, e.g.,][]{Taherzadeh2017}, but such an exploration is outside of the scope of the current study. C biomass of phytoplankton by the two variants is near-identical, however, differences do exist during the spring bloom, with concentrations of smaller groups being higher as simulated by the IA variant relative to the DA variant, and vice versa for the larger groups. Concentrations of the larger groups as simulated by the DA variant are higher, likely because their quoata advantage as imposed by the allometric relationships employed here \citep[and as in][]{Grover1991a,Litchman2009} is not fully captured by the IA variant. \onur{and I guess the reason for the concentration of smaller groups being higher in the IA variant is the faster optimization of Q, and therefore fV, but I'm not sure. Any other ideas?}
 
 \begin{figure}[ht!]
-\includegraphics[width=14cm,trim=0cm 0mm 0.0cm 0mm, clip]{figures/2022-05-07_Ldvar_Tvar_ThatVar_10P_PARext_IA_vs_DA/0D-Highlat_wconst_lext_Ldvar_Tvar_DIN015_10P_Cbased_modular_24h_IAvsDA_boxplot_size.png}
-\caption{Results of T3: Box-whisker plots of C biomass of 10 phytoplankton size classes, as simulated by the IA (dark blue boxes) and DA (orange boxes) approaches under variable $L_{\text{D}}$ and $T$.  \markus{Here I would suggest two panels.  One for the DA results with log(ESD) on the y-axis, divided into similarly-spaced sections, time on the x-axis and concentration shown as colour.  The other panel would have the same layout but with the colour showing (again) (IA - DA)/DA.}\label{f.T3res}}
+\includegraphics[width=16cm,trim=0cm 0mm 0.0cm 0mm, clip]{figures/2022-05-07_Ldvar_Tvar_ThatVar_10P_PARext_IA_vs_DA/0D-Highlat_wconst_lext_Ldvar_Tvar_DIN015_10P_Cbased_IAvsDAvsDIF_lineplot_size.png}
+\caption{Results of T3: C biomass of 10 phytoplankton size classes, as simulated by the IA (solid line) and DA (dotted line) variants (left) and the difference between the two (IA$-$DA, right).  \markus{Here I would suggest two panels.  One for the DA results with log(ESD) on the y-axis, divided into similarly-spaced sections, time on the x-axis and concentration shown as colour.  The other panel would have the same layout but with the colour showing (again) (IA - DA)/DA.}\onur{I tried this but did not like the result that much. I think with these line plots one can more easily see what's going on. But again, I prefer the absolute difference instead of the relative difference.}\label{f.T3res}}
 \end{figure}
 
 
