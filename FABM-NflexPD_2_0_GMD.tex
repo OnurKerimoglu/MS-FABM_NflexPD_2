@@ -249,7 +249,7 @@ The flux from DIN to $\text{Phy}_{\text{N}}$ is given by phytoplankton N uptake,
 The rate of change of $\text{Phy}_{\text{N}}$ resulting from Eqs.~\eqref{eq:sPhyC} --~\eqref{eq:dim}  is the complement of the sum of Eqs.~\eqref{eq:sDetN} and ~\eqref{eq:sdin}, apart from the dilution term:
 \begin{equation}
   \label{eq:phyn_def}
-  \frac{\mathrm{d}\,\text{Phy}_{\text{N}}}{\mathrm{d}\,t} = F_{\text{DIN}-\text{Phy}_{\text{N}}} - F_{\text{Phy}_{\text{N}}-\text{Det}_{\text{N}}}  - D \cdot \text{Phy}_{\text{N}} %= \frac{\mathrm{d}\,\text{Phy}_{\text{C}}}{\mathrm{d}\,t} \cdot Q
+  \frac{\mathrm{d}\,\text{Phy}_{\text{N}}}{\mathrm{d}\,t} = F_{\text{DIN}-\text{Phy}_{\text{N}}} - F_{\text{Phy}_{\text{N}}-\text{Det}_{\text{N}}}  - D \cdot \text{Phy}_{\text{N}} = \frac{\mathrm{d}\,\text{Phy}_{\text{C}}}{\mathrm{d}\,t} \cdot Q  - D \cdot \text{Phy}_{\text{C}} \cdot Q
 \end{equation}
 However, $Q$ changes over time, which also contributes to the rate of change of $\text{Phy}_{\text{N}}$.  This becomes clear by differentiating the rate of change of $\text{Phy}_{\text{N}}$ via the product rule:
 \begin{equation}
@@ -259,7 +259,7 @@ However, $Q$ changes over time, which also contributes to the rate of change of 
 %  = V_{\text{N}} - F_{\text{Phy}_{\text{C}}-\text{Det}_{\text{C}}}\cdot Q + \text{Phy}_{\text{C}} \cdot \frac{\mathrm{d}\,Q}{\mathrm{d}\,t}
 \end{equation}
 
-Thus, the right-most term in Eq.~\eqref{eq:phyn_def2}, $\text{Phy}_{\text{C}}\cdot \mathrm{d}\,Q / \mathrm{d}\, t$, is not accounted for by our system of Eqs.~\eqref{eq:sPhyC} --~\eqref{eq:dim} because $\text{Phy}_{\text{N}}$ is not a state variable.  Following \citet{Smith2016}, we subtract it from the differential equation for DIN\@:
+Thus, the second term in the right-hand side of Eq.~\eqref{eq:phyn_def2}, $\text{Phy}_{\text{C}}\cdot \mathrm{d}\,Q / \mathrm{d}\, t$, is not accounted for by our system of Eqs.~\eqref{eq:sPhyC} --~\eqref{eq:dim} because $\text{Phy}_{\text{N}}$ is not a state variable.  Following \citet{Smith2016}, we subtract it from the differential equation for DIN\@:
 \begin{flalign}\label{eq:sdin2}
   \begin{split}
     \frac{\text{d}\,\text{DIN}}{\text{d}\, t} &= F_{\text{Det}_{\text{N}}-\text{DIN}} - F_{\text{DIN}-\text{Phy}_\text{N}} - \text{Phy}_{\text{C}} \cdot \frac{\mathrm{d}\, Q}{\mathrm{d}\, t} - D \cdot (\text{DIN}-\text{DIN}_{\text{in}}) \\
