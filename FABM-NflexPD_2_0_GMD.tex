@@ -232,8 +232,8 @@ where $m_{\text{C}}$ [\unit{m^3\ mmolC^{-1}\ d^{-1}}] is the C-based specific mo
 The hydrolysis and remineralization fluxes are calculated as first-order reactions:
 \begin{flalign}
   \label{eq:remiC}
-  F_{\text{Det}_{\text{X}}-\text{DOX}} &= r_{\text{hyd}} \cdot \text{Det}_{\text{X}}\ \text{, X}=\{\text{C,N}\} \\
-  F_{\text{DOX}-\text{DIX}} &= r_{\text{rem}} \cdot \text{DOX}\ \text{, X}=\{\text{C,N}\}
+  F_{\text{Det}_{X}-\text{DO}X} &= r_{\text{hyd}} \cdot \text{Det}_{X}\ \text{,} \quad X\in\{\text{C, N}\} \\
+  F_{\text{DO}X-\text{DI}X} &= r_{\text{rem}} \cdot \text{DO}X\ \text{,} \quad X\in\{\text{C, N}\}
 \end{flalign}
 
 %given by the division of N flux from phytoplankton to detritus, $F_{\text{Phy}_{\text{N}}-\text{Det}_{\text{N}}}$ by $Q$
@@ -408,7 +408,7 @@ As a technical note regarding the implementation, using the \verb|phy_Cbased.F90
     In order to examine the mass balance of the model in such a setup, we introduce two new state variables, $\text{Ext}_{\text{C}}$ and $\text{Ext}_{\text{N}}$, which trace the amounts of N and C exported from and imported into the  system:
     \begin{flalign}
     \label{eq:Xext}
-    \frac{\mathrm{d}\,\text{Ext}_{\text{X}}}{\mathrm{d}\,t} &= D \cdot \left(\text{Phy}_{\text{X}} + \text{Det}_{\text{X}}  + \text{DOX} + (\text{DIX}-\text{DIX}_{\text{in}}) \right) + \frac{w_{\text{Det}}}{H_{\text{SML}}} \cdot \text{Det}_{\text{X}}\ \text{, X} \in \{\text{C},\text{N}\}
+    \frac{\mathrm{d}\,\text{Ext}_{X}}{\mathrm{d}\,t} &= D \cdot \left(\text{Phy}_{X} + \text{Det}_{X}  + \text{DO}X + (\text{DI}X-\text{DI}X_{\text{in}}) \right) + \frac{w_{\text{Det}}}{H_{\text{SML}}} \cdot \text{Det}_{X}\ \text{,}\quad X \in \{\text{C, N}\}
     \end{flalign}
     such that the global amounts of N and C, i.e., the sums of these variables and the corresponding C and N variables in Eqs.~\ref{eq:sPhyC}-\ref{eq:dim}, should be conserved.  See Table~\ref{T.pars} for the values of the additional parameters that describe the dilution and sinking fluxes.
     
