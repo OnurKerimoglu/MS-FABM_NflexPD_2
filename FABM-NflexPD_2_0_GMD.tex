@@ -9,8 +9,8 @@
 %% Please use the following documentclass and journal abbreviations for preprints and final revised papers.
 
 %% 2-column papers and preprints
-%\documentclass[gmd, manuscript]{copernicus}
-\documentclass[gmd, manuscript,draft]{copernicus}
+\documentclass[gmd, manuscript]{copernicus}
+%\documentclass[gmd, manuscript,draft]{copernicus}
 
 %% Journal abbreviations (please use the same for preprints and final revised papers)
 
@@ -262,8 +262,8 @@ However, $Q$ changes over time, which also contributes to the rate of change of 
 Thus, the second term in the right-hand side of Eq.~\eqref{eq:phyn_def2}, $\text{Phy}_{\text{C}}\cdot \mathrm{d}\,Q / \mathrm{d}\, t$, is not accounted for by our system of Eqs.~\eqref{eq:sPhyC} --~\eqref{eq:dim} because $\text{Phy}_{\text{N}}$ is not a state variable.  Following \citet{Smith2016}, we subtract it from the differential equation for DIN\@:
 \begin{flalign}\label{eq:sdin2}
   \begin{split}
-    \frac{\text{d}\,\text{DIN}}{\text{d}\, t} &= F_{\text{Det}_{\text{N}}-\text{DIN}} - F_{\text{DIN}-\text{Phy}_\text{N}} - \text{Phy}_{\text{C}} \cdot \frac{\mathrm{d}\, Q}{\mathrm{d}\, t} - D \cdot (\text{DIN}-\text{DIN}_{\text{in}}) \\
-    &= F_{\text{Det}_{\text{N}}-\text{DIN}} - V_{\text{N}} - \text{Phy}_{\text{C}} \cdot \left(\frac{\partial Q}{\partial \text{DIN}} \frac{\text{d}\, \text{DIN}}{\text{d}\, t}
+    \frac{\text{d}\,\text{DIN}}{\text{d}\, t} &= F_{\text{DON}-\text{DIN}} - F_{\text{DIN}-\text{Phy}_\text{N}} - \text{Phy}_{\text{C}} \cdot \frac{\mathrm{d}\, Q}{\mathrm{d}\, t} - D \cdot (\text{DIN}-\text{DIN}_{\text{in}}) \\
+    &= F_{\text{DON}-\text{DIN}} - V_{\text{N}} - \text{Phy}_{\text{C}} \cdot \left(\frac{\partial Q}{\partial \text{DIN}} \frac{\text{d}\, \text{DIN}}{\text{d}\, t}
       + \frac{\partial Q}{\partial \bar{I}} \frac{\text{d}\, \bar{I}}{\text{d}\, t}
       + \frac{\partial Q}{\partial L_{\text{D}}} \frac{\text{d}\, L_{\text{D}}}{\text{d}\, t}
       + \frac{\partial Q}{\partial T} \frac{\text{d}\, T}{\text{d}\, t} \right) - D \cdot (\text{DIN}-\text{DIN}_{\text{in}})
@@ -275,7 +275,7 @@ Thus, the second term in the right-hand side of Eq.~\eqref{eq:phyn_def2}, $\text
 %  \frac{\text{d}\text{DIN}}{\text{d}t} \left( 1+\text{Phy}_{\text{C}}\frac{\partial Q}{\partial \text{DIN}} \right) = F_{\text{DON}-\text{DIN}} - \text{Phy}_{\text{C}} \left(V_{\text{N}} +  \frac{\partial Q}{\partial \bar{I}} \frac{\text{d} \bar{I}}{\text{d} t} \right)\\
 % \end{equation}
 \label{eq:sdin3}
-\frac{\text{d}\,\text{DIN}}{\text{d}\,t} &= \frac{\displaystyle F_{\text{Det}_{\text{N}}-\text{DIN}} - V_{\text{N}} - \text{Phy}_{\text{C}} \cdot
+\frac{\text{d}\,\text{DIN}}{\text{d}\,t} &= \frac{\displaystyle F_{\text{DON}-\text{DIN}} - V_{\text{N}} - \text{Phy}_{\text{C}} \cdot
   \left( \frac{\partial Q}{\partial \bar{I}} \frac{\text{d}\, \bar{I}}{\text{d}\, t}
     + \frac{\partial Q}{\partial L_{\text{D}}} \frac{\text{d}\, L_{\text{D}}}{\text{d}\, t}
     + \frac{\partial Q}{\partial T} \frac{\text{d}\, T}{\text{d}\, t} \right) - D \cdot (\text{DIN}-\text{DIN}_{\text{in}})}%
@@ -312,7 +312,7 @@ The partial derivatives of $Q$ with respect to DIN, $\bar{I}$, $L_{\text{D}}$ an
 
 Finally, for the case of multiple phytoplankton functional types (PFTs), Eq.~\ref{eq:sdin3} can be generalized as follows:
 \begin{flalign}\label{eq:sdin4}
-\frac{\text{d}\,\text{DIN}}{\text{d}\,t} &= \frac{\displaystyle F_{\text{Det}_{\text{N}}-\text{DIN}} -
+\frac{\text{d}\,\text{DIN}}{\text{d}\,t} &= \frac{\displaystyle F_{\text{DON}-\text{DIN}} -
   \sum_j \left[ V_{\text{N}}^j + \text{Phy}_{\text{C}}^j \cdot
   \left( \frac{\partial Q^j}{\partial \bar{I}} \frac{\text{d}\, \bar{I}}{\text{d}\, t}
     + \frac{\partial Q^j}{\partial L_{\text{D}}} \frac{\text{d}\, L_{\text{D}}}{\text{d}\, t}
