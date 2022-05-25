@@ -150,8 +150,7 @@ However, additional state variables can increase the computational costs signifi
 FABM-NflexPD 1.0 only tracks N, which may be sufficient for some ecological applications, but not for applications that require mass balance for (multiple) nutrients and carbon.  Here we introduce FABM-NflexPD 2.0, which tracks both C and N\@.  We present a detailed description of a C-based version, which is extended to account also for N fluxes resulting from instantaneous changes in cell quotas, such that mass balance is maintained for both C and N\@.  We evaluate the consistency and robustness of the model by means of the following formal tests:
 \begin{description}
  \item [T1] assessment of the conservation of C and N in a simplified version of the model in a 0D setup, where temperature and day length are held constant, and light is provided as a sinusoidal function of time of year
- \item [T2a] test of the IA approach in a more realistic setup, where temperature and day length also vary over time, while also accounting for  light attenuation by phytoplankton
- \item [T2b] comparison of the fully explicit (DA) and IA model variants
+ \item [T2] test of the IA approach in a more realistic setup, where temperature and day length also vary over time, while also accounting for light attenuation by phytoplankton, and comparison against a fully explicit DA variant 
  \item [T3] simulation with multiple phytoplankton groups
  \item [T4] simulation in an open system where N and C are not conserved
  %\item [T4] \onur{done} application of the model in an idealistic 1D setup and assessment of mass conservation \textcolor{red}{\{Onur: this test failed: in 1D, model does not seem to be mass conservative, see Section~\ref{s.resT4}.\}}
@@ -171,11 +170,17 @@ FABM-NflexPD 1.0 only tracks N, which may be sufficient for some ecological appl
 
 FABM-NflexPD 2.0 differs from FABM-NflexPD 1.0 (K21) 
 %in two major respects.  (1) The new version maintains mass balance for both C and N, instead of only N\@.  (2) We restrict this version to 0D for simplicity, which allows subsuming the DOM compartment in the detritus compartment, leaving 5 state variables to represent dissolved inorganic C and N (DIC and DIN), phytoplankton C ($\text{Phy}_{\text{C}}$), and detritus C and N ($\text{Det}_{\text{C}}$ and $\text{Det}_{\text{N}}$). 
-mainly by tracing the dissolved inorganic carbon pool, DIC, such that now the model is ideally able to conserve both the total C and N in the system, and not only N as in K21. Moreover, we consider a dilution term for simulating an open (non-mass-conserving) system, such as a chemostat or a surface mixed layer (SML). The rates of change of the state variables are
+mainly by tracing the dissolved inorganic carbon pool, DIC, such that now the model is ideally able to conserve both the total C and N in the system, and not only N as in K21. Moreover, we consider dilution/mixing and sinking terms for simulating a non-closed system, such as a chemostat or a surface mixed layer (SML). As in K21, we consider here a DA variant to compare against the IA variant, but not a fixed stoichiometry variant unlike in K21. As a final difference, for the IA, we trace the C content in phytoplankton with a state variable, instead of the N content as in K21. The rates of change of the state variables are:
 
-\begin{flalign} \label{eq:sPhyC}
-  \frac{\mathrm{d}\, \text{Phy}_{\text{C}}}{\mathrm{d}\, t} &= \underbrace{F_{\text{DIC}-\text{Phy}_{\text{C}}}}_{\text{Net uptake}} - \underbrace{F_{\text{Phy}_{\text{C}}-\text{Det}_{\text{C}}}}_{\text{Mortality}} - \underbrace{D \cdot \text{Phy}_{\text{C}}}_{\text{Dilution}}
-\end{flalign}  
+\begin{subequations}\label{eq:phy}
+ \begin{flalign}
+  \label{eq:sPhyC}
+  %\frac{\mathrm{d}\, \text{Phy}_{\text{C}}}{\mathrm{d}\, t} &= \underbrace{F_{\text{DIC}-\text{Phy}_{\text{C}}}}_{\text{Net uptake}} - \underbrace{F_{\text{Phy}_{\text{C}}-\text{Det}_{\text{C}}}}_{\text{Mortality}} - \underbrace{D \cdot \text{Phy}_{\text{C}}}_{\text{Dilution}}\\
+  \frac{\mathrm{d}\, \text{Phy}_{\text{C}}}{\mathrm{d}\, t} &= F_{\text{DIC}-\text{Phy}_{\text{C}}} - F_{\text{Phy}_{\text{C}}-\text{Det}_{\text{C}}} - D \cdot \text{Phy}_{\text{C}}\\
+  \label{eq:sPhyN}
+  \frac{\mathrm{d}\, \text{Phy}_{\text{N}}}{\mathrm{d}\, t} &= \underbrace{F_{\text{DIN}-\text{Phy}_{\text{N}}}}_{\text{Net uptake}} - \underbrace{F_{\text{Phy}_{\text{N}}-\text{Det}_{\text{N}}}}_{\text{Mortality}} - \underbrace{D \cdot \text{Phy}_{\text{N}}}_{\text{Dilution}} &  \{\text{DA}\}
+ \end{flalign}
+\end{subequations}
 \begin{subequations}\label{eq:det}
   \begin{flalign}
   \label{eq:sDetC}
@@ -201,18 +206,18 @@ mainly by tracing the dissolved inorganic carbon pool, DIC, such that now the mo
 \end{flalign}  
 \end{subequations}
 
-where $F_{x-y}$ is the flux from $x$ to $y$, where $x$ and $y$ are state variables, except for $\text{Phy}_{\text{N}}$, which is defined as
+where $F_{x-y}$ is the flux from $x$ to $y$, where $x$ and $y$ are state variables, except for $\text{Phy}_{\text{N}}$ in the IA variant, which is defined as:
 \begin{equation}
   \label{eq:Q}
-  \text{Phy}_{\text{N}} = \text{Phy}_{\text{C}} \cdot Q
+  \text{Phy}_{\text{N}} = \text{Phy}_{\text{C}} \cdot Q \hfill \{\text{IA}\}
 \end{equation}
-where $Q$ is the phytoplankton N quota (N:C ratio). Dilution ($D$) and sinking terms (sinking velocity $w_{\text{Det}}$) describe fluxes in and out of the system, and are non-zero only for T4 (see below).
+where $Q$ is the phytoplankton N quota (N:C ratio). Dilution and sinking terms describe fluxes in and out of the system, and are non-zero only for the test T4 (see below).
 
 \subsection{C and N content of Phytoplankton}
 
-In this, C-based, version of the model, only the C content of phytoplankton ($\text{Phy}_{\text{C}}$) is dynamically tracked via Eq.~\eqref{eq:sPhyC}, whereas $\text{Phy}_{\text{N}}$ is defined as a function of $Q$ in Eq.~\eqref{eq:Q}.  $Q$ adjusts instantaneously to its optimal value for balanced growth, as determined by nutrient uptake in the protoplast, $\hat{V}_{\text{N}}$, and net photosynthesis in the chloroplast, $\hat{\mu}_{\text{net}}$ (Eq.~10 in K21):
+As mentioned above, in this, C-based, version of the IA model variant, only the C content of phytoplankton ($\text{Phy}_{\text{C}}$) is dynamically tracked via Eq.~\eqref{eq:sPhyC}, whereas $\text{Phy}_{\text{N}}$ is defined as a function of $Q$ in Eq.~\eqref{eq:Q}.  $Q$ adjusts instantaneously to its optimal value for balanced growth, as determined by nutrient uptake in the protoplast, $\hat{V}_{\text{N}}$, and net photosynthesis in the chloroplast, $\hat{\mu}_{\text{net}}$ (Eq.~10 in K21):
 \begin{equation}\label{eq:Qopt}
- Q = \frac{Q_{0}}{2} \left[1+\sqrt{1+\frac{2}{Q_{0}{({\hat{\mu}_{\text{net}}}/{\hat{V}_{\text{N}}}+\zeta_{\text{N}} )}}} \right] %\hfill \{\text{IA}\}
+ Q = \frac{Q_{0}}{2} \left[1+\sqrt{1+\frac{2}{Q_{0}{({\hat{\mu}_{\text{net}}}/{\hat{V}_{\text{N}}}+\zeta_{\text{N}} )}}} \right] \hfill \{\text{IA}\}
 \end{equation}
 where $Q_{0}$ and $\zeta_{\text{N}}$ are the subsistence N quota, and cost of N uptake, respectively (Table~\ref{T.pars}). The first term in Eq.~\eqref{eq:sPhyC}, $F_{\text{DIC}-\text{Phy}_{\text{C}}}$, represents net phytoplankton growth:
 \begin{equation}
@@ -226,6 +231,7 @@ The second term in Eq.~\eqref{eq:sPhyC}, $F_{\text{Phy}_{\text{C}}-\text{Det}_{\
   \label{eq:mortC}
   F_{\text{Phy}_{\text{C}}-\text{Det}_{\text{C}}} &= m_{\text{C}} \cdot \text{Phy}_{\text{C}}^2 \\
   \intertext{Its N counterpart is found by multiplication with $Q$:}
+  \label{eq:mortN}
   F_{\text{Phy}_{\text{N}}-\text{Det}_{\text{N}}} &= F_{\text{Phy}_{\text{C}}-\text{Det}_{\text{C}}} \cdot Q
 \end{flalign}
 where $m_{\text{C}}$ [\unit{m^3\ mmolC^{-1}\ d^{-1}}] is the C-based specific mortality rate.
@@ -238,88 +244,84 @@ The hydrolysis and remineralization fluxes are calculated as first-order reactio
 
 %given by the division of N flux from phytoplankton to detritus, $F_{\text{Phy}_{\text{N}}-\text{Det}_{\text{N}}}$ by $Q$
 
-\subsection{Accounting for Phytoplankton N}\label{S:DescFlux}
-
-The flux from DIN to $\text{Phy}_{\text{N}}$ is given by phytoplankton N uptake, $V_{\text{N}}$:
-%As in K21, the source term for the nutrients in the DIM pool are described as the remineralization fluxes from the nutrients in dissolved organic form (e.g., DON), $F_{\text{DON}-\text{DIN}}$ (Table 1, K21), minus the fluxes between the DIM (e.g., DIN) and phytoplankton ($F_{\text{DIN}-\text{Phy}_{\text{N}}}$):
-%$F_{\text{DON}-\text{DIN}}$ is calculated like the $F_{\text{DOC}-\text{DIC}}$ explained above. $F_{\text{DIN}-\text{Phy}_{\text{N}}}$ is N uptake by phytoplankton ($V^{\text{N}}$), which can be expressed as:
-\begin{equation} \label{eq:dphyNdt}
-  F_{\text{DIN}-\text{Phy}_{\text{N}}} = V_{\text{N}} = F_{\text{DIC -- Phy}_{\text{C}}} \cdot Q = \mu \cdot \text{Phy}_{\text{C}} \cdot Q
-\end{equation}
-The rate of change of $\text{Phy}_{\text{N}}$ resulting from Eqs.~\eqref{eq:sPhyC} --~\eqref{eq:dim}  is the complement of the sum of Eqs.~\eqref{eq:sDetN},~\eqref{eq:don} and~\eqref{eq:sdin}, apart from the dilution and sinking terms for $\text{Det}_{\text{N}}$, DON and DIN, less the dilution of $\text{Phy}_{\text{N}}$:
-\begin{equation}
-  \label{eq:phyn_def}
-  \frac{\mathrm{d}\,\text{Phy}_{\text{N}}}{\mathrm{d}\,t} = F_{\text{DIN}-\text{Phy}_{\text{N}}} - F_{\text{Phy}_{\text{N}}-\text{Det}_{\text{N}}}  - D \cdot \text{Phy}_{\text{N}} = \frac{\mathrm{d}\,\text{Phy}_{\text{C}}}{\mathrm{d}\,t} \cdot Q
-\end{equation}
-However, $Q$ changes over time, which also contributes to the rate of change of $\text{Phy}_{\text{N}}$.  This becomes clear by differentiating the rate of change of $\text{Phy}_{\text{N}}$ via the product rule:
-\begin{equation}
-  \label{eq:phyn_def2}
-  \frac{\mathrm{d}\,\text{Phy}_{\text{N}}}{\mathrm{d}\,t} = \frac{\mathrm{d}\,(\text{Phy}_{\text{C}}\cdot Q)}{\mathrm{d}\,t}
-  = \frac{\mathrm{d}\,\text{Phy}_{\text{C}}}{\mathrm{d}\,t} \cdot Q + \text{Phy}_{\text{C}} \cdot \frac{\mathrm{d}\,Q}{\mathrm{d}\,t} \tag{\ref{eq:phyn_def}.2}
-%  = V_{\text{N}} - F_{\text{Phy}_{\text{C}}-\text{Det}_{\text{C}}}\cdot Q + \text{Phy}_{\text{C}} \cdot \frac{\mathrm{d}\,Q}{\mathrm{d}\,t}
-\end{equation}
-
-Thus, the second term in the right-hand side of Eq.~\eqref{eq:phyn_def2}, $\text{Phy}_{\text{C}}\cdot \mathrm{d}\,Q / \mathrm{d}\, t$, is not accounted for by our system of Eqs.~\eqref{eq:sPhyC} --~\eqref{eq:dim} because $\text{Phy}_{\text{N}}$ is not a state variable.  Following \citet{Smith2016}, we subtract it from the differential equation for DIN\@:
-\begin{flalign}\label{eq:sdin2}
-  \begin{split}
-    \frac{\text{d}\,\text{DIN}}{\text{d}\, t} &= F_{\text{DON}-\text{DIN}} - F_{\text{DIN}-\text{Phy}_\text{N}} - \text{Phy}_{\text{C}} \cdot \frac{\mathrm{d}\, Q}{\mathrm{d}\, t} - D \cdot (\text{DIN}-\text{DIN}_{\text{in}}) \\
-    &= F_{\text{DON}-\text{DIN}} - V_{\text{N}} - \text{Phy}_{\text{C}} \cdot \left(\frac{\partial Q}{\partial \text{DIN}} \frac{\text{d}\, \text{DIN}}{\text{d}\, t}
-      + \frac{\partial Q}{\partial \bar{I}} \frac{\text{d}\, \bar{I}}{\text{d}\, t}
-      + \frac{\partial Q}{\partial L_{\text{D}}} \frac{\text{d}\, L_{\text{D}}}{\text{d}\, t}
-      + \frac{\partial Q}{\partial T} \frac{\text{d}\, T}{\text{d}\, t} \right) - D \cdot (\text{DIN}-\text{DIN}_{\text{in}})
-  \end{split}
-  \tag{\ref{eq:sdin}.2}\\
-  \intertext{and reorganizing:}
-%intermediate step:
-% \begin{equation}\label{eq:sdin2.5}
-%  \frac{\text{d}\text{DIN}}{\text{d}t} \left( 1+\text{Phy}_{\text{C}}\frac{\partial Q}{\partial \text{DIN}} \right) = F_{\text{DON}-\text{DIN}} - \text{Phy}_{\text{C}} \left(V_{\text{N}} +  \frac{\partial Q}{\partial \bar{I}} \frac{\text{d} \bar{I}}{\text{d} t} \right)\\
+\subsection{N fluxes between DIN and Phytoplankton}\label{S:DescFlux}
+% The flux from DIN to $\text{Phy}_{\text{N}}$ given by phytoplankton N uptake, $V_{\text{N}}$:
+% \begin{equation} \label{eq:dphyNdt}
+%   F_{\text{DIN}-\text{Phy}_{\text{N}}} = V_{\text{N}} = F_{\text{DIC -- Phy}_{\text{C}}} \cdot Q = \mu \cdot \text{Phy}_{\text{C}} \cdot Q
 % \end{equation}
-\label{eq:sdin3}
-\frac{\text{d}\,\text{DIN}}{\text{d}\,t} &= \frac{\displaystyle F_{\text{DON}-\text{DIN}} - V_{\text{N}} - \text{Phy}_{\text{C}} \cdot
-  \left( \frac{\partial Q}{\partial \bar{I}} \frac{\text{d}\, \bar{I}}{\text{d}\, t}
+% The rate of change of $\text{Phy}_{\text{N}}$ resulting from Eqs.~\eqref{eq:sPhyC} --~\eqref{eq:dim}  is the complement of the sum of Eqs.~\eqref{eq:sDetN},~\eqref{eq:don} and~\eqref{eq:sdin}, apart from the dilution and sinking terms for $\text{Det}_{\text{N}}$, DON and DIN, less the dilution of $\text{Phy}_{\text{N}}$:
+% \begin{equation}
+%   \label{eq:phyn_def}
+%   \frac{\mathrm{d}\,\text{Phy}_{\text{N}}}{\mathrm{d}\,t} = F_{\text{DIN}-\text{Phy}_{\text{N}}} - F_{\text{Phy}_{\text{N}}-\text{Det}_{\text{N}}}  - D \cdot \text{Phy}_{\text{N}} = \frac{\mathrm{d}\,\text{Phy}_{\text{C}}}{\mathrm{d}\,t} \cdot Q
+% \end{equation}
+% However, $Q$ changes over time, which also contributes to the rate of change of $\text{Phy}_{\text{N}}$.  This becomes clear by differentiating the rate of change of $\text{Phy}_{\text{N}}$ via the product rule:
+% \begin{equation}
+%   \label{eq:phyn_def2}
+%   \frac{\mathrm{d}\,\text{Phy}_{\text{N}}}{\mathrm{d}\,t} = \frac{\mathrm{d}\,(\text{Phy}_{\text{C}}\cdot Q)}{\mathrm{d}\,t}
+%   = \frac{\mathrm{d}\,\text{Phy}_{\text{C}}}{\mathrm{d}\,t} \cdot Q + \text{Phy}_{\text{C}} \cdot \frac{\mathrm{d}\,Q}{\mathrm{d}\,t} \tag{\ref{eq:phyn_def}.2}
+% \end{equation}
+% Thus, the second term in the right-hand side of Eq.~\eqref{eq:phyn_def2}, $\text{Phy}_{\text{C}}\cdot \mathrm{d}\,Q / \mathrm{d}\, t$, is not accounted for by our system of Eqs.~\eqref{eq:sPhyC} --~\eqref{eq:dim} because $\text{Phy}_{\text{N}}$ is not a state variable.  Following \citet{Smith2016}, we subtract it from the differential equation for DIN\@:
+For tracking the $\text{Phy}_{\text{N}}$ for the DA variant (Eq.~\ref{eq:sPhyN}), and the DIN for both variants (Eq.~\ref{eq:sdin}), the flux from DIN to $\text{Phy}_{\text{N}}$ needs to be known. As in K21, for the DA variant, it is simply the product of a specific uptake rate and the phytoplankton C biomass:
+\begin{equation}
+  \label{eq:Fdinphyn}
+  F_{\text{DIN}-\text{Phy}_{\text{N}}} = V_{\text{N}} \cdot \text{Phy}_{\text{C}} \hfill \{\text{DA}\}
+\end{equation}
+For the IA variant, exact value of this flux is unknown due to the non-existent $\text{Phy}_{\text{N}}$ pool, and the corresponding complement flux. By substituting $\text{Phy}_{\text{N}}$ with  $\text{Phy}_{\text{C}}\cdot Q$, and applying the product rule we get:
+\begin{equation}
+  \label{eq:sPhyN2}
+  \frac{\mathrm{d}\,\text{Phy}_{\text{N}}}{\mathrm{d}\,t} = \frac{\mathrm{d}\,(\text{Phy}_{\text{C}}\cdot Q)}{\mathrm{d}\,t}
+  = \frac{\mathrm{d}\,\text{Phy}_{\text{C}}}{\mathrm{d}\,t} \cdot Q + \text{Phy}_{\text{C}} \cdot \frac{\mathrm{d}\,Q}{\mathrm{d}\,t} \tag{\ref{eq:sPhyN}.2}
+\end{equation}
+here, the first term reflects the N equivalent of the change in $\text{Phy}_{\text{C}}$, i.e., Eq.~\ref{eq:sPhyC}, and the second term describes the change in quota over time that can occur due to potential imbalances between C and N uptake. Substituting Eq.~\ref{eq:sPhyC} in Eq.~\ref{eq:sPhyN2}:
+\begin{equation}
+  \label{eq:sPhyN3}
+  \frac{\mathrm{d}\,\text{Phy}_{\text{N}}}{\mathrm{d}\,t} = \left[ F_{\text{DIC}-\text{Phy}_{\text{C}}} \cdot Q - F_{\text{Phy}_{\text{C}}-\text{Det}_{\text{C}}} \cdot Q - D \cdot \text{Phy}_{\text{C}} \cdot Q \right] + \text{Phy}_{\text{C}} \cdot \frac{\mathrm{d}\,Q}{\mathrm{d}\,t}
+ \tag{\ref{eq:sPhyN}.3}
+\end{equation}
+and plugging Eqs.~\ref{eq:growth} and \ref{eq:mortN} into Eq.~\ref{eq:sPhyN3}
+\begin{equation}
+  \label{eq:sPhyN4}
+  \frac{\mathrm{d}\,\text{Phy}_{\text{N}}}{\mathrm{d}\,t} = \left[ \mu \cdot \text{Phy}_{\text{C}} \cdot Q - F_{\text{Phy}_{\text{N}}-\text{Det}_{\text{N}}} - D \cdot \text{Phy}_{\text{C}} \cdot Q \right] + \text{Phy}_{\text{C}} \cdot \frac{\mathrm{d}\,Q}{\mathrm{d}\,t}
+ \tag{\ref{eq:sPhyN}.4}
+\end{equation}
+In Eq.~\ref{eq:sPhyN4}, it is clear that $\mu \cdot \text{Phy}_{\text{C}} \cdot Q$ should belong to $F_{\text{DIN}-\text{Phy}_{\text{N}}}$. In addition, following \citet{Smith2016}, we assume that the last term belongs to $F_{\text{DIN}-\text{Phy}_{\text{N}}}$ too, yielding:
+\begin{equation}
+  \label{eq:Fdinphyn2}
+  F_{\text{DIN}-\text{Phy}_{\text{N}}} = \text{Phy}_{\text{C}} \left[ \mu Q + \frac{\mathrm{d}\,Q}{\mathrm{d}\,t} \right] \hfill \{\text{IA}\}
+  \tag{\ref{eq:Fdinphyn}.2}
+\end{equation}
+Plugging this into Eq.~\ref{eq:sdin}, and recognizing that $\frac{\mathrm{d}\,Q}{\mathrm{d}\,t} $ consists of partial derivatives with respect to $\text{DIN}$, $\bar{I}$, $L_{\text{D}}$ and $T$:
+\begin{flalign}\label{eq:sdin2}
+\begin{split}
+\frac{\text{d}\,\text{DIN}}{\text{d}\, t} &= F_{\text{DON}-\text{DIN}} - \text{Phy}_{\text{C}} \left[ \mu Q + \frac{\mathrm{d}\,Q}{\mathrm{d}\,t} \right] - D \cdot (\text{DIN}-\text{DIN}_{\text{in}}) \\
+&= F_{\text{DON}-\text{DIN}} - \text{Phy}_{\text{C}} \left[ \mu Q 
+    + \frac{\partial Q}{\partial \text{DIN}} \frac{\text{d}\, \text{DIN}}{\text{d}\, t}
+    + \frac{\partial Q}{\partial \bar{I}} \frac{\text{d}\, \bar{I}}{\text{d}\, t}
     + \frac{\partial Q}{\partial L_{\text{D}}} \frac{\text{d}\, L_{\text{D}}}{\text{d}\, t}
-    + \frac{\partial Q}{\partial T} \frac{\text{d}\, T}{\text{d}\, t} \right) - D \cdot (\text{DIN}-\text{DIN}_{\text{in}})}%
-{\displaystyle 1+ \text{Phy}_{\text{C}}\frac{\partial Q}{\partial \text{DIN}}}\tag{\ref{eq:sdin}.3}
+    + \frac{\partial Q}{\partial T} \frac{\text{d}\, T}{\text{d}\, t} \right] 
+    - D \cdot (\text{DIN}-\text{DIN}_{\text{in}})
+\end{split} &  \{\text{IA}\}
+\tag{\ref{eq:sdin}.2}\\
+\intertext{and reorganizing the $\frac{\text{d}\, \text{DIN}}{\text{d}\, t}$ on the right hand side:}
+\label{eq:sdin3}
+\frac{\text{d}\,\text{DIN}}{\text{d}\,t} &= \frac{\displaystyle F_{\text{DON}-\text{DIN}} - \text{Phy}_{\text{C}} \left[\mu Q  
+    + \frac{\partial Q}{\partial \bar{I}} \frac{\text{d}\, \bar{I}}{\text{d}\, t}
+    + \frac{\partial Q}{\partial L_{\text{D}}} \frac{\text{d}\, L_{\text{D}}}{\text{d}\, t}
+    + \frac{\partial Q}{\partial T} \frac{\text{d}\, T}{\text{d}\, t} \right] 
+    - D \cdot (\text{DIN}-\text{DIN}_{\text{in}})}%
+{\displaystyle 1+ \text{Phy}_{\text{C}}\frac{\partial Q}{\partial \text{DIN}}} & \{\text{IA}\} \tag{\ref{eq:sdin}.3}
 \end{flalign}
 The partial derivatives of $Q$ with respect to DIN, $\bar{I}$, $L_{\text{D}}$ and $T$ are obtained by canonical application of the chain rule, as detailed in Appendix~\ref{S:Sol}. The final terms required in Eq.~\eqref{eq:sdin3} are the changes in $\bar{I}$, $L_{\text{D}}$ and $T$ over time, i.e., $\text{d}\,\bar{I} / \text{d}\,t$, $\text{d}\,L_{\text{D}} / \text{d}\,t$ and $\text{d}\,T / \text{d}\,t$. When the irradiance and temperature are supplied externally, as is typically the case in coupled physical-biological models, it is not possible to obtain their temporal derivatives analytically.  Hence they are numerically approximated as the discrete backward difference between their current ($t=i$) and previous ($t=i-1$) values, divided by the integration time step, i.e., $\text{d}\, E / \text{d}\, t \approx (E_{i} - E_{i-1}) / \Delta t$ for $E=\{\bar{I},\ L_{\text{D}},\ T\}$ (see also Section~\ref{S:DescT1}).
-% Here, $\frac{\text{d} \text{Phy}_{\text{C}}}{\text{d} t} \big\rvert_G$ corresponds to gross growth of phytoplankton C biomass, i.e., $F_{\text{DIC}-\text{Phy}_{\text{C}}}$ in Eq.~\eqref{eq:sPhyC}. Substituting therefore Eq.~\eqref{eq:fdicphyc} in Eq.~\eqref{eq:dphyNdt}:
-% \begin{equation} \label{eq:dphyNdt2}
-%   \frac{\text{d}\text{Phy}_{\text{N}}}{\text{d}t} \bigg\rvert_G= Q \cdot \mu \cdot \text{Phy}_{\text{C}} + \text{Phy}_{\text{C}} \frac{\text{d} Q}{\text{d} t}
-% \end{equation}
-% where, assuming balanced growth \citep{Burmaster1979}, i.e., $V_{\text{N}} = Q \cdot \mu$  (K21, Eq.~6) the first term on the right hand side of Eq.~\eqref{eq:dphyNdt2} can be replaced with $V_{\text{N}} \cdot \text{Phy}_{\text{C}}$, i.e.,
-% \begin{equation} \label{eq:dphyNdt3}
-%   \frac{\text{d}\text{Phy}_{\text{N}}}{\text{d}t} \bigg\rvert_G=  \text{Phy}_{\text{C}} \left( V_{\text{N}} + \frac{\text{d} Q}{\text{d} t} \right)
-% \end{equation}
-% %\onur{In the N-based version, we had (K21, Eq.~5): $F_{DIN-%\text{Phy}_{\text{N}}} = V_{\text{N}} \cdot \text{Phy}_{\text{C}}$. i.e., excluding the $%\frac{\text{d} Q}{\text{d} t}$ term in Eq.~\eqref{eq:dphyNdt3}. %As we discussed, this apparent difference %(apparent, because maybe there is a mistake in the notation? Also note that $F_{DIN-\text{Phy}_{\text{N}}}$ is not used anywhere, and in the C-based version of the model it is only saved as a diagnostic quantity)
-% %doesn't violate the internal consistency of the N-based version, but it would be great if we could explain what this really is. For instance, is this a `real deviation' in model formulations that contributes (among other sources) to quantitative differences in results?}
-% According to Eq.~\eqref{eq:dphyNdt3}, the N flux between the DIM pool and phytoplankton can be intuitively understood as the sum of uptake due to growth of C biomass, and the change in the N quota. % It should be noted that this cumulative change can become negative. (?)
-% Given that the terms $\hat{V}_{\text{N}}$ and $\hat{\mu}_{\text{net}}$ required for calculating $Q$ (Eq.~\ref{eq:Qopt}) are respectively functions of DIN (Eq.~16 in K21) and daytime average irradiance, $\bar{I}$ (Eqs.~20--22 in K21), the total time derivative of $Q$ in Eq.~\eqref{eq:dphyNdt3} can be computed as the sum of partial derivatives with respect to DIN and $\bar{I}$ using chain rule:
-% \begin{equation} \label{eq:dqdt}
-%  \frac{\text{d} Q}{\text{d} t} = \frac{\partial Q}{\partial \text{DIN}} \frac{\text{d} \text{DIN}}{\text{d} t} +  \frac{\partial Q}{\partial \bar{I}} \frac{\text{d} \bar{I}}{\text{d} t}
-% \end{equation}
-% Substituting Eq.~\eqref{eq:dqdt} in Eq.~\eqref{eq:dphyNdt3}, and subsequently Eq.~\eqref{eq:dphyNdt3} in Eq.~\eqref{eq:sdin}:
-% \begin{equation}\label{eq:sdin2}
-%  \frac{\text{d}\text{DIN}}{\text{d}t} = F_{\text{DON}-\text{DIN}} - \text{Phy}_{\text{C}} \left(V_{\text{N}} + \frac{\partial Q}{\partial \text{DIN}} \frac{\text{d} \text{DIN}}{\text{d} t} +  \frac{\partial Q}{\partial \bar{I}} \frac{\text{d} \bar{I}}{\text{d} t} \right)
-% \end{equation}
-% and reorganizing:
-% %intermediate step:
-% % \begin{equation}\label{eq:sdin2.5}
-% %  \frac{\text{d}\text{DIN}}{\text{d}t} \left( 1+\text{Phy}_{\text{C}}\frac{\partial Q}{\partial \text{DIN}} \right) = F_{\text{DON}-\text{DIN}} - \text{Phy}_{\text{C}} \left(V_{\text{N}} +  \frac{\partial Q}{\partial \bar{I}} \frac{\text{d} \bar{I}}{\text{d} t} \right)\\
-% % \end{equation}
-% \begin{equation}\label{eq:sdin3}
-%  s(\text{DIN}) = \frac{\text{d}\text{DIN}}{\text{d}t} = \frac{F_{\text{DON}-\text{DIN}} - \text{Phy}_{\text{C}} \left(V_{\text{N}} +  \frac{\partial Q}{\partial \bar{I}} \frac{\text{d} \bar{I}}{\text{d} t} \right)}{ 1+\text{Phy}_{\text{C}}\frac{\partial Q}{\partial \text{DIN}}}
-% \end{equation}
-
-Finally, for the case of multiple phytoplankton functional types (PFTs), Eq.~\ref{eq:sdin3} can be generalized as follows:
+Finally, for the case of multiple phytoplankton functional types (PFTs) indexed by $j$, Eq.~\ref{eq:sdin3} can be generalized as follows:
 \begin{flalign}\label{eq:sdin4}
 \frac{\text{d}\,\text{DIN}}{\text{d}\,t} &= \frac{\displaystyle F_{\text{DON}-\text{DIN}} -
-  \sum_j \left[ V_{\text{N}}^j + \text{Phy}_{\text{C}}^j \cdot
-  \left( \frac{\partial Q^j}{\partial \bar{I}} \frac{\text{d}\, \bar{I}}{\text{d}\, t}
+  \sum_j \text{Phy}_{\text{C}}^j \left[ \mu^j Q^j
+    + \frac{\partial Q^j}{\partial \bar{I}} \frac{\text{d}\, \bar{I}}{\text{d}\, t}
     + \frac{\partial Q^j}{\partial L_{\text{D}}} \frac{\text{d}\, L_{\text{D}}}{\text{d}\, t}
-    + \frac{\partial Q^j}{\partial T} \frac{\text{d}\, T}{\text{d}\, t} \right) \right] - D \cdot (\text{DIN}-\text{DIN}_{\text{in}})} %
-{\displaystyle 1+ \sum_j \left[ \text{Phy}_{\text{C}}^j\frac{\partial Q^j}{\partial \text{DIN}} \right]} \tag{\ref{eq:sdin}.4}
+    + \frac{\partial Q^j}{\partial T} \frac{\text{d}\, T}{\text{d}\, t} \right] 
+    - D \cdot (\text{DIN}-\text{DIN}_{\text{in}})} %
+{\displaystyle 1+ \sum_j \left[ \text{Phy}_{\text{C}}^j\frac{\partial Q^j}{\partial \text{DIN}} \right]} & \{\text{IA}\} \tag{\ref{eq:sdin}.4}
 \end{flalign}
-Where $j$ indexes the different PFTs simulated.
 
 As a technical remark regarding the FABM implementation of the model: Eqs.~\eqref{eq:sdin3}--\eqref{eq:sdin4} require the combination of terms which are calculated by separate abiotic and phytoplankton modules in K21.  Therefore, in order to avoid a circular-dependency error in the current implementation, an intermediate module collects the necessary terms from the two modules, and sets the right-hand sides for DIN at once.
 
@@ -555,7 +557,7 @@ For simulations with a small number of groups, any potential reduction in comput
 \caption{Simulation times for different numbers of phytoplankton groups.\label{f.speed}}
 \end{figure}
 
-The modelling framework FABM, in which the model is implemented, allows seamless coupling of models with various hydrodynamical hosts \citep{Bruggeman2014}. We have also attempted an application in a 1D setup using GOTM \citep{Burchard2006} as the hydrodynamical host, and found out that N is not conserved. This is to be expected, because the spatial transport calculations do not account for spatial gradients in $Q$, which introduces errors analogous to the difference between Eqs.~\eqref{eq:phyn_def} and~\eqref{eq:phyn_def2}. Modified spatial flux terms may have to be introduced into the hydrodynamical host (which would be the case for our FABM implementation). It is not clear whether the resulting model would be faster than the fully explicit variant: On one hand, in a spatially explicit setup, reducing the number of state variables would also reduce the size of the necessary transport matrices \onur{ANY REFs?}.  On the other hand, fluxes associated with spatial changes in $Q$ would require additional logic and calculations. As mentioned above, performance advantages of the instantaneous acclimation approach emerge only for a large number of phytoplankton groups in our 0D setup.  However, in a spatially explicit setups, transport calculations can easily become computationally more demanding than calculating the right-hand sides of a biogeochemical model.  Therefore, a reduction of the number of state variables might offer computational advantages even for simulating a smaller number of phytoplankton groups.
+The modelling framework FABM, in which the model is implemented, allows seamless coupling of models with various hydrodynamical hosts \citep{Bruggeman2014}. We have also attempted an application in a 1D setup using GOTM \citep{Burchard2006} as the hydrodynamical host, and found out that N is not conserved. This is to be expected, because the spatial transport calculations do not account for spatial gradients in $Q$, which introduces errors analogous to the difference between Eqs.~\eqref{eq:sdin} and~\eqref{eq:sdin3}. Modified spatial flux terms may have to be introduced into the hydrodynamical host (which would be the case for our FABM implementation). It is not clear whether the resulting model would be faster than the fully explicit variant: On one hand, in a spatially explicit setup, reducing the number of state variables would also reduce the size of the necessary transport matrices \onur{ANY REFs?}.  On the other hand, fluxes associated with spatial changes in $Q$ would require additional logic and calculations. As mentioned above, performance advantages of the instantaneous acclimation approach emerge only for a large number of phytoplankton groups in our 0D setup.  However, in a spatially explicit setups, transport calculations can easily become computationally more demanding than calculating the right-hand sides of a biogeochemical model.  Therefore, a reduction of the number of state variables might offer computational advantages even for simulating a smaller number of phytoplankton groups.
 
 %CONCLUSION
 %\section{Conclusions}
