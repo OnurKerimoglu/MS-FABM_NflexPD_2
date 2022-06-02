@@ -175,7 +175,7 @@ FABM-NflexPD 1.0 only tracks N, which may be sufficient for some ecological appl
 
 FABM-NflexPD 2.0 differs from FABM-NflexPD 1.0 (K21) 
 %in two major respects.  (1) The new version maintains mass balance for both C and N, instead of only N\@.  (2) We restrict this version to 0D for simplicity, which allows subsuming the DOM compartment in the detritus compartment, leaving 5 state variables to represent dissolved inorganic C and N (DIC and DIN), phytoplankton C ($\text{Phy}_{\text{C}}$), and detritus C and N ($\text{Det}_{\text{C}}$ and $\text{Det}_{\text{N}}$). 
-mainly by tracing the dissolved inorganic carbon pool, DIC, such that now the model is ideally able to conserve both the total C and N in the system, and not only N as in K21. Moreover, we consider dilution/mixing and sinking terms for simulating a non-closed system, such as a chemostat or a surface mixed layer (SML). As in K21, we consider here a DA variant to compare against the IA variant, but not a fixed stoichiometry variant unlike in K21. As a final difference, for the IA, we trace the C content in phytoplankton with a state variable, instead of the N content as in K21. The rates of change of the state variables are:
+mainly by tracing the dissolved inorganic carbon pool, DIC, such that now the model is ideally able to conserve both the total C and N in the system, and not only N as in K21. Moreover, we consider dilution/mixing and sinking terms for simulating an open system, such as a chemostat or a surface mixed layer (SML). As in K21, we consider here a DA variant to compare against the IA variant, but not a fixed stoichiometry variant unlike in K21. As a final difference, for the IA, we trace the C content in phytoplankton with a state variable, instead of the N content as in K21. The rates of change of the state variables are:
 
 \begin{subequations}\label{eq:phy}
  \begin{flalign}
@@ -192,7 +192,7 @@ mainly by tracing the dissolved inorganic carbon pool, DIC, such that now the mo
   \frac{\mathrm{d}\, \text{Det}_{\text{C}}}{\mathrm{d}\, t} &= F_{\text{Phy}_{\text{C}}-\text{Det}_{\text{C}}} - F_{\text{Det}_{\text{C}}-\text{DOC}}  - D \cdot \text{Det}_{\text{C}} - \frac{w_{\text{Det}}}{H_{\text{SML}}} \cdot \text{Det}_{\text{C}} \\
   \label{eq:sDetN}
   \frac{\mathrm{d}\, \text{Det}_{\text{N}}}{\mathrm{d}\, t} &= F_{\text{Phy}_{\text{N}}-\text{Det}_{\text{N}}} - \underbrace{F_{\text{Det}_{\text{N}}-\text{DON}}}_\textrm{Hydrolysis} - D \cdot \text{Det}_{\text{N}} - \underbrace{\frac{w_{\text{Det}}}{H_{\text{SML}}} \cdot \text{Det}_{\text{N}}}_{\text{Sinking}}
-\end{flalign}  
+\end{flalign}
 \end{subequations}
 \begin{subequations}\label{eq:dom}
   \begin{align}
@@ -208,7 +208,7 @@ mainly by tracing the dissolved inorganic carbon pool, DIC, such that now the mo
   \frac{\mathrm{d}\, \text{DIC}}{\mathrm{d}\, t} &= F_{\text{DOC}-\text{DIC}} - F_{\text{DIC}-\text{Phy}_{\text{C}}} - D \cdot(\text{DIC}-\text{DIC}_{\text{in}}) \\
   \label{eq:sdin}
   \frac{\mathrm{d}\,\text{DIN}}{\mathrm{d}\,t} &= F_{\text{DON}-\text{DIN}} - F_{\text{DIN}-\text{Phy}_{\text{N}}} - D \cdot (\text{DIN}-\text{DIN}_{\text{in}})
-\end{flalign}  
+\end{flalign}
 \end{subequations}
 
 \noindent where $F_{x-y}$ is the flux from $x$ to $y$, where $x$ and $y$ are state variables, except for $\text{Phy}_{\text{N}}$ in the IA variant, which is defined as:
