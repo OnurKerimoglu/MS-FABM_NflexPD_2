@@ -277,26 +277,26 @@ For the IA variant, the exact value of this flux is unknown due to the non-exist
   \frac{\mathrm{d}\,\text{Phy}_{\text{N}}}{\mathrm{d}\,t} = \frac{\mathrm{d}\,(\text{Phy}_{\text{C}}\cdot Q)}{\mathrm{d}\,t}
   = \frac{\mathrm{d}\,\text{Phy}_{\text{C}}}{\mathrm{d}\,t} \cdot Q + \text{Phy}_{\text{C}} \cdot \frac{\mathrm{d}\,Q}{\mathrm{d}\,t} \tag{\ref{eq:sPhyN}.2}
 \end{equation}
-here, the first term reflects the N equivalent of the change in $\text{Phy}_{\text{C}}$, i.e., Eq.~\ref{eq:sPhyC}, and the second term describes the effect of the change in quota over time due to imbalances between C and N uptake. Substituting Eq.~\ref{eq:sPhyC} in Eq.~\ref{eq:sPhyN2}:
+here, the first term reflects the N equivalent of the change in $\text{Phy}_{\text{C}}$, i.e., Eq.~\eqref{eq:sPhyC}, and the second term describes the effect of the change in quota over time due to imbalances between C and N uptake. Substituting Eq.~\eqref{eq:sPhyC} in Eq.~\eqref{eq:sPhyN2}:
 \begin{equation}
   \label{eq:sPhyN3}
   \frac{\mathrm{d}\,\text{Phy}_{\text{N}}}{\mathrm{d}\,t} = \left[ F_{\text{DIC}-\text{Phy}_{\text{C}}} \cdot Q - F_{\text{Phy}_{\text{C}}-\text{Det}_{\text{C}}} \cdot Q - D \cdot \text{Phy}_{\text{C}} \cdot Q \right] + \text{Phy}_{\text{C}} \cdot \frac{\mathrm{d}\,Q}{\mathrm{d}\,t}
  \tag{\ref{eq:sPhyN}.3}
 \end{equation}
-and plugging Eqs.~\ref{eq:growth} and \ref{eq:mortN} into Eq.~\ref{eq:sPhyN3} yields:
+and plugging Eqs.~\eqref{eq:growth} and \eqref{eq:mortN} into Eq.~\eqref{eq:sPhyN3} yields:
 \begin{equation}
   \label{eq:sPhyN4}
   \frac{\mathrm{d}\,\text{Phy}_{\text{N}}}{\mathrm{d}\,t} = \left[ \mu \cdot \text{Phy}_{\text{C}} \cdot Q - F_{\text{Phy}_{\text{N}}-\text{Det}_{\text{N}}} - D \cdot \text{Phy}_{\text{C}} \cdot Q \right] + \text{Phy}_{\text{C}} \cdot \frac{\mathrm{d}\,Q}{\mathrm{d}\,t}
  \tag{\ref{eq:sPhyN}.4}
 \end{equation}
-In Eq.~\ref{eq:sPhyN4}, $\mu \cdot \text{Phy}_{\text{C}} \cdot Q$ can be identified with $F_{\text{DIN}-\text{Phy}_{\text{N}}}$ in the IA variant because $V_{\text{N}} = \mu\cdot Q$ for balanced growth. Following \citet{Smith2016}, we assign that the last term to $F_{\text{DIN}-\text{Phy}_{\text{N}}}$ too, yielding a re-definition of $F_{\text{DIN}-\text{Phy}_{\text{N}}}$ for the IA variant:
+In Eq.~\eqref{eq:sPhyN4}, $\mu \cdot \text{Phy}_{\text{C}} \cdot Q$ can be identified with $F_{\text{DIN}-\text{Phy}_{\text{N}}}$ in the IA variant because $V_{\text{N}} = \mu\cdot Q$ for balanced growth. Following \citet{Smith2016}, we assign that the last term to $F_{\text{DIN}-\text{Phy}_{\text{N}}}$ too, yielding a re-definition of $F_{\text{DIN}-\text{Phy}_{\text{N}}}$ for the IA variant:
 \begin{equation}
   \label{eq:Fdinphyn2}
   F_{\text{DIN}-\text{Phy}_{\text{N}}} = \text{Phy}_{\text{C}} \left[ \mu Q + \frac{\mathrm{d}\,Q}{\mathrm{d}\,t} \right] \hfill \{\text{IA}\}
   \tag{\ref{eq:Fdinphyn}.2}
 \end{equation}
 which essentially redirects part of the fluxes associated with $\text{Phy}_{\text{N}}$ to DIN\@.
-Plugging this into Eq.~\ref{eq:sdin}, and recognizing that $\frac{\mathrm{d}\,Q}{\mathrm{d}\,t} $ consists of partial derivatives with respect to $\text{DIN}$, daily average irradiance, $\bar{I}$, fractional daylength, $L_{\text{D}})$ and temperature, $T$ (see Appendix~\ref{S:Sol}):
+Plugging this into Eq.~\eqref{eq:sdin}, and recognizing that $\frac{\mathrm{d}\,Q}{\mathrm{d}\,t} $ consists of partial derivatives with respect to $\text{DIN}$, daily average irradiance, $\bar{I}$, fractional daylength, $L_{\text{D}})$ and temperature, $T$ (see Appendix~\ref{S:Sol}):
 \begin{flalign}\label{eq:sdin2}
 \begin{split}
 \frac{\text{d}\,\text{DIN}}{\text{d}\, t} &= F_{\text{DON}-\text{DIN}} - \text{Phy}_{\text{C}} \left[ \mu Q + \frac{\mathrm{d}\,Q}{\mathrm{d}\,t} \right] - D \cdot (\text{DIN}-\text{DIN}_{\text{in}}) \\
@@ -318,7 +318,7 @@ Plugging this into Eq.~\ref{eq:sdin}, and recognizing that $\frac{\mathrm{d}\,Q}
 {\displaystyle 1+ \text{Phy}_{\text{C}}\frac{\partial Q}{\partial \text{DIN}}} & \{\text{IA}\} \tag{\ref{eq:sdin}.3}
 \end{flalign}
 The partial derivatives of $Q$ with respect to DIN, $\bar{I}$, $L_{\text{D}}$ and $T$ are obtained by canonical application of the chain rule, as detailed in Appendix~\ref{S:Sol}. The final terms required in Eq.~\eqref{eq:sdin3} are the changes in $\bar{I}$, $L_{\text{D}}$ and $T$ over time, i.e., $\text{d}\,\bar{I} / \text{d}\,t$, $\text{d}\,L_{\text{D}} / \text{d}\,t$ and $\text{d}\,T / \text{d}\,t$. When the irradiance and temperature are supplied externally, as is typically the case in coupled physical-biological models, it is not possible to obtain their temporal derivatives analytically.  Hence they are numerically approximated as the discrete backward difference between their current ($t=i$) and previous ($t=i-1$) values, divided by the integration time step, i.e., $\text{d}\, E / \text{d}\, t \approx (E_{i} - E_{i-1}) / \Delta t$ for $E=\{\bar{I},\ L_{\text{D}},\ T\}$ (see also Section~\ref{S:DescT1}).
-Finally, for the case of multiple phytoplankton functional types (PFTs) indexed by $j$, Eq.~\ref{eq:sdin3} can be generalized as follows:
+Finally, for the case of multiple phytoplankton functional types (PFTs) indexed by $j$, Eq.~\eqref{eq:sdin3} can be generalized as follows:
 \begin{flalign}\label{eq:sdin4}
 \frac{\text{d}\,\text{DIN}}{\text{d}\,t} &= \frac{\displaystyle F_{\text{DON}-\text{DIN}} -
   \sum_j \text{Phy}_{\text{C}}^j \left[ \mu^j Q^j
@@ -393,7 +393,7 @@ As a technical remark regarding the FABM implementation of the model: Eqs.~\eqre
 
     \subsubsection{T2 -- T3}
 
-    For these tests, we apply the numerical and analytical time-derivatives for $\bar{I}$ (Eqs.~\ref{eq.dIdtn} and~\ref{eq.dIdt}) and also for variable day length, $L_{\text{D}}$, and temperature, T\@. $L_{\text{D}}$, as described by \citet{Forsythe2003}, is used to calculate the instantaneous irradiance, based on the same irradiance function as in T1 (Eq.~\ref{eq.I}).  The seasonal variability in T is represented by a sinusoidal function analogous to Eq.~\ref{eq.I}, with $T_{\min}=2\degree$C and $T_{\max}=20\degree$C.
+    For these tests, we apply the numerical and analytical time-derivatives for $\bar{I}$ (Eqs.~\ref{eq.dIdtn} and~\ref{eq.dIdt}) and also for variable day length, $L_{\text{D}}$, and temperature, T\@. $L_{\text{D}}$, as described by \citet{Forsythe2003}, is used to calculate the instantaneous irradiance, based on the same irradiance function as in T1 (Eq.~\ref{eq.I}).  The seasonal variability in T is represented by a sinusoidal function analogous to Eq.~\eqref{eq.I}, with $T_{\min}=2\degree$C and $T_{\max}=20\degree$C.
 
     For T3, we compare simulations for 10 phytoplankton groups with the IA and DA variants. Phytoplankton groups represent different size classes across the range of 0.2--100 \unit{{\mu}m} equivalent spherical diameter (ESD), uniformly spaced on a logarithmic scale. As in \citet{Smith2016}, $Q_0$, $\hat{V}_0$ and $\hat{A}_0$ vary according to allometric relationships (Table~\ref{T.pars}). Scalings of $Q_0$ and $\hat{V}_0$ are based on a combination of cell-specific scalings of subsistence quotas \citep[][`marine species']{Edwards2012}, maximum uptake rates \citep{Maranon2013}, and cell-specific C content \citep[][`protist plankton excluding diatoms']{Menden2000}. Scaling of $\hat{A}_0$ is based on heuristics \citep{Smith2014a}.
 
@@ -403,7 +403,7 @@ As a technical note regarding the implementation, using the \verb|phy_Cbased.F90
 
     \subsubsection{T4}
 
-    In a closed system, where all mass is conserved, DIN can be calculated directly as the difference between the initial total mass and the sum of all other pools (e.g., $\text{DIN} = \text{Total N} - \text{DON} - \text{Det}_{\text{N}} - Q \cdot \text{Phy}_{\text{C}}$). This would eliminate the neccessity of deriving the additional differentials in Eq.~\ref{eq:sdin3} (solutions of which are provided in Appendix~\ref{S:Sol}), and the resulting code could be significantly faster, owing to one less state variable (i.e., DIN) and lower amounts of logic and calculations. However, this would work only for closed systems.
+    In a closed system, where all mass is conserved, DIN can be calculated directly as the difference between the initial total mass and the sum of all other pools (e.g., $\text{DIN} = \text{Total N} - \text{DON} - \text{Det}_{\text{N}} - Q \cdot \text{Phy}_{\text{C}}$). This would eliminate the neccessity of deriving the additional differentials in Eq.~\eqref{eq:sdin3} (solutions of which are provided in Appendix~\ref{S:Sol}), and the resulting code could be significantly faster, owing to one less state variable (i.e., DIN) and lower amounts of logic and calculations. However, this would work only for closed systems.
 
     The aim of T4 is to evaluate the behavior of the model in open systems, such as chemostats, using a non-zero $D$ in Eqs.~\eqref{eq:sPhyC}--\eqref{eq:dic} to represent dilution, or the dynamics within a surface mixed layer (SML), using $D>0$ and $w_{\text{Det}}>0$, to represent mixing with the layer below the SML and sedimentation of detritus out of the SML, respectively. %\onur{do we need to tell about the motivation to include such a test (i.e., that in a closed system, DIN does not need to be dynamically traced, but can be found simply by substracting Q*PhyC, DON and DetN from the initial $\sum{N}$)? In my opinion we better tell this in the discussion.}
     In order to characterize an aquatic environment in a temperate climate zone that undergoes thermal stratification in summer, we consider a cyclic seasonal pattern in $D$, with values approaching to $D_{\max}=1.0$ during winter and $D_{\min}=0.001$ during summer:
@@ -418,7 +418,7 @@ As a technical note regarding the implementation, using the \verb|phy_Cbased.F90
     \label{eq:Xext}
     \frac{\mathrm{d}\,\text{Ext}_{X}}{\mathrm{d}\,t} &= D \cdot \left(\text{Phy}_{X} + \text{Det}_{X}  + \text{DO}X + (\text{DI}X-\text{DI}X_{\text{in}}) \right) + \frac{w_{\text{Det}}}{H_{\text{SML}}} \cdot \text{Det}_{X}\ \text{,}\quad X \in \{\text{C, N}\}
     \end{flalign}
-    such that the global amounts of N and C, i.e., the sums of these variables and the corresponding C and N variables in Eqs.~\ref{eq:sPhyC}-\ref{eq:dim}, should be conserved.  See Table~\ref{T.pars} for the values of the additional parameters that describe the dilution and sinking fluxes.
+    such that the global amounts of N and C, i.e., the sums of these variables and the corresponding C and N variables in Eqs.~\eqref{eq:sPhyC}--\eqref{eq:dim}, should be conserved.  See Table~\ref{T.pars} for the values of the additional parameters that describe the dilution and sinking fluxes.
 
     For this test, we consider two PFTs with ESD's of 1 and 10 $\mu$m, with $Q_0$, $\hat{V}_0$ and $\hat{A}_0$ scaled as explained for T3 above. The configuration files for this test are provided with the code (see the code availability section).
 
@@ -530,7 +530,7 @@ Under such a regime, the system captures the characteristic features of a temper
 
 \begin{figure}[ht!]
 \includegraphics[width=12cm,trim=0cm 18mm 0.0cm 15mm, clip]{figures/2022-05-06c_Ldvar_Tvar_ThatVar_PARext_Dvar_sdet01_IA_vs_DA/0D-Highlat_wconst_lext_Ldvar_Tvar_DIN015_2P_Dmax1_sdet01_CbasedIA_modular_24h_vs_0D-Highlat_wconst_lext_Ldvar_Tvar_DIN015_2P_Dmax1_sdet01_CbasedDA_modular_24h_cont_abio1_2y.png}
-\caption{T4: Annual variations of global C and N (sum of total C/N and Ext$_{\text{C/N}}$, see Eq.~\ref{eq:Xext}), total C/N (sum of $\sum\text{Phy}^j$, DIM, DOM, Det) and other state variables that trace N in individual pools for a seasonally varying mixing regime and sedimentation fluxes. \markus{I would suggest to remove the panels for global and total C, since the mass-balance for C is trivial also for the IA variant.  This would make the caption much easier to read. \onur{I feel like showing the global C/N is needed as a proof of concept and implementation. I agree however that the caption is not easy. I tried improving it now, but it's still not too easy I guess. I suggest to see what the reviewers think about this.}}}\label{f.T4res}
+\caption{T4: Annual variations of global C and N (sum of total C/N and Ext$_{\text{C/N}}$, see Eq.~\eqref{eq:Xext}), total C/N (sum of $\sum\text{Phy}^j$, DIM, DOM, Det) and other state variables that trace N in individual pools for a seasonally varying mixing regime and sedimentation fluxes. \markus{I would suggest to remove the panels for global and total C, since the mass-balance for C is trivial also for the IA variant.  This would make the caption much easier to read. \onur{I feel like showing the global C/N is needed as a proof of concept and implementation. I agree however that the caption is not easy. I tried improving it now, but it's still not too easy I guess. I suggest to see what the reviewers think about this.}}}\label{f.T4res}
 \end{figure}
 
 
@@ -571,7 +571,7 @@ As explained in Section~\ref{S:DescFlux}, reducing the errors in mass balance fo
 Our results demonstrate that a state variable that tracks the elemental content of plankton can be effectively removed, without leading to major issues in mass balance, in a 0D setup. In comparison to a fully explicit dynamic variant, removing a state variable does not seem to result in clear advantages in computational efficiency in such a spatially truncated setup that does not require calculation of spatial transport.
 %, at least not for simulating a low number of phytoplankton groups.  However, when simulating 50 groups, IA is $10.2 \%$ faster (Fig.~\ref{f.speed}).
 %For simulations with a small number of groups, 
-Any potential reduction in computational costs owing to one less state variable in the IA variant is presumably compensated by the additional calculations required for the derivatives in Eq.~\ref{eq:sdin3} (see Appendix-\ref{S:Sol}). 
+Any potential reduction in computational costs owing to one less state variable in the IA variant is presumably compensated by the additional calculations required for the derivatives in Eq.~\eqref{eq:sdin3} (see Appendix-\ref{S:Sol}).
 %However, for a larger number of groups, requirements for allocating memory to trace a greater number of state variables probably outweighs the additional costs associated with the flux calculations. % \onur{these were some quick thoughts, if anyone knows something more about this, or a reference, please let me know}.
 
 %\begin{figure}[ht!]
