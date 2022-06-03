@@ -271,7 +271,7 @@ For tracking the $\text{Phy}_{\text{N}}$ for the DA variant (Eq.~\ref{eq:sPhyN})
   \label{eq:Fdinphyn}
   F_{\text{DIN}-\text{Phy}_{\text{N}}} = V_{\text{N}} \cdot \text{Phy}_{\text{C}} \hfill \{\text{DA}\}
 \end{equation}
-For the IA variant, exact value of this flux is unknown due to the non-existent $\text{Phy}_{\text{N}}$ pool, and the corresponding complement flux. By substituting $\text{Phy}_{\text{N}}$ with  $\text{Phy}_{\text{C}}\cdot Q$, and applying the product rule we get:
+For the IA variant, the exact value of this flux is unknown due to the non-existent $\text{Phy}_{\text{N}}$ pool, and the corresponding flux. By substituting $\text{Phy}_{\text{N}}$ with  $\text{Phy}_{\text{C}}\cdot Q$, and applying the product rule we get:
 \begin{equation}
   \label{eq:sPhyN2}
   \frac{\mathrm{d}\,\text{Phy}_{\text{N}}}{\mathrm{d}\,t} = \frac{\mathrm{d}\,(\text{Phy}_{\text{C}}\cdot Q)}{\mathrm{d}\,t}
@@ -289,12 +289,13 @@ and plugging Eqs.~\ref{eq:growth} and \ref{eq:mortN} into Eq.~\ref{eq:sPhyN3}
   \frac{\mathrm{d}\,\text{Phy}_{\text{N}}}{\mathrm{d}\,t} = \left[ \mu \cdot \text{Phy}_{\text{C}} \cdot Q - F_{\text{Phy}_{\text{N}}-\text{Det}_{\text{N}}} - D \cdot \text{Phy}_{\text{C}} \cdot Q \right] + \text{Phy}_{\text{C}} \cdot \frac{\mathrm{d}\,Q}{\mathrm{d}\,t}
  \tag{\ref{eq:sPhyN}.4}
 \end{equation}
-In Eq.~\ref{eq:sPhyN4}, it is clear that $\mu \cdot \text{Phy}_{\text{C}} \cdot Q$ should belong to $F_{\text{DIN}-\text{Phy}_{\text{N}}}$. In addition, following \citet{Smith2016}, we assume that the last term belongs to $F_{\text{DIN}-\text{Phy}_{\text{N}}}$ too, yielding:
+In Eq.~\ref{eq:sPhyN4}, $\mu \cdot \text{Phy}_{\text{C}} \cdot Q$ can be identified with $F_{\text{DIN}-\text{Phy}_{\text{N}}}$ because $V_{\text{N}} =  \mu\cdot Q$ at steady state. In addition, following \citet{Smith2016}, we assign that the last term also to $F_{\text{DIN}-\text{Phy}_{\text{N}}}$ too, yielding a re-definition of $F_{\text{DIN}-\text{Phy}_{\text{N}}}$ for the IA variant:
 \begin{equation}
   \label{eq:Fdinphyn2}
   F_{\text{DIN}-\text{Phy}_{\text{N}}} = \text{Phy}_{\text{C}} \left[ \mu Q + \frac{\mathrm{d}\,Q}{\mathrm{d}\,t} \right] \hfill \{\text{IA}\}
   \tag{\ref{eq:Fdinphyn}.2}
 \end{equation}
+which essentially redirects part of the fluxes associated with $\text{Phy}_{\text{N}}$ to DIN\@.
 Plugging this into Eq.~\ref{eq:sdin}, and recognizing that $\frac{\mathrm{d}\,Q}{\mathrm{d}\,t} $ consists of partial derivatives with respect to $\text{DIN}$, daily average irradiance, $\bar{I}$, fractional daylength, $L_{\text{D}})$ and temperature, $T$ (see Appendix~\ref{S:Sol}):
 \begin{flalign}\label{eq:sdin2}
 \begin{split}
@@ -399,28 +400,28 @@ As a technical remark regarding the FABM implementation of the model: Eqs.~\eqre
 As a technical note regarding the implementation, using the \verb|phy_Cbased.F90| and \verb|abio_Cbased.F90| modules, the number of phytoplankton types can be modified without changing or recompiling the code, by adjusting the configuration file (see the \verb|fabm.yaml| examples in the \verb|testcases| folder that were employed to produce the results presented in this study), which is a feature of the modularity of FABM\@.
 
     %\markus{I have recently analysed compilations of N subsistence quotas from the literature (though not including \citet{Edwards2012}) and found that many of those were not really subsistence quotas.  When I exclude those not being subsistence quotas and whose ESD > 100\unit{{\mu}m}, there is no size dependence.}\onur{This is interesting, but I think it is outside of the scope of the current ms. Let's keep the allometries as in Smith et al 2016.}
-    
+
     \subsubsection{T4}
 
-    In a closed system, where all mass is conserved, DIN can be calculated directly as the difference between the initial total mass and the sum of all other pools (e.g., DIN = Total N - DON - Det$_{\text{N}}$ - $Q \cdot \text{Phy}_C$). This would eliminate the neccessity of deriving the additional differentials in Eq.~\ref{eq:sdin3} (solutions of which are provided in Appendix~\ref{S:Sol}), and the resulting code could be significantly faster, owing to one less state variable (i.e., DIN) and lower amounts of logic and calculations. However, this would work only for closed systems.
+    In a closed system, where all mass is conserved, DIN can be calculated directly as the difference between the initial total mass and the sum of all other pools (e.g., $\text{DIN} = \text{Total N} - \text{DON} - \text{Det}_{\text{N}} - Q \cdot \text{Phy}_{\text{C}}$). This would eliminate the neccessity of deriving the additional differentials in Eq.~\ref{eq:sdin3} (solutions of which are provided in Appendix~\ref{S:Sol}), and the resulting code could be significantly faster, owing to one less state variable (i.e., DIN) and lower amounts of logic and calculations. However, this would work only for closed systems.
 
     The aim of T4 is to evaluate the behavior of the model in open systems, such as chemostats, using a non-zero $D$ in Eqs.~\eqref{eq:sPhyC}--\eqref{eq:dic} to represent dilution, or the dynamics within a surface mixed layer (SML), using $D>0$ and $w_{\text{Det}}>0$, to represent mixing with the layer below the SML and sedimentation of detritus out of the SML, respectively. %\onur{do we need to tell about the motivation to include such a test (i.e., that in a closed system, DIN does not need to be dynamically traced, but can be found simply by substracting Q*PhyC, DON and DetN from the initial $\sum{N}$)? In my opinion we better tell this in the discussion.}
     In order to characterize an aquatic environment in a temperate climate zone that undergoes thermal stratification in summer, we consider a cyclic seasonal pattern in $D$, with values approaching to $D_{\max}=1.0$ during winter and $D_{\min}=0.001$ during summer:
     \begin{flalign}
-      D = D_{\min}+ 0.25 (D_{\max} - D_{\min}) \left[ 1 - \sin(2 \pi t')\right]^2, \qquad t'=\frac{t}{365} - 0.15  
+      D = D_{\min}+ 0.25 (D_{\max} - D_{\min}) {\left[ 1 - \sin(2 \pi t')\right]}^2, \qquad t'=\frac{t}{365} - 0.15
     \end{flalign}
 
-    \noindent where $t'$ is the relative day of the year, adjusted to mimic initiation of stratification by the beginning of April. 
-    
+    \noindent where $t'$ is the relative day of the year, adjusted to mimic initiation of stratification by the beginning of April.
+
     In order to examine the mass balance of the model in such a setup, we introduce two new state variables, $\text{Ext}_{\text{C}}$ and $\text{Ext}_{\text{N}}$, which trace the amounts of N and C exported from and imported into the  system:
     \begin{flalign}
     \label{eq:Xext}
     \frac{\mathrm{d}\,\text{Ext}_{X}}{\mathrm{d}\,t} &= D \cdot \left(\text{Phy}_{X} + \text{Det}_{X}  + \text{DO}X + (\text{DI}X-\text{DI}X_{\text{in}}) \right) + \frac{w_{\text{Det}}}{H_{\text{SML}}} \cdot \text{Det}_{X}\ \text{,}\quad X \in \{\text{C, N}\}
     \end{flalign}
     such that the global amounts of N and C, i.e., the sums of these variables and the corresponding C and N variables in Eqs.~\ref{eq:sPhyC}-\ref{eq:dim}, should be conserved.  See Table~\ref{T.pars} for the values of the additional parameters that describe the dilution and sinking fluxes.
-    
+
     For this test, we consider two PFTs with ESD's of 1 and 10 $\mu$m, with $Q_0$, $\hat{V}_0$ and $\hat{A}_0$ scaled as explained for T3 above. The configuration files for this test are provided with the code (see the code availability section).
-    
+
 %\subsubsection{1D setup (T4)}
 %    \onur{I'm not sure if we really need to show these results, although I included them for now }
 
@@ -505,15 +506,13 @@ The IA and DA variants produce almost identical results (Figs.~\ref{f.T2res},~\r
 \FloatBarrier%
 \subsection{T3: Comparing DA and IA variants in simulating in simulating multiple PFTs}\label{s.resT3}
 
-Fig.~\ref{f.T3res} shows results of experiment T3 with 10 phytoplankton size classes for our IA and DA variants. Annually-averaged concentrations decrease with cell size, and the larger classes exhibit stronger seasonal relative variations. Under other environmental conditions, e.g., different initial conditions or temporal variability, different outcomes can emerge \citep[see, e.g.,][]{Taherzadeh2017}, but this is outside of the scope of our current study. C biomass of phytoplankton by the two variants is near-identical.  However, differences do exist during the spring bloom, with concentrations of smaller groups being higher in the IA than in the DA variant, and vice versa for the larger groups. Concentrations of the larger groups are higher in the DA variant as their quota advantage imposed by the allometric relationships, which allows them keep growing when the external DIN is depleted \citep[i.e., the storage effect, see][]{Grover1991a,Litchman2009} is not fully captured by the IA variant.
-%the DIN derived in the IA variant from the increasing cell quotas during the spring bloom benefits the larger cells less than the smaller cells  \citep[as in][]{Grover1991a,Litchman2009}. 
-\onur{and I guess the reason for the concentration of smaller groups being higher in the IA variant is the faster optimization of Q, and therefore fV, but I'm not sure. Any other ideas?} \markus{I think the affinity-scaling dominates this part.  Also, above we cite \citet{Edwards2012}, \citet{Smith2014a}, etc. for the scaling, which way is correct?} \onur{i realized now that the small cells are growing faster in the IA variant exactly because the large cells grow less, which therefore does not need an additional explanation. Edwards 2012 is for the scaling the Q0, Smith etal 2014a is for the scaling of A0}
+Fig.~\ref{f.T3res} shows results of experiment T3 with 10 phytoplankton size classes for our IA and DA variants. Annually-averaged concentrations decrease with cell size, and the larger classes exhibit stronger seasonal relative variations. Under other environmental conditions, e.g., different initial conditions or temporal variability, different outcomes can emerge \citep[see, e.g.,][]{Taherzadeh2017}, but this is outside of the scope of our current study.  C biomass of phytoplankton by the two variants is near-identical.  However, differences do exist during the spring bloom, with concentrations of smaller groups being higher in the IA than in the DA variant, and vice versa for the larger groups. Concentrations of the larger groups are higher in the DA variant, likely because the extra DIN derived in the IA variant from the increasing cell quotas during the spring bloom benefits the larger cells less than the smaller cells as imposed by the allometric relationships \citep[as in][]{Grover1991a,Litchman2009}. \onur{and I guess the reason for the concentration of smaller groups being higher in the IA variant is the faster optimization of Q, and therefore fV, but I'm not sure. Any other ideas?} \markus{I think the affinity-scaling dominates this part.  Also, above we cite \citet{Edwards2012}, \citet{Smith2014a}, etc.\ for the scaling, which way is correct?} \onur{i realized now that the small cells are growing faster in the IA variant exactly because the large cells grow less, which therefore does not need an additional explanation. Edwards 2012 is for the scaling the Q0, Smith etal 2014a is for the scaling of A0}
 
 \begin{figure}[ht!]
 \includegraphics[width=16cm,trim=0cm 0mm 0.0cm 0mm, clip]{figures/2022-05-07_Ldvar_Tvar_ThatVar_10P_PARext_IA_vs_DA/0D-Highlat_wconst_lext_Ldvar_Tvar_DIN015_10P_Cbased_IAvsDAvsDIF_lineplot_size.png}
 \caption{T3: C biomass of 10 phytoplankton size classes in the IA (solid line) and DA (dotted line) variants (left) and the difference between IA and DA (right).
-%\markus{Here I would suggest two panels.  One for the DA results with log(ESD) on the y-axis, divided into similarly-spaced sections, time on the x-axis and concentration shown as colour.  The other panel would have the same layout but with the colour showing (again) (IA - DA)/DA.}\onur{I tried this but did not like the result that much. I think with these line plots one can more easily see what's going on. But again, I prefer the absolute difference instead of the relative difference.}
-\label{f.T3res}}
+  % \markus{Here I would suggest two panels.  One for the DA results with $\log(\text{ESD})$ on the y-axis, divided into similarly-spaced sections, time on the x-axis and concentration shown as colour.  The other panel would have the same layout but with the colour showing (again) (IA -- DA)/DA.}\onur{I tried this but did not like the result that much. I think with these line plots one can more easily see what's going on. But again, I prefer the absolute difference instead of the relative difference.}
+}\label{f.T3res}
 \end{figure}
 
 %In Fig.~\ref{f.T3res} we present the results of a numerical experiment with 2 phytoplankton functional types, as simulated by IA and DA.The first type characterizes a fast growing `opportunist' species, and the second type characterizes a `gleaner' species, with lower growth rate but higher nutrient affinity. As expected, the first type reaches higher C-biomass during the spring bloom, whereas the second type maintains higher concentrations during summer, under low nutrient concentrations. The predictions by the two variants are almost identical.
@@ -525,7 +524,7 @@ Fig.~\ref{f.T3res} shows results of experiment T3 with 10 phytoplankton size cla
 \FloatBarrier%
 \subsection{T4: Comparing DA and IA variants in a non-closed system}\label{s.resT4}
 
-In T4, we consider competition between two species in an open system forced by fluxes to and from an external environment.  We simulate a surface-mixed-layer (SML), where mixing with the deeper layer can introduce new nutrients (DIN and DIC) and dilute all other variables \markus{(also DON?)}\onur{yes, although this may not be entirely realistic. But I guess this does not matter from a conceptual perspective}, and sedimentation exports detrital C and N out of the system. As typically observed in aquatic environments located in temperate climate zones, we prescribe a seasonally-varying mixing coefficient, with lower values during summer due to thermal stratification. 
+In T4, we consider competition between two species in an open system forced by fluxes to and from an external environment.  We simulate a surface-mixed-layer (SML), where mixing with the deeper layer can introduce new nutrients (DIN and DIC) and dilute all other variables \markus{(also DON?)}\onur{yes, although this may not be entirely realistic. But I guess this does not matter from a conceptual perspective}, and sedimentation exports detrital C and N out of the system. As typically observed in aquatic environments located in temperate climate zones, we prescribe a seasonally-varying mixing coefficient, with lower values during summer due to thermal stratification.
 
 Under such a regime, the system captures the characteristic features of a temperate aquatic environment, with low phytoplankton biomass during winter, a strong spring bloom, depletion of DIN within the SML during summer, and an autumn bloom. Accordingly, the total N in the system shows a strong seasonal pattern (Fig.~\ref{f.T4res}). However, when the external N is taken into account, the global amount of N is conserved by the model, demonstrating that the model behavior is consistent with the mass-balance requirement of such an open system.
 
@@ -732,7 +731,7 @@ We would like to clarify that
 
 %% Please add \clearpage between each table and/or figure. Further guidelines on figures and tables can be found below.
 
-\authorcontribution{OK and SLS conveiced and designed the study with contributions from MP; OK and MP extended the model with fluxes required to satisfy the mass balance; OK implemented the model in FABM\@; PA configured and performed the runs with multiple PFTs; OK drafted the manuscript; MP and SLS contributed to writing and revision of the text.
+\authorcontribution{OK and SLS conceived and designed the study with contributions from MP; OK and MP extended the model with fluxes required to satisfy the mass balance; OK implemented the model in FABM\@; PA configured and performed the runs with multiple PFTs; OK drafted the manuscript; MP and SLS contributed to writing and revision of the text.
 %\onur{anything I might have missed?}
 } %% this section is mandatory
 
