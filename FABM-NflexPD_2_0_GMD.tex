@@ -437,7 +437,7 @@ As a technical note regarding the implementation, using the \verb|phy_Cbased.F90
 % RESULTS
 \section{Results}
 
-\subsection{Accuracy of numerical approximation of temporal derivative of light (T1)}
+\subsection{Accuracy of numerical approximation of the temporal derivative of light (T1)}
 The model is conservative with respect to C and mostly also N (Fig.~\ref{f.T1res}), for both numerically-approximated (PAR:N) and analytically-calculated (PAR:A) temporal derivatives of irradiance (see the details in Section.~\ref{S:DescT1}). The range of deviation (difference between maximum and minimum values obtained throughout the run) of total N is about twofold higher in the PAR:N run than in the PAR:A run (see Fig.~\ref{f.T1res}), and corresponds to about 0.0003\% of the total N in the system. This suggests that the numerical approximation of the derivative of light does introduce some additional error.
 %For PAR:N, total N slightly (about 0.02 \unit{mmolN\ m^{-3}}) increases at the very beginning of the simulation, which is caused by the unknown previous value of $\bar{I}$ during the first day of the simulation (as required by the numerical approximation of $\text{d}\,\bar{I}/\text{d}\,t$), which is set to the current value ($\bar{I}_{0} = \bar{I}_{1} \Rightarrow \text{d}\,\bar{I}/\text{d}\,t = 0$), causing therefore a difference between the total N as simulated by the analytical approach (PAR:A). However, after this initial jump, this new baseline is preserved until the end of the simulation. \markus{This is not shown in Fig.~\ref{f.T1res}: the blue curve starts out almost the same as the yellow curve and loses some N until the end of the simulation.  Maybe you confused this with Fig.~\ref{f.T2res}, top-right panel?}\onur{I guess this is from an old version of the model, and meanwhile this issue is fixed somehow apparently, although I'm not sure how and when really.}
 
@@ -456,7 +456,7 @@ For T2 we consider seasonal variations also in $T$ and $L_{\text{D}}$ (Fig.~\ref
 
 \begin{figure}[ht!]
   \includegraphics[width=12cm,trim=0mm 0mm 0cm 0mm, clip]{figures/2022-05-06a_Ldvar_Tvar_ThatVar_PARext_IA_vs_DA/0D-Highlat_wconst_lext_Ldvar_Tvar_DIN015_CbasedIA_modular_24h_vs_0D-Highlat_wconst_lext_Ldvar_Tvar_DIN015_CbasedDA_modular_24h_cont_abio0_2y.png}
-  \caption{Daily average irradiance, its numerically approximated temporal derivative, and temperature and its numerically approximated temporal derivative, as used in T2.\label{f.T2env}}
+  \caption{Daily average irradiance and temperature and their numerically approximated temporal derivatives used in T2.\label{f.T2env}}
 \end{figure}
 
 
