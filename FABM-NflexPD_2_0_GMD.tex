@@ -136,7 +136,7 @@ The acclimative response of phytoplankton, which adjusts their nutrient and pigm
 In a 0D setup, we did not find evidence for computational advantages of the IA approch over the DA variant.
 In a spatially explicit setup, performance gains 
 %for simulating a small number of phytoplankton groups 
-may be possible, but requires modifications of the physical-flux calculations to account for spatial differences in $Q$ between model grid cells.
+may be possible, but would require modifying the physical-flux calculations to account for spatial differences in $Q$ between model grid cells.
 \end{abstract}
 
 
@@ -146,7 +146,7 @@ may be possible, but requires modifications of the physical-flux calculations to
 %INTRODUCTION
 \introduction%% \introduction[modified heading if necessary]
 
-Elemental stoichiometry and pigment density of phytoplankton exhibit strong variability across environmental conditions, at both the physiological \citep[e.g.,][]{Garcia2016}, and the community level \citep[e.g.,][]{MorenoMartiny2018}. The physiological flexibility is driven by an acclimative re-adjustment of cellular machinery to changes in the availability in nutrients and light, and the fact that the various cellular functions have competing requirements for resources, an example being enzymes, rich in N \citep{Geider2002}, needed for nutrient uptake and photosynthesis. The systematic differences in cellular composition between species may be explained by the typical composition of some species being better or worse suited than that of others for a given resource regime \citep{Klausmeier2004,Arrigo2005,Burson2016}.
+Elemental stoichiometry and pigment density of phytoplankton vary widely across environmental conditions, at both the physiological \citep[e.g.,][]{Garcia2016}, and the community level \citep[e.g.,][]{MorenoMartiny2018}. The physiological flexibility is driven by an acclimative re-adjustment of cellular machinery to changes in the availability in nutrients and light, and the fact that the various cellular functions have competing requirements for resources, an example being enzymes, rich in N \citep{Geider2002}, needed for nutrient uptake and photosynthesis. The systematic differences in cellular composition between species may be explained by the typical composition of some species being better or worse suited than that of others for a given resource regime \citep{Klausmeier2004,Arrigo2005,Burson2016}.
 
 The potential relevance of such variability in the cellular composition of phytoplankton for biogeochemical cycles has been recognized decades ago \citep{Redfield1934,Redfield1958}, and evidence has been building ever since \citep{Lenton2007,Bonachela2016,Pahlow2020}.  Accounting for the acclimative capacity of phytoplankton in models is relevant for predicting the response of ecosystems to environmental change \citep{Kwiatkowski2018,Kerimoglu2018} and for model performance \citep{Ayata2013, Kerimoglu2017, Chen2018a}.  It also can endow models with desirable properties, such as improved model portability \citep{Anugerahanti2021}. However, mechanistic acclimative models typically require additional state variables, usually one for chlorophyll and one for each of the resolved nutrients \citep[e.g.,][]{Geider1998, Flynn2003}, but possibly even more \citep{Bonachela2013, Wirtz2016, Inomura2020}.%\onur{Check again Inomura2020}.
 
@@ -483,7 +483,7 @@ For T2 we consider seasonal variations also in $T$ and $L_{\text{D}}$ (Fig.~\ref
 
 %\subsection{Comparison of IA approach to the fully explicit DA approach (T2b)}
 
-The IA and DA variants produce almost identical results (Figs.~\ref{f.T2res},~\ref{f.T2resdif}). This similarity is expected \citep{Ward2017}. On a closer look, some differences can be detected, such as slightly higher $\text{Phy}_{\text{N}}$ at the peak of the spring bloom and slightly higher $\text{Det}_{\text{N}}$ shortly after the spring bloom in the DA variant.  The differences are due to the re-allocation of part of the fluxes between $\text{Phy}_{\text{N}}$ and DIN according to Eq.~\eqref{eq:sdin3}.  They remain relatively small because (1) the time scale of the optimal regulation of N uptake in the DA variant is short relative to those of phytoplankton growth and the DIN-changes in our simulations, and (2) the strong interaction between phytoplankton and DIN leads to a negative feed-back between the deviations between the IA and DA variants and the extra DIN fluxes caused by variations in $Q$ in the IA variant.
+The IA and DA variants produce almost identical results (Figs.~\ref{f.T2res},~\ref{f.T2resdif}). This similarity is expected \citep{Ward2017}. On a closer look, some differences can be detected, such as slightly higher $\text{Phy}_{\text{N}}$ at the peak of the spring bloom and slightly higher $\text{Det}_{\text{N}}$ shortly after the spring bloom in the DA variant.  The differences are due to the re-allocation of part of the fluxes between $\text{Phy}_{\text{N}}$ and DIN according to Eq.~\eqref{eq:sdin3}.  They remain relatively small because (1) the time scale of the optimal regulation of N uptake in the DA variant is short relative to the time scale of phytoplankton growth and the DIN-changes in our simulations, and (2) the strong interaction between phytoplankton and DIN leads to a negative feed-back between the deviations between the IA and DA variants and the extra DIN fluxes caused by variations in $Q$ in the IA variant.
 
 \begin{figure}[htb!]
 \includegraphics[width=14cm,trim=0cm 11mm 0.0cm 5mm, clip]{figures/2022-05-06a_Ldvar_Tvar_ThatVar_PARext_IA_vs_DA/0D-Highlat_wconst_lext_Ldvar_Tvar_DIN015_CbasedIA_modular_24h_vs_0D-Highlat_wconst_lext_Ldvar_Tvar_DIN015_CbasedDA_modular_24h_cont_abio1_2y.png}
@@ -527,7 +527,9 @@ Fig.~\ref{f.T3res} shows results of experiment T3 with 10 phytoplankton size cla
 In T4, we consider competition between two species in an open system forced by fluxes to and from an external environment.  We simulate a surface-mixed-layer (SML), where mixing with the deeper layer can introduce new nutrients (DIN and DIC) and dilute all other variables, %\markus{(also DON?)}\onur{yes, although this may not be entirely realistic. But I guess this does not matter from a conceptual perspective} 
 and sedimentation exports detrital C and N out of the system. As typically observed in aquatic environments located in temperate climate zones, we prescribe a seasonally-varying mixing coefficient, with lower values during summer due to thermal stratification.
 
-Under such a regime, the system captures the characteristic features of a temperate aquatic environment, with low phytoplankton biomass during winter, a strong spring bloom, depletion of DIN within the SML during summer, and an autumn bloom. Accordingly, the total N in the system shows a strong seasonal pattern (Fig.~\ref{f.T4res}). However, when the external N is taken into account, the global amount of N is conserved by the model, demonstrating that the model behavior is consistent with the mass-balance requirement of such an open system.
+Under such a regime, the system captures the characteristic features of a temperate aquatic environment, with low phytoplankton biomass during winter, a strong spring bloom, depletion of DIN within the SML during summer, and an autumn bloom. Accordingly, the total N in the system shows a strong seasonal pattern (Fig.~\ref{f.T4res}). However, when the external N is taken into account, the global amount of N is consistently conserved by the model
+%, demonstrating that the model behavior is consistent with the mass-balance requirement of such 
+also for an open system.
 
 \begin{figure}[ht!]
 \includegraphics[width=12cm,trim=0cm 18mm 0.0cm 15mm, clip]{figures/2022-05-06c_Ldvar_Tvar_ThatVar_PARext_Dvar_sdet01_IA_vs_DA/0D-Highlat_wconst_lext_Ldvar_Tvar_DIN015_2P_Dmax1_sdet01_CbasedIA_modular_24h_vs_0D-Highlat_wconst_lext_Ldvar_Tvar_DIN015_2P_Dmax1_sdet01_CbasedDA_modular_24h_cont_abio1_2y.png}
@@ -543,7 +545,7 @@ Under such a regime, the system captures the characteristic features of a temper
 % DISCUSSION
 \section{Discussion}
 
-In this study, we present FABM-NflexPD 2.0, a FABM implementation of the FlexPFT model introduced by \citet{Smith2016} with a few minor corrections (see the notes at the end of Appendix~\ref{S:Sol}). The precursor, FABM-NflexPD 1.0 \citep{Kerimoglu2021}, resolves only the N cycle, and the C-cycle is not closed.  FABM-NflexPD 2.0 can resolve both N- and C-cycles in a 0D setup, owing to an additional flux term to maintain the mass balance of N (Sections~\ref{S:DescFlux} and Appendix~\ref{S:Sol}).
+In this study, we present FABM-NflexPD 2.0, a FABM implementation of the FlexPFT model introduced by \citet{Smith2016} with a few minor corrections (see the notes at the end of Appendix~\ref{S:Sol}). The precursor, FABM-NflexPD 1.0 \citep{Kerimoglu2021}, resolves only the N cycle, and does not close the C-cycle.  FABM-NflexPD 2.0 can resolve both N- and C-cycles in a 0D setup, owing to an additional flux term to maintain the mass balance of N (Sections~\ref{S:DescFlux} and Appendix~\ref{S:Sol}).
 
 \subsection{Re-establishing the Mass Balance}
 
@@ -566,7 +568,7 @@ As explained in Section~\ref{S:DescFlux}, reducing the errors in mass balance fo
 \caption{T2: Total $\textrm{d}Q/\textrm{d}t$ and its components as contributed by the changes in DIN, $\bar{I}$, $\textrm{L}_{\textrm{D}}$ and T.\label{f.T2dQdt}}
 \end{figure}
 
- Moreover, although the model, as of its current state, is not ready to be used in a spatial setup (see below), we believe that this study can provide the basis for extension of the model to a potential extension to a spatially explicit framework.
+ Moreover, although the model, as of its current state, is not ready to be used in a spatial setup (see below), we believe that this study can provide the basis for extension of the model for spatially explicit frameworks.
 
 \FloatBarrier
 \subsection{Computational Efficiency and Application Potential}
@@ -743,7 +745,7 @@ We would like to clarify that
 %\disclaimer{TEXT} %% optional section
 
 \begin{acknowledgements}
-This research has been supported by the German Research Foundation, DFG (grant no. KE 1970/2-1, PI\@: OK), the Japan Society for the Promotion of Science, JSPS (PI\@: SLS). %\onur{any other financial support statements needed?}
+This research has been supported by the German Research Foundation, DFG (grant no. KE 1970/2-1, PI\@: OK) and the Japan Society for the Promotion of Science, JSPS (PI\@: SLS). %\onur{any other financial support statements needed?}
 We acknowledge the developers of the open-source software used in this study, foremost FABM and GOTM\@.
 \end{acknowledgements}
 
