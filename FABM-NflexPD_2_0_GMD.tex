@@ -95,7 +95,7 @@
 \Author[1]{Onur}{Kerimoglu}
 \Author[2]{Markus}{Pahlow}
 \Author[3,a]{Prima}{Anugerahanti}
-\Author[3]{S. Lan}{Smith}
+\Author[3]{Sherwood Lan}{Smith}
 
 \affil[1]{Institute for Chemistry and Biology of the Marine Environment, University of Oldenburg, Oldenburg, Germany}
 \affil[2]{GEOMAR Helmholtz Centre for Ocean Research Kiel, Kiel, Germany}
@@ -133,7 +133,7 @@
 \begin{abstract}
 The acclimative response of phytoplankton, which adjusts their nutrient and pigment content in response to changes in ambient light, nutrient levels, and temperature, is an important determinant of observed chlorophyll distributions and biogeochemistry. Acclimative models typically capture this response and its impact on the C:nutrient:Chl ratios of phytoplankton by explicitly resolving the dynamics of these constituents of phytoplankton biomass. The Instantaneous Acclimation (IA) approach only requires resolving the dynamics of a single tracer and calculates the elemental composition assuming instantaneous local equilibrium.  IA can capture the acclimative response without substantial loss of accuracy in both 0D box models and spatially explicit 1D models.  A major draw-back of IA so far has been its inability to maintain mass balance for the elements with unresolved dynamics.  Here we extend the IA model to capture both C and N cycles in a 0D setup, which requires analytical derivation of additional flux terms to account for the temporal changes in cellular N quota, $Q$. We present extensive tests of this model, with regard to the conservation of total C an N, and its behavior in comparison to an otherwise equivalent, fully explicit Dynamic Acclimation (DA) variant, under idealized conditions with variable light and temperature. We also demonstrate a modular implementation of this model in the Framework for Aquatic Biogeochemical Modelling (FABM), which facilitates modelling competition between an arbitrary number of different acclimative phytoplankton types.  
 %The IA variant is $\sim$10\% faster than the fully dynamic variant for 50 phytoplankton groups, but no clear improvement in computation speed is achieved for fewer groups.  
-In a 0D setup, we did not find evidence for computational advantages of the IA approch over the DA variant.
+In a 0D setup, we did not find evidence for computational advantages of the IA approach over the DA variant.
 In a spatially explicit setup, performance gains 
 %for simulating a small number of phytoplankton groups 
 may be possible, but would require modifying the physical-flux calculations to account for spatial differences in $Q$ between model grid cells.
@@ -504,13 +504,15 @@ The IA and DA variants produce almost identical results (Figs.~\ref{f.T2res},~\r
 
 
 \FloatBarrier%
-\subsection{T3: Comparing DA and IA variants in simulating in simulating multiple PFTs}\label{s.resT3}
+\subsection{T3: Comparing DA and IA variants in simulating multiple PFTs}\label{s.resT3}
 
-Fig.~\ref{f.T3res} shows results of experiment T3 with 10 phytoplankton size classes for our IA and DA variants. Annually-averaged concentrations decrease with cell size, and the larger classes exhibit stronger seasonal relative variations. Under other environmental conditions, e.g., different initial conditions or temporal variability, different outcomes can emerge \citep[see, e.g.,][]{Taherzadeh2017}, but this is outside of the scope of our current study.  C biomass of phytoplankton by the two variants is near-identical.  However, differences do exist during the spring bloom, with concentrations of smaller groups being higher in the IA than in the DA variant, and vice versa for the larger groups. Concentrations of the larger groups are higher in the DA variant, likely because the extra DIN derived in the IA variant from the increasing cell quotas during the spring bloom benefits the larger cells less than the smaller cells as imposed by the allometric relationships \citep[as in][]{Grover1991a,Litchman2009}. %\onur{and I guess the reason for the concentration of smaller groups being higher in the IA variant is the faster optimization of Q, and therefore fV, but I'm not sure. Any other ideas?} \markus{I think the affinity-scaling dominates this part.  Also, above we cite \citet{Edwards2012}, \citet{Smith2014a}, etc.\ for the scaling, which way is correct?} \onur{i realized now that the small cells are growing faster in the IA variant exactly because the large cells grow less, which therefore does not need an additional explanation. Edwards 2012 is for the scaling the Q0, Smith etal 2014a is for the scaling of A0}
+Fig.~\ref{f.T3res} shows results of experiment T3 with 10 phytoplankton size classes for our IA and DA variants. Annually-averaged concentrations decrease with cell size, and the larger classes exhibit stronger seasonal relative variations. Under other environmental conditions, e.g., different initial conditions or temporal variability, different outcomes can emerge \citep[see, e.g.,][]{Taherzadeh2017}, but this is outside of the scope of our current study.  C biomass of phytoplankton by the two variants is near-identical.  However, differences do exist during the spring bloom, with concentrations of smaller groups being higher in the IA than in the DA variant, and vice versa for the larger groups. Concentrations of the larger groups are higher in the DA variant, likely because the extra DIN derived in the IA variant from the increasing cell quotas during the spring bloom benefits the larger cells less than the smaller cells as imposed by the allometric relationships \citep[as in][]{Grover1991a,Litchman2009}.
+
+%\onur{and I guess the reason for the concentration of smaller groups being higher in the IA variant is the faster optimization of Q, and therefore fV, but I'm not sure. Any other ideas?} \markus{I think the affinity-scaling dominates this part.  Also, above we cite \citet{Edwards2012}, \citet{Smith2014a}, etc.\ for the scaling, which way is correct?} \onur{i realized now that the small cells are growing faster in the IA variant exactly because the large cells grow less, which therefore does not need an additional explanation. Edwards 2012 is for the scaling the Q0, Smith etal 2014a is for the scaling of A0}
 
 \begin{figure}[ht!]
-\includegraphics[width=16cm,trim=0cm 0mm 0.0cm 0mm, clip]{figures/2022-05-07_Ldvar_Tvar_ThatVar_10P_PARext_IA_vs_DA/0D-Highlat_wconst_lext_Ldvar_Tvar_DIN015_10P_Cbased_IAvsDAvsDIF_lineplot_size.png}
-\caption{T3: C biomass of 10 phytoplankton size classes in the IA (solid line) and DA (dotted line) variants (left) and the difference between IA and DA (right).
+\includegraphics[width=16cm,trim=0cm 0mm 0.0cm 0mm, clip]{figures/2022-05-07_Ldvar_Tvar_ThatVar_10P_PARext_IA_vs_DA/0D-Highlat_wconst_lext_Ldvar_Tvar_DIN015_10P_Cbased_IAvsDAvsDIF_lineplot_size_totphy.png}
+\caption{T3: Top row: C biomass of 10 phytoplankton size classes in the IA (solid line) and DA (dotted line) variants (left) and the difference between IA and DA (right). Bottom row: sums of phytoplankton C biomass simulated by the IA and DA variants (left) and their differences (right).
   % \markus{Here I would suggest two panels.  One for the DA results with $\log(\text{ESD})$ on the y-axis, divided into similarly-spaced sections, time on the x-axis and concentration shown as colour.  The other panel would have the same layout but with the colour showing (again) (IA -- DA)/DA.}\onur{I tried this but did not like the result that much. I think with these line plots one can more easily see what's going on. But again, I prefer the absolute difference instead of the relative difference.}
 }\label{f.T3res}
 \end{figure}
@@ -545,7 +547,7 @@ also for an open system.
 % DISCUSSION
 \section{Discussion}
 
-In this study, we present FABM-NflexPD 2.0, a FABM implementation of the FlexPFT model introduced by \citet{Smith2016} with a few minor corrections (see the notes at the end of Appendix~\ref{S:Sol}). The precursor, FABM-NflexPD 1.0 \citep{Kerimoglu2021}, resolves only the N cycle, and does not close the C-cycle.  FABM-NflexPD 2.0 can resolve both N- and C-cycles in a 0D setup, owing to an additional flux term to maintain the mass balance of N (Sections~\ref{S:DescFlux} and Appendix~\ref{S:Sol}).
+In this study, we present FABM-NflexPD 2.0, a FABM implementation of the FlexPFT model introduced by \citet{Smith2016} with a few minor corrections (see the notes at the end of Appendix~\ref{S:Sol}). The precursor, FABM-NflexPD 1.0 \citep[K21][]{Kerimoglu2021}, resolves only the N cycle, and does not close the C-cycle.  FABM-NflexPD 2.0, which we present here, can resolve both N- and C-cycles in a 0D setup, owing to an additional flux term to maintain the mass balance of N (Sections~\ref{S:DescFlux} and Appendix~\ref{S:Sol}).
 
 \subsection{Re-establishing the Mass Balance}
 
@@ -590,8 +592,11 @@ we have not found evidence for performance advantages of the IA approach in a 0D
 %even for simulating fewer phytoplankton groups.
 
 %CONCLUSION
-%\section{Conclusions}
-
+\section{Conclusion}
+%Take home messages 
+%What was achieved, what is left for future work.\\
+%Remaining challanges to achieve an efficient model that can mimic the expensive full quota model.
+Accounting for the variabilities in cellular composition of phytoplankton is required for a realistic representation of the nutrient cycles, which, however, results in additional state variables, and consequently additional computational costs. As a remedy, \citet{Smith2016} proposed the Instantaneous Acclimation (IA) approach, which approximates the variabilities in the cellular composition that was described by a Dynamic Acclimation (DA) described by \citet{Pahlowetal13}, but without using an additional state variable for N. As long as only one of C or N are fully resolved (i.e., their mass balance is globally closed), this approach, without requiring additional flux terms, is fully conservative, and thus, can be used, e.g., for ecologically oriented questions \citep[e.g.][]{Kerimoglu2021}. Here, we provided a formally consistent and complete explanation of how the mass balance can be nearly re-established. Through various tests in 0D setups, we demonstrated that under stable environmental conditions, the fully explicit model can be closely reproduced, but that during transients, differences in specific predictions between the IA and DA variants can emerge, and that mass balance can be slightly compromised. Here we were concerned only with variabilities, and a generalization of this approach to account for spatial variabilities requires extension of this framework, which can be aimed in future work. In our 0D setups, we did not find evidence for improved computational efficiency, however gains in spatially expicit setups are possible, given that the number of state variables to be transported is known to be a costly process.
 
 \codeavailability{For running the model and reproducing the results presented in this study, FABM (submodule version that matches GOTM v6.0.0) needs to be installed with its 0d driver as the `host' (see \url{https://github.com/fabm-model/fabm/wiki/Building-and-installing}). The version of the FABM-NflexPD used in this manuscript has been stored in a Zenodo repository, accessible under: \url{https://doi.org/10.5281/zenodo.6600755}. Instructions for compiling FABM-NflexPD for GOTM-FABM and our 0D setup are provided in README.md. The \texttt{src} folder contains the Fortran code. The model was implemented as two separate modules: the \texttt{phy.F90} module that describes phytoplankton growth and the \texttt{abio.F90} module that describes everything other than phytoplankton (See Fig.~1 in \citet{Kerimoglu2021}). The phytoplankton module can reproduce the behavior of both the IA and DA variants considered in the manuscript by setting model parameters. The \texttt{testcases} folder contains the configuration (yaml) file that was used to produce the results for T4 in this manuscript, which can be simplified or extended to conduct the other tests.}
 
