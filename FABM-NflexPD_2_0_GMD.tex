@@ -350,8 +350,9 @@ As a technical remark regarding the FABM implementation of the model: Eqs.~\eqre
       \end{description}
     \end{subequations}
     The temporal derivatives found by the numerical and analytical approaches are almost identical (Fig.~\ref{f.T1light}).
+    
     \begin{figure}[ht!]
-    \includegraphics[width=12cm,trim=0mm 54mm 0cm 0mm, clip]{figures/2022-03-22a_Ld1_T20_ThatVar_PARint_vs_PARext/0D-Highlat_wconst_lext_Ld1_T20_CbasedIA_modular_24h_vs_0D-Highlat_wconst_lint_Ld1_T20_CbasedIA_modular_24h_cont_abio0_1y.png}
+    \includegraphics[width=12cm,trim=0mm 0mm 0cm 0mm, clip]{figures_final/f1.pdf}
     \caption{Daily average irradiance and its temporal derivative, as extracted from the simulation outputs generated for T1. PAR:N (solid blue line) is the model version where the temporal derivative of irradiance is approximated numerically; PAR:A (dashed orange line): both irradiance and its temporal derivative are calculated analytically.\label{f.T1light}}
     \end{figure}
 
@@ -390,7 +391,7 @@ As a technical note regarding the implementation, using the \verb|phy_Cbased.F90
 The model is conservative with respect to C and mostly also N (Fig.~\ref{f.T1res}), for both numerically-approximated (PAR:N) and analytically-calculated (PAR:A) temporal derivatives of irradiance (see the details in Section.~\ref{S:DescT1}). The range of deviation (difference between maximum and minimum values obtained throughout the run) of total N is about twofold higher in the PAR:N run than in the PAR:A run (see Fig.~\ref{f.T1res}), and corresponds to about 0.0003\% of the total N in the system. This suggests that the numerical approximation of the derivative of light does introduce some additional error.
 
 \begin{figure}[ht!]
-\includegraphics[width=12cm,trim=0cm 16.8cm 0.0cm 5mm, clip]{figures/2022-03-22a_Ld1_T20_ThatVar_PARint_vs_PARext/0D-Highlat_wconst_lext_Ld1_T20_CbasedIA_modular_24h_vs_0D-Highlat_wconst_lint_Ld1_T20_CbasedIA_modular_24h_cont_abio1_1y.png}
+\includegraphics[width=12cm,trim=0cm 0cm 0.0cm 0mm, clip]{figures_final/f2.pdf}
 \caption{T1: Carbon (left) and nitrogen (right) pools for the PAR:N (solid blue line), and PAR:A (dashed orange line) simulations.
 \label{f.T1res}}
 \end{figure}
@@ -402,20 +403,20 @@ The model is conservative with respect to C and mostly also N (Fig.~\ref{f.T1res
 For T2 we consider seasonal variations also in $T$ and $L_{\text{D}}$ (Fig.~\ref{f.T2env}).  Note that variations in $L_{\text{D}}$ also affect the seasonal cycles of $\bar{I}$ and $\text{d}\bar{I}/\text{d}t$.
 
 \begin{figure}[ht!]
-  \includegraphics[width=12cm,trim=0mm 0mm 0cm 0mm, clip]{figures/2022-05-06a_Ldvar_Tvar_ThatVar_PARext_IA_vs_DA/0D-Highlat_wconst_lext_Ldvar_Tvar_DIN015_CbasedIA_modular_24h_vs_0D-Highlat_wconst_lext_Ldvar_Tvar_DIN015_CbasedDA_modular_24h_cont_abio0_2y.png}
+  \includegraphics[width=12cm,trim=0mm 0mm 0cm 0mm, clip]{figures_final/f3.pdf}
   \caption{Daily average irradiance and temperature and their numerically approximated temporal derivatives used in T2.\label{f.T2env}}
 \end{figure}
 
 The IA and DA variants produce almost identical results (Figs.~\ref{f.T2res},~\ref{f.T2resdif}). This similarity is expected \citep{Ward2017}. On a closer look, some differences can be detected, such as slightly higher $\text{Phy}_{\text{N}}$ at the peak of the spring bloom and slightly higher $\text{Det}_{\text{N}}$ shortly after the spring bloom in the DA variant.  The differences are due to the re-allocation of part of the fluxes between $\text{Phy}_{\text{N}}$ and DIN according to Eq.~\eqref{eq:sdin3}.  They remain relatively small because (1) the time scale of the optimal regulation of N uptake in the DA variant is short relative to the time scale of phytoplankton growth and the DIN-changes in our simulations, and (2) the strong interaction between phytoplankton and DIN leads to a negative feed-back between the deviations between the IA and DA variants and the extra DIN fluxes caused by variations in $Q$ in the IA variant.
 
 \begin{figure}[htb!]
-\includegraphics[width=14cm,trim=0cm 11mm 0.0cm 5mm, clip]{figures/2022-05-06a_Ldvar_Tvar_ThatVar_PARext_IA_vs_DA/0D-Highlat_wconst_lext_Ldvar_Tvar_DIN015_CbasedIA_modular_24h_vs_0D-Highlat_wconst_lext_Ldvar_Tvar_DIN015_CbasedDA_modular_24h_cont_abio1_2y.png}
+\includegraphics[width=14cm,trim=0cm 0mm 0.0cm 0mm, clip]{figures_final/f4.pdf}
 \caption{T2: Carbon (left) and nitrogen (right) pools for the IA (solid blue line) and DA (dashed orange line) variants with variable daylength and temperature.
 \label{f.T2res}}
 \end{figure}
 
 \begin{figure}[htb!]
-\includegraphics[width=14cm,trim=0cm 11mm 0.0cm 5mm, clip]{figures/2022-05-06a_Ldvar_Tvar_ThatVar_PARext_IA_vs_DA/IA-DIF-DA_cont_abio1_1y.png}
+\includegraphics[width=14cm,trim=0cm 0mm 0.0cm 0mm, clip]{figures_final/f5.pdf}
 \caption{T2: Differences between the IA and DA variants for the quantities shown in Fig.~\ref{f.T2res}.\label{f.T2resdif}}
 \end{figure}
 
@@ -426,7 +427,7 @@ The IA and DA variants produce almost identical results (Figs.~\ref{f.T2res},~\r
 Fig.~\ref{f.T3res} shows results of experiment T3 with 10 phytoplankton size classes for our IA and DA variants. Annually-averaged concentrations decrease with cell size, and the larger classes exhibit stronger seasonal relative variations. Under other environmental conditions, e.g., different initial conditions or temporal variability, different outcomes can emerge \citep[see, e.g.,][]{Taherzadeh2017}, but this is outside of the scope of our current study.  C biomass of phytoplankton by the two variants is near-identical.  However, differences do exist during the spring bloom, with concentrations of smaller groups being higher in the IA than in the DA variant, and vice versa for the larger groups. Concentrations of the larger groups are higher in the DA variant, likely because the extra DIN derived in the IA variant from the increasing cell quotas during the spring bloom benefits the larger cells less than the smaller cells as imposed by the allometric relationships \citep[as in][]{Grover1991a,Litchman2009}.
 
 \begin{figure}[ht!]
-\includegraphics[width=16cm,trim=0cm 0mm 0.0cm 0mm, clip]{figures/2022-05-07_Ldvar_Tvar_ThatVar_10P_PARext_IA_vs_DA/0D-Highlat_wconst_lext_Ldvar_Tvar_DIN015_10P_Cbased_IAvsDAvsDIF_lineplot_size_totphy.png}
+\includegraphics[width=16cm,trim=0cm 0mm 0.0cm 0mm, clip]{figures_final/f6.pdf}
 \caption{T3: Top row: C biomass of 10 phytoplankton size classes in the IA (solid line) and DA (dotted line) variants (left) and the difference between IA and DA (right). Bottom row: sums of phytoplankton C biomass simulated by the IA and DA variants (left) and their differences (right).
 }\label{f.T3res}
 \end{figure}
@@ -439,7 +440,7 @@ In T4, we consider competition between two species in an open system forced by f
 Under such a regime, the system captures the characteristic features of a temperate aquatic environment, with low phytoplankton biomass during winter, a strong spring bloom, depletion of DIN within the SML during summer, and an autumn bloom. Accordingly, the total N in the system shows a strong seasonal pattern (Fig.~\ref{f.T4res}). However, when the external N is taken into account, the global amount of N is consistently conserved by the model also for an open system.
 
 \begin{figure}[ht!]
-\includegraphics[width=12cm,trim=0cm 18mm 0.0cm 15mm, clip]{figures/2022-05-06c_Ldvar_Tvar_ThatVar_PARext_Dvar_sdet01_IA_vs_DA/0D-Highlat_wconst_lext_Ldvar_Tvar_DIN015_2P_Dmax1_sdet01_CbasedIA_modular_24h_vs_0D-Highlat_wconst_lext_Ldvar_Tvar_DIN015_2P_Dmax1_sdet01_CbasedDA_modular_24h_cont_abio1_2y.png}
+\includegraphics[width=12cm,trim=0cm 0mm 0.0cm 0mm, clip]{figures_final/f7.pdf}
 \caption{T4: Annual variations of global C and N ($\text{total C} + \text{Ext}_{\text{C}}$ and $\text{total N} + \text{Ext}_{\text{N}}$, see Eq.~\ref{eq:Xext}), total C and N ($\sum\text{Phy}_{\text{C}}^j + \text{DIC} + \text{DOC} + \text{Det}_{\text{C}}$ and $\sum\text{Phy}_{\text{N}}^j + \text{DIN} + \text{DON} + \text{Det}_{\text{N}}$) and other state variables that trace individual C and N pools for a seasonally varying mixing regime in an open system.
 \label{f.T4res}}
 \end{figure}
@@ -462,7 +463,7 @@ Through detailed tests, we show that N is conserved  to a very large degree (for
 As explained in Section~\ref{S:DescFlux}, reducing the errors in mass balance for N requires explicitly calculating the changes in N quota over time, i.e., $\textrm{d}Q/\textrm{d}t$, which in turn requires calculation of individual components of this change driven by different environmental factors, namely, DIN, $\bar{I}$, T and $\textrm{L}_{\textrm{D}}$.  Under the idealized setup of T2, changes in DIN are clearly the dominant source of variation in Q.  However, contributions by other factors are non-negligible (Fig.~\ref{f.T2dQdt}). In other setups, the relative importance of various environmental factors may be different. Relevance of these secondary factors to the elemental stoichiometry of phytoplankton is an often neglected aspect. We expect our mathematically explicit treatment of this issue to inspire and contribute to future endeavors to establish an analytical framework for investigating the mechanistic underpinnings of plankton physiology.
 
 \begin{figure}[ht!]
-\includegraphics[width=12cm,trim=0cm 0mm 0.0cm 0mm, clip]{figures/2022-05-06a_Ldvar_Tvar_ThatVar_PARext_IA_vs_DA/0D-Highlat_wconst_lext_Ldvar_Tvar_DIN015_CbasedIA_modular_24h_vs_0D-Highlat_wconst_lext_Ldvar_Tvar_DIN015_CbasedDA_modular_24h_cont_phy-4_2y.png}
+\includegraphics[width=12cm,trim=0cm 0mm 0.0cm 0mm, clip]{figures_final/f8.pdf}
 \caption{T2: Total $\textrm{d}Q/\textrm{d}t$ and its components as contributed by the changes in DIN, $\bar{I}$, $\textrm{L}_{\textrm{D}}$ and T.\label{f.T2dQdt}}
 \end{figure}
 
