@@ -131,12 +131,7 @@
 
 
 \begin{abstract}
-The acclimative response of phytoplankton, which adjusts their nutrient and pigment content in response to changes in ambient light, nutrient levels, and temperature, is an important determinant of observed chlorophyll distributions and biogeochemistry. Acclimative models typically capture this response and its impact on the C:nutrient:Chl ratios of phytoplankton by explicitly resolving the dynamics of these constituents of phytoplankton biomass. The Instantaneous Acclimation (IA) approach only requires resolving the dynamics of a single tracer and calculates the elemental composition assuming instantaneous local equilibrium.  IA can capture the acclimative response without substantial loss of accuracy in both 0D box models and spatially explicit 1D models.  A major draw-back of IA so far has been its inability to maintain mass balance for the elements with unresolved dynamics.  Here we extend the IA model to capture both C and N cycles in a 0D setup, which requires analytical derivation of additional flux terms to account for the temporal changes in cellular N quota, $Q$. We present extensive tests of this model, with regard to the conservation of total C an N, and its behavior in comparison to an otherwise equivalent, fully explicit Dynamic Acclimation (DA) variant, under idealized conditions with variable light and temperature. We also demonstrate a modular implementation of this model in the Framework for Aquatic Biogeochemical Modelling (FABM), which facilitates modelling competition between an arbitrary number of different acclimative phytoplankton types.  
-%The IA variant is $\sim$10\% faster than the fully dynamic variant for 50 phytoplankton groups, but no clear improvement in computation speed is achieved for fewer groups.  
-In a 0D setup, we did not find evidence for computational advantages of the IA approach over the DA variant.
-In a spatially explicit setup, performance gains 
-%for simulating a small number of phytoplankton groups 
-may be possible, but would require modifying the physical-flux calculations to account for spatial differences in $Q$ between model grid cells.
+The acclimative response of phytoplankton, which adjusts their nutrient and pigment content in response to changes in ambient light, nutrient levels, and temperature, is an important determinant of observed chlorophyll distributions and biogeochemistry. Acclimative models typically capture this response and its impact on the C:nutrient:Chl ratios of phytoplankton by explicitly resolving the dynamics of these constituents of phytoplankton biomass. The Instantaneous Acclimation (IA) approach only requires resolving the dynamics of a single tracer and calculates the elemental composition assuming instantaneous local equilibrium.  IA can capture the acclimative response without substantial loss of accuracy in both 0D box models and spatially explicit 1D models.  A major draw-back of IA so far has been its inability to maintain mass balance for the elements with unresolved dynamics.  Here we extend the IA model to capture both C and N cycles in a 0D setup, which requires analytical derivation of additional flux terms to account for the temporal changes in cellular N quota, $Q$. We present extensive tests of this model, with regard to the conservation of total C an N, and its behavior in comparison to an otherwise equivalent, fully explicit Dynamic Acclimation (DA) variant, under idealized conditions with variable light and temperature. We also demonstrate a modular implementation of this model in the Framework for Aquatic Biogeochemical Modelling (FABM), which facilitates modelling competition between an arbitrary number of different acclimative phytoplankton types. In a 0D setup, we did not find evidence for computational advantages of the IA approach over the DA variant. In a spatially explicit setup, performance gains may be possible, but would require modifying the physical-flux calculations to account for spatial differences in $Q$ between model grid cells.
 \end{abstract}
 
 
@@ -148,7 +143,7 @@ may be possible, but would require modifying the physical-flux calculations to a
 
 Elemental stoichiometry and pigment density of phytoplankton vary widely across environmental conditions, at both the physiological \citep[e.g.,][]{Garcia2016}, and the community level \citep[e.g.,][]{MorenoMartiny2018}. The physiological flexibility is driven by an acclimative re-adjustment of cellular machinery to changes in the availability in nutrients and light, and the fact that the various cellular functions have competing requirements for resources, an example being enzymes, rich in N \citep{Geider2002}, needed for nutrient uptake and photosynthesis. The systematic differences in cellular composition between species may be explained by the typical composition of some species being better or worse suited than that of others for a given resource regime \citep{Klausmeier2004,Arrigo2005,Burson2016}.
 
-The potential relevance of such variability in the cellular composition of phytoplankton for biogeochemical cycles has been recognized decades ago \citep{Redfield1934,Redfield1958}, and evidence has been building ever since \citep{Lenton2007,Bonachela2016,Pahlow2020}.  Accounting for the acclimative capacity of phytoplankton in models is relevant for predicting the response of ecosystems to environmental change \citep{Kwiatkowski2018,Kerimoglu2018} and for model performance \citep{Ayata2013, Kerimoglu2017, Chen2018a}.  It also can endow models with desirable properties, such as improved model portability \citep{Anugerahanti2021}. However, mechanistic acclimative models typically require additional state variables, usually one for chlorophyll and one for each of the resolved nutrients \citep[e.g.,][]{Geider1998, Flynn2003}, but possibly even more \citep{Bonachela2013, Wirtz2016, Inomura2020}.%\onur{Check again Inomura2020}.
+The potential relevance of such variability in the cellular composition of phytoplankton for biogeochemical cycles has been recognized decades ago \citep{Redfield1934,Redfield1958}, and evidence has been building ever since \citep{Lenton2007,Bonachela2016,Pahlow2020}.  Accounting for the acclimative capacity of phytoplankton in models is relevant for predicting the response of ecosystems to environmental change \citep{Kwiatkowski2018,Kerimoglu2018} and for model performance \citep{Ayata2013, Kerimoglu2017, Chen2018a}.  It also can endow models with desirable properties, such as improved model portability \citep{Anugerahanti2021}. However, mechanistic acclimative models typically require additional state variables, usually one for chlorophyll and one for each of the resolved nutrients \citep[e.g.,][]{Geider1998, Flynn2003}, but possibly even more \citep{Bonachela2013, Wirtz2016, Inomura2020}.
 
 However, additional state variables can increase the computational costs significantly in spatially explicit setups \citep{Fulton2003}, especially for models with 100s of phytoplankton groups \citep[e.g.,][]{Follows2007, Dutkiewicz2020}. As a potential remedy to this problem, the `Instantaneous Acclimation' (IA) approach can be used, where the changes in cellular composition are not dynamically tracked, but adjust instantaneously to the resource environment. For instance, the FlexPFT model \citep{Smith2016} follows an IA approach, where the Chl:C and C:N ratios instantaneously assume the optimal ratios for balanced growth \citep{Pahlowetal13}.  \citet{Ward2017} compared a fully explicit, classical Caperon/Droop model \citep{Caperon1968,Droop1968} to its IA counterpart, and found that across a range of environmental settings, the predictions of the two approaches matched closely in a 0D setup.  \citet{Kerimoglu2021} introduced FABM-NflexPD 1.0, a 1D setup of the FlexPFT model in the Framework of Aquatic Biogeochemical Models \citep[FABM,][]{Bruggeman2014} and showed that the predictions of the IA variant of the model largely matched those of the fully explicit `Dynamic Acclimation' (DA) counterpart, except for minor differences during the transitions from winter to spring and from autumn to winter.
 
@@ -158,29 +153,18 @@ FABM-NflexPD 1.0 only tracks N, which may be sufficient for some ecological appl
  \item [T2] test of the IA approach in a more realistic setup, where temperature and day length also vary over time, while also accounting for light attenuation by phytoplankton, and comparison against a fully explicit DA variant 
  \item [T3] simulation with multiple phytoplankton groups
  \item [T4] simulation in an open system where N and C are not conserved
- %\item [T4] \onur{done} application of the model in an idealistic 1D setup and assessment of mass conservation \textcolor{red}{\{Onur: this test failed: in 1D, model does not seem to be mass conservative, see Section~\ref{s.resT4}.\}}
 \end{description}
 
-
-% \begin{figure}[htb]
-%   \centering
-%   \includegraphics[width=12cm]{?.pdf}
-%   \caption{\label{?}}
-% \end{figure}
 
 %MODEL DESCRIPTION
 \section{Model Description}
 
-%\markus{Do we need DOM?  Including DOC and DON in the detritus and reducing the rate of hydrolysis by 1/2 yields almost the same results.  So, in 0D including DOM makes no difference.}
 
-FABM-NflexPD 2.0 differs from FABM-NflexPD 1.0 (K21) 
-%in two major respects.  (1) The new version maintains mass balance for both C and N, instead of only N\@.  (2) We restrict this version to 0D for simplicity, which allows subsuming the DOM compartment in the detritus compartment, leaving 5 state variables to represent dissolved inorganic C and N (DIC and DIN), phytoplankton C ($\text{Phy}_{\text{C}}$), and detritus C and N ($\text{Det}_{\text{C}}$ and $\text{Det}_{\text{N}}$). 
-mainly by tracing the dissolved inorganic carbon pool, DIC, such that now the model is ideally able to conserve both the total C and N in the system, and not only N as in K21. Moreover, we consider dilution/mixing and sinking terms for simulating an open system, such as a chemostat or a surface mixed layer (SML). As in K21, we consider here a DA variant to compare against the IA variant, but not a fixed stoichiometry variant unlike in K21. As a final difference, for the IA, we trace the C content in phytoplankton with a state variable, instead of the N content as in K21. The rates of change of the state variables are:
+FABM-NflexPD 2.0 differs from FABM-NflexPD 1.0 (K21) mainly by tracing the dissolved inorganic carbon pool, DIC, such that now the model is ideally able to conserve both the total C and N in the system, and not only N as in K21. Moreover, we consider dilution/mixing and sinking terms for simulating an open system, such as a chemostat or a surface mixed layer (SML). As in K21, we consider here a DA variant to compare against the IA variant, but not a fixed stoichiometry variant unlike in K21. As a final difference, for the IA, we trace the C content in phytoplankton with a state variable, instead of the N content as in K21. The rates of change of the state variables are:
 
 \begin{subequations}\label{eq:phy}
  \begin{flalign}
   \label{eq:sPhyC}
-  %\frac{\mathrm{d}\, \text{Phy}_{\text{C}}}{\mathrm{d}\, t} &= \underbrace{F_{\text{DIC}-\text{Phy}_{\text{C}}}}_{\text{Net uptake}} - \underbrace{F_{\text{Phy}_{\text{C}}-\text{Det}_{\text{C}}}}_{\text{Mortality}} - \underbrace{D \cdot \text{Phy}_{\text{C}}}_{\text{Dilution}}\\
   \frac{\mathrm{d}\, \text{Phy}_{\text{C}}}{\mathrm{d}\, t} &= F_{\text{DIC}-\text{Phy}_{\text{C}}} - F_{\text{Phy}_{\text{C}}-\text{Det}_{\text{C}}} - D \cdot \text{Phy}_{\text{C}}\\
   \label{eq:sPhyN}
   \frac{\mathrm{d}\, \text{Phy}_{\text{N}}}{\mathrm{d}\, t} &= \underbrace{F_{\text{DIN}-\text{Phy}_{\text{N}}}}_{\text{Net uptake}} - \underbrace{F_{\text{Phy}_{\text{N}}-\text{Det}_{\text{N}}}}_{\text{Mortality}} - \underbrace{D \cdot \text{Phy}_{\text{N}}}_{\text{Dilution}} &  \{\text{DA}\}
@@ -229,8 +213,6 @@ where $Q_{0}$ and $\zeta_{\text{N}}$ are the subsistence N quota, and cost of N 
   \label{eq:growth}
   F_{\text{DIC}-\text{Phy}_{\text{C}}} = \mu \cdot \text{Phy}_{\text{C}}
 \end{equation}
-% This term is used in this updated model version also to track the DIC concentration, which in turn enables tracing the total C in the system.
-% Note that representing the C uptake and respiration terms with a lumped term $F_{\text{DIC}-\text{Phy}_{\text{C}}}$ in Eq.~\eqref{eq:dic} is based on the assumption that the respiration terms (see Eq.~7 in K21) are added back to DIC, and would have to be separated if CO2 was explicitly resolved. (M removed this because both C uptake and respiration are CO2 fluxes)
 The second term in Eq.~\eqref{eq:sPhyC}, $F_{\text{Phy}_{\text{C}}-\text{Det}_{\text{C}}}$, represents the mortality of phytoplankton:
 \begin{flalign}
   \label{eq:mortC}
@@ -247,25 +229,8 @@ The hydrolysis and remineralization fluxes are calculated as first-order reactio
   F_{\text{DO}X-\text{DI}X} &= r_{\text{rem}} \cdot \text{DO}X\ \text{,} \quad X\in\{\text{C, N}\}
 \end{flalign}
 
-%given by the division of N flux from phytoplankton to detritus, $F_{\text{Phy}_{\text{N}}-\text{Det}_{\text{N}}}$ by $Q$
 
 \subsection{N fluxes between DIN and Phytoplankton}\label{S:DescFlux}
-% The flux from DIN to $\text{Phy}_{\text{N}}$ given by phytoplankton N uptake, $V_{\text{N}}$:
-% \begin{equation} \label{eq:dphyNdt}
-%   F_{\text{DIN}-\text{Phy}_{\text{N}}} = V_{\text{N}} = F_{\text{DIC -- Phy}_{\text{C}}} \cdot Q = \mu \cdot \text{Phy}_{\text{C}} \cdot Q
-% \end{equation}
-% The rate of change of $\text{Phy}_{\text{N}}$ resulting from Eqs.~\eqref{eq:sPhyC} --~\eqref{eq:dim}  is the complement of the sum of Eqs.~\eqref{eq:sDetN},~\eqref{eq:don} and~\eqref{eq:sdin}, apart from the dilution and sinking terms for $\text{Det}_{\text{N}}$, DON and DIN, less the dilution of $\text{Phy}_{\text{N}}$:
-% \begin{equation}
-%   \label{eq:phyn_def}
-%   \frac{\mathrm{d}\,\text{Phy}_{\text{N}}}{\mathrm{d}\,t} = F_{\text{DIN}-\text{Phy}_{\text{N}}} - F_{\text{Phy}_{\text{N}}-\text{Det}_{\text{N}}}  - D \cdot \text{Phy}_{\text{N}} = \frac{\mathrm{d}\,\text{Phy}_{\text{C}}}{\mathrm{d}\,t} \cdot Q
-% \end{equation}
-% However, $Q$ changes over time, which also contributes to the rate of change of $\text{Phy}_{\text{N}}$.  This becomes clear by differentiating the rate of change of $\text{Phy}_{\text{N}}$ via the product rule:
-% \begin{equation}
-%   \label{eq:phyn_def2}
-%   \frac{\mathrm{d}\,\text{Phy}_{\text{N}}}{\mathrm{d}\,t} = \frac{\mathrm{d}\,(\text{Phy}_{\text{C}}\cdot Q)}{\mathrm{d}\,t}
-%   = \frac{\mathrm{d}\,\text{Phy}_{\text{C}}}{\mathrm{d}\,t} \cdot Q + \text{Phy}_{\text{C}} \cdot \frac{\mathrm{d}\,Q}{\mathrm{d}\,t} \tag{\ref{eq:phyn_def}.2}
-% \end{equation}
-% Thus, the second term in the right-hand side of Eq.~\eqref{eq:phyn_def2}, $\text{Phy}_{\text{C}}\cdot \mathrm{d}\,Q / \mathrm{d}\, t$, is not accounted for by our system of Eqs.~\eqref{eq:sPhyC} --~\eqref{eq:dim} because $\text{Phy}_{\text{N}}$ is not a state variable.  Following \citet{Smith2016}, we subtract it from the differential equation for DIN\@:
 For tracking the $\text{Phy}_{\text{N}}$ for the DA variant (Eq.~\ref{eq:sPhyN}), and the DIN for both variants (Eq.~\ref{eq:sdin}), the flux from DIN to $\text{Phy}_{\text{N}}$ needs to be known. As in K21, for the DA variant, it is simply the product of a specific uptake rate and the phytoplankton C biomass:
 \begin{equation}
   \label{eq:Fdinphyn}
@@ -363,7 +328,6 @@ As a technical remark regarding the FABM implementation of the model: Eqs.~\eqre
 \end{table*}
 
 \subsection{Test setups and model operation}\label{S:DescSetup}
-    %\subsubsection{0D setup (T1-T3)}
     For all tests, the model is operated in a spatially homogeneous 1-box setup, using the 0D driver of FABM \citep{Bruggeman2014}. With this 0D setup, numerical solutions are obtained using a 4\textsuperscript{th} order Runge-Kutta method with a time step of 60 seconds. Model forcing applied in our 0D setup varies among different tests, as explained below.
 
     \subsubsection{T1}\label{S:DescT1}
@@ -399,14 +363,11 @@ As a technical remark regarding the FABM implementation of the model: Eqs.~\eqre
 
 As a technical note regarding the implementation, using the \verb|phy_Cbased.F90| and \verb|abio_Cbased.F90| modules, the number of phytoplankton types can be modified without changing or recompiling the code, by adjusting the configuration file (see the \verb|fabm.yaml| examples in the \verb|testcases| folder that were employed to produce the results presented in this study), which is a feature of the modularity of FABM\@.
 
-    %\markus{I have recently analysed compilations of N subsistence quotas from the literature (though not including \citet{Edwards2012}) and found that many of those were not really subsistence quotas.  When I exclude those not being subsistence quotas and whose ESD > 100\unit{{\mu}m}, there is no size dependence.}\onur{This is interesting, but I think it is outside of the scope of the current ms. Let's keep the allometries as in Smith et al 2016.}
-
     \subsubsection{T4}
 
     In a closed system, where all mass is conserved, DIN can be calculated directly as the difference between the initial total mass and the sum of all other pools (e.g., $\text{DIN} = \text{Total N} - \text{DON} - \text{Det}_{\text{N}} - Q \cdot \text{Phy}_{\text{C}}$). This would eliminate the neccessity of deriving the additional differentials in Eq.~\eqref{eq:sdin3} (solutions of which are provided in Appendix~\ref{S:Sol}), and the resulting code could be significantly faster, owing to one less state variable (i.e., DIN) and lower amounts of logic and calculations. However, this would work only for closed systems.
 
-    The aim of T4 is to evaluate the behavior of the model in open systems, such as chemostats, using a non-zero $D$ in Eqs.~\eqref{eq:sPhyC}--\eqref{eq:dic} to represent dilution, or the dynamics within a surface mixed layer (SML), using $D>0$ and $w_{\text{Det}}>0$, to represent mixing with the layer below the SML and sedimentation of detritus out of the SML, respectively. %\onur{do we need to tell about the motivation to include such a test (i.e., that in a closed system, DIN does not need to be dynamically traced, but can be found simply by substracting Q*PhyC, DON and DetN from the initial $\sum{N}$)? In my opinion we better tell this in the discussion.}
-    In order to characterize an aquatic environment in a temperate climate zone that undergoes thermal stratification in summer, we consider a cyclic seasonal pattern in $D$, with values approaching to $D_{\max}=1.0$ during winter and $D_{\min}=0.001$ during summer:
+    The aim of T4 is to evaluate the behavior of the model in open systems, such as chemostats, using a non-zero $D$ in Eqs.~\eqref{eq:sPhyC}--\eqref{eq:dic} to represent dilution, or the dynamics within a surface mixed layer (SML), using $D>0$ and $w_{\text{Det}}>0$, to represent mixing with the layer below the SML and sedimentation of detritus out of the SML, respectively. In order to characterize an aquatic environment in a temperate climate zone that undergoes thermal stratification in summer, we consider a cyclic seasonal pattern in $D$, with values approaching to $D_{\max}=1.0$ during winter and $D_{\min}=0.001$ during summer:
     \begin{flalign}
       D = D_{\min}+ 0.25 (D_{\max} - D_{\min}) {\left[ 1 - \sin(2 \pi t')\right]}^2, \qquad t'=\frac{t}{365} - 0.15
     \end{flalign}
@@ -422,29 +383,15 @@ As a technical note regarding the implementation, using the \verb|phy_Cbased.F90
 
     For this test, we consider two PFTs with ESD's of 1 and 10 $\mu$m, with $Q_0$, $\hat{V}_0$ and $\hat{A}_0$ scaled as explained for T3 above. The configuration files for this test are provided with the code (see the code availability section).
 
-%\subsubsection{1D setup (T4)}
-%    \onur{I'm not sure if we really need to show these results, although I included them for now }
-
-%\begin{figure}[t]
-%\includegraphics[width=8.3cm,trim=0cm 6mm 0.0cm 10mm, clip]{figures/fI_analytical.png}
-%\caption{Seasonal course of analytically described (Eqs.\eqref{f.Ian}) daily average irradiance (a) and its temporal derivative (b), with $\bar{I}_{\min}$=1.6 and $\bar{I}_{\max}$=110 [mol m$^2$ d$^{-1}$]. \label{f.Ian}}
-%\end{figure}
-
-%and $\frac{\text{d} \text{DIN}}{\text{d} t} \approx \frac{\text{DIN}_{i} - \text{DIN}_{i-1}}{\Delta t}$.
-
-%\newpage
-
 % RESULTS
 \section{Results}
 
 \subsection{Accuracy of numerical approximation of the temporal derivative of light (T1)}
 The model is conservative with respect to C and mostly also N (Fig.~\ref{f.T1res}), for both numerically-approximated (PAR:N) and analytically-calculated (PAR:A) temporal derivatives of irradiance (see the details in Section.~\ref{S:DescT1}). The range of deviation (difference between maximum and minimum values obtained throughout the run) of total N is about twofold higher in the PAR:N run than in the PAR:A run (see Fig.~\ref{f.T1res}), and corresponds to about 0.0003\% of the total N in the system. This suggests that the numerical approximation of the derivative of light does introduce some additional error.
-%For PAR:N, total N slightly (about 0.02 \unit{mmolN\ m^{-3}}) increases at the very beginning of the simulation, which is caused by the unknown previous value of $\bar{I}$ during the first day of the simulation (as required by the numerical approximation of $\text{d}\,\bar{I}/\text{d}\,t$), which is set to the current value ($\bar{I}_{0} = \bar{I}_{1} \Rightarrow \text{d}\,\bar{I}/\text{d}\,t = 0$), causing therefore a difference between the total N as simulated by the analytical approach (PAR:A). However, after this initial jump, this new baseline is preserved until the end of the simulation. \markus{This is not shown in Fig.~\ref{f.T1res}: the blue curve starts out almost the same as the yellow curve and loses some N until the end of the simulation.  Maybe you confused this with Fig.~\ref{f.T2res}, top-right panel?}\onur{I guess this is from an old version of the model, and meanwhile this issue is fixed somehow apparently, although I'm not sure how and when really.}
 
 \begin{figure}[ht!]
 \includegraphics[width=12cm,trim=0cm 16.8cm 0.0cm 5mm, clip]{figures/2022-03-22a_Ld1_T20_ThatVar_PARint_vs_PARext/0D-Highlat_wconst_lext_Ld1_T20_CbasedIA_modular_24h_vs_0D-Highlat_wconst_lint_Ld1_T20_CbasedIA_modular_24h_cont_abio1_1y.png}
 \caption{T1: Carbon (left) and nitrogen (right) pools for the PAR:N (solid blue line), and PAR:A (dashed orange line) simulations.
-%\onur{I think the other panels (din,phy,det,don) are not necessary to include here}
 \label{f.T1res}}
 \end{figure}
 
@@ -459,36 +406,11 @@ For T2 we consider seasonal variations also in $T$ and $L_{\text{D}}$ (Fig.~\ref
   \caption{Daily average irradiance and temperature and their numerically approximated temporal derivatives used in T2.\label{f.T2env}}
 \end{figure}
 
-
-% \begin{figure}[ht!]
-% \centering
-%   \setlength{\unitlength}{1mm}
-%   \begin{picture}(120,70)(0,0)
-%     \put(0,45){
-%     \begin{overpic}[width=14cm,trim=0cm 16.8cm 0.0cm 5mm, clip]{figures/2022-02-10b_Ld1_T20_ThatVar_PARext_IA_vs_DA/0D-Highlat_wconst_lext_Ld1_T20_CbasedIA_modular_24h_vs_0D-Highlat_wconst_lext_Ld1_T20_CbasedDA_modular_24h_cont_abio1_1y.png}
-%     \end{overpic}}
-%     \put(0,22){
-%     \begin{overpic}[width=14cm,trim=0cm 16.8cm 0.0cm 14mm, clip]{figures/2022-02-10c_Ldvar_T20_ThatVar_PARext_IA_vs_DA/0D-Highlat_wconst_lext_Ldvar_T20_CbasedIA_modular_24h_vs_0D-Highlat_wconst_lext_Ldvar_T20_CbasedDA_modular_24h_cont_abio1_1y.png}
-%     \end{overpic}}
-%     \put(0,0){
-%     \begin{overpic}[width=14cm,trim=0cm 16.8cm 0.0cm 14mm, clip]{figures/2022-03-22d_Ldvar_Tvar_ThatVar_PARext_IA_vs_DA/0D-Highlat_wconst_lext_Ldvar_Tvar_CbasedIA_modular_24h_vs_0D-Highlat_wconst_lext_Ldvar_Tvar_CbasedDA_modular_24h_cont_abio1_1y.png}
-%     \end{overpic}}
-%     %\put(9,26){\scriptsize{\textsf{(a)}}}
-%     %\put(69,26){\scriptsize{\textsf{(b)}}}
-%   \put(0,0){\tiny \grid(140,70)(5,5)[0,0]}
-%   \end{picture}
-%
-% \caption{Results of T2: Carbon (left) and nitrogen (right) pools according to the IA (solid blue line) and DA (dashed orange line) approaches, (a-b) under constant $L_{\text{D}}=1$ and $T=20^{\circ}C$;  (c-d) variable $L_{\text{D}}$; (e-f) constant $T=20^{\circ}C$;  variable $L_{\text{D}}$ and$T$; . \onur{Again, I think no other panels required here}.\label{f.T2ares}}
-% \end{figure}
-
-%\subsection{Comparison of IA approach to the fully explicit DA approach (T2b)}
-
 The IA and DA variants produce almost identical results (Figs.~\ref{f.T2res},~\ref{f.T2resdif}). This similarity is expected \citep{Ward2017}. On a closer look, some differences can be detected, such as slightly higher $\text{Phy}_{\text{N}}$ at the peak of the spring bloom and slightly higher $\text{Det}_{\text{N}}$ shortly after the spring bloom in the DA variant.  The differences are due to the re-allocation of part of the fluxes between $\text{Phy}_{\text{N}}$ and DIN according to Eq.~\eqref{eq:sdin3}.  They remain relatively small because (1) the time scale of the optimal regulation of N uptake in the DA variant is short relative to the time scale of phytoplankton growth and the DIN-changes in our simulations, and (2) the strong interaction between phytoplankton and DIN leads to a negative feed-back between the deviations between the IA and DA variants and the extra DIN fluxes caused by variations in $Q$ in the IA variant.
 
 \begin{figure}[htb!]
 \includegraphics[width=14cm,trim=0cm 11mm 0.0cm 5mm, clip]{figures/2022-05-06a_Ldvar_Tvar_ThatVar_PARext_IA_vs_DA/0D-Highlat_wconst_lext_Ldvar_Tvar_DIN015_CbasedIA_modular_24h_vs_0D-Highlat_wconst_lext_Ldvar_Tvar_DIN015_CbasedDA_modular_24h_cont_abio1_2y.png}
 \caption{T2: Carbon (left) and nitrogen (right) pools for the IA (solid blue line) and DA (dashed orange line) variants with variable daylength and temperature.
-%\onur{We had planned to show box-whisker plots instead of this, but looking at that plot, I feel like we may want to keep this} \markus{I don't get the large discrepancy in the top-right panel in my calculations, maybe check the initial conditions?  I would suggest to include the first row in Fig.~\ref{f.T2env}.  Then (without DOM) we could show 6 rows (PhyC etc.) and two columns (DA and (IA - DA)/DA).  This would show clearly the extent of the differences along with the actual model behaviour, so we don't need the box-and-whisker plots.}\onur{thanks for the suggestions. Indeed, the differences between totN and totC were due to initial conditions for PhyN in the DA variant: adopting the diagnostic PhyN estimated by the IA at the first time time step as the IC for DA variant fixed the problem. I now removed the figure with box-whisker plots, and the new Fig.~\ref{f.T2resdif} shows directly the diffrences between the IA and DA variatns. As the DIN approaches 0 during summer, the relative differences become too huge (>500), so I think it's better to show the absolute differences. But note your layout suggestion doesn't work, we have too many panels, so I think this has to be a seperate figure, but maybe we can put it in an appendix.}
 \label{f.T2res}}
 \end{figure}
 
@@ -497,51 +419,31 @@ The IA and DA variants produce almost identical results (Figs.~\ref{f.T2res},~\r
 \caption{T2: Differences between the IA and DA variants for the quantities shown in Fig.~\ref{f.T2res}.\label{f.T2resdif}}
 \end{figure}
 
-% \begin{figure}[htb!]
-% \includegraphics[width=14cm,trim=0cm 0mm 0.0cm 0mm, clip]{figures/2022-03-22d_Ldvar_Tvar_ThatVar_PARext_IA_vs_DA/0D-Highlat_wconst_lext_Ldvar_Tvar_DIN015_Cbased_modular_24h_IAvsDA_boxplot_CN.png}
-% \caption{Results of T2: Carbon (left) and nitrogen (right) pools according to the IA (solid blue line) and DA (dashed orange line) approaches under variable $L_{\text{D}}$ and $T$. \onur{I'm not sure whether this is really better than Fig.~\ref{f.T2res}. Maybe we keep them both?} \markus{No, I would modify Fig.~\ref{f.T2res} and leave this one out (I don't really see anything here).}.\label{f.T2resbox}}
-% \end{figure}
-
 
 \FloatBarrier%
 \subsection{T3: Comparing DA and IA variants in simulating multiple PFTs}\label{s.resT3}
 
 Fig.~\ref{f.T3res} shows results of experiment T3 with 10 phytoplankton size classes for our IA and DA variants. Annually-averaged concentrations decrease with cell size, and the larger classes exhibit stronger seasonal relative variations. Under other environmental conditions, e.g., different initial conditions or temporal variability, different outcomes can emerge \citep[see, e.g.,][]{Taherzadeh2017}, but this is outside of the scope of our current study.  C biomass of phytoplankton by the two variants is near-identical.  However, differences do exist during the spring bloom, with concentrations of smaller groups being higher in the IA than in the DA variant, and vice versa for the larger groups. Concentrations of the larger groups are higher in the DA variant, likely because the extra DIN derived in the IA variant from the increasing cell quotas during the spring bloom benefits the larger cells less than the smaller cells as imposed by the allometric relationships \citep[as in][]{Grover1991a,Litchman2009}.
 
-%\onur{and I guess the reason for the concentration of smaller groups being higher in the IA variant is the faster optimization of Q, and therefore fV, but I'm not sure. Any other ideas?} \markus{I think the affinity-scaling dominates this part.  Also, above we cite \citet{Edwards2012}, \citet{Smith2014a}, etc.\ for the scaling, which way is correct?} \onur{i realized now that the small cells are growing faster in the IA variant exactly because the large cells grow less, which therefore does not need an additional explanation. Edwards 2012 is for the scaling the Q0, Smith etal 2014a is for the scaling of A0}
-
 \begin{figure}[ht!]
 \includegraphics[width=16cm,trim=0cm 0mm 0.0cm 0mm, clip]{figures/2022-05-07_Ldvar_Tvar_ThatVar_10P_PARext_IA_vs_DA/0D-Highlat_wconst_lext_Ldvar_Tvar_DIN015_10P_Cbased_IAvsDAvsDIF_lineplot_size_totphy.png}
 \caption{T3: Top row: C biomass of 10 phytoplankton size classes in the IA (solid line) and DA (dotted line) variants (left) and the difference between IA and DA (right). Bottom row: sums of phytoplankton C biomass simulated by the IA and DA variants (left) and their differences (right).
-  % \markus{Here I would suggest two panels.  One for the DA results with $\log(\text{ESD})$ on the y-axis, divided into similarly-spaced sections, time on the x-axis and concentration shown as colour.  The other panel would have the same layout but with the colour showing (again) (IA -- DA)/DA.}\onur{I tried this but did not like the result that much. I think with these line plots one can more easily see what's going on. But again, I prefer the absolute difference instead of the relative difference.}
 }\label{f.T3res}
 \end{figure}
-
-%In Fig.~\ref{f.T3res} we present the results of a numerical experiment with 2 phytoplankton functional types, as simulated by IA and DA.The first type characterizes a fast growing `opportunist' species, and the second type characterizes a `gleaner' species, with lower growth rate but higher nutrient affinity. As expected, the first type reaches higher C-biomass during the spring bloom, whereas the second type maintains higher concentrations during summer, under low nutrient concentrations. The predictions by the two variants are almost identical.
-% \begin{figure}[ht!]
-% \includegraphics[width=14cm,trim=0cm 11mm 0.0cm 5mm, clip]{figures/2022-03-22e_Ldvar_Tvar_ThatVar_2P_PARext_IA_vs_DA/0D-Highlat_wconst_lext_Ldvar_Tvar_DIN015_2P_CbasedIA_modular_24h_vs_0D-Highlat_wconst_lext_Ldvar_Tvar_DIN015_2P_CbasedDA_modular_24h_cont_abio1_2y.png}
-% \caption{Results of T3: Carbon (left) and nitrogen (right) pools according to the IA (solid blue line) and DA (dashed orange line) approaches under variable $L_{\text{D}}$ and $T$ and 2 phytoplankton types. \onur{Figure is for drafting purposes}.\label{f.T3res}}
-% \end{figure}
 
 \FloatBarrier%
 \subsection{T4: Comparing DA and IA variants in a non-closed system}\label{s.resT4}
 
-In T4, we consider competition between two species in an open system forced by fluxes to and from an external environment.  We simulate a surface-mixed-layer (SML), where mixing with the deeper layer can introduce new nutrients (DIN and DIC) and dilute all other variables, %\markus{(also DON?)}\onur{yes, although this may not be entirely realistic. But I guess this does not matter from a conceptual perspective} 
-and sedimentation exports detrital C and N out of the system. As typically observed in aquatic environments located in temperate climate zones, we prescribe a seasonally-varying mixing coefficient, with lower values during summer due to thermal stratification.
+In T4, we consider competition between two species in an open system forced by fluxes to and from an external environment.  We simulate a surface-mixed-layer (SML), where mixing with the deeper layer can introduce new nutrients (DIN and DIC) and dilute all other variables, and sedimentation exports detrital C and N out of the system. As typically observed in aquatic environments located in temperate climate zones, we prescribe a seasonally-varying mixing coefficient, with lower values during summer due to thermal stratification.
 
-Under such a regime, the system captures the characteristic features of a temperate aquatic environment, with low phytoplankton biomass during winter, a strong spring bloom, depletion of DIN within the SML during summer, and an autumn bloom. Accordingly, the total N in the system shows a strong seasonal pattern (Fig.~\ref{f.T4res}). However, when the external N is taken into account, the global amount of N is consistently conserved by the model
-%, demonstrating that the model behavior is consistent with the mass-balance requirement of such 
-also for an open system.
+Under such a regime, the system captures the characteristic features of a temperate aquatic environment, with low phytoplankton biomass during winter, a strong spring bloom, depletion of DIN within the SML during summer, and an autumn bloom. Accordingly, the total N in the system shows a strong seasonal pattern (Fig.~\ref{f.T4res}). However, when the external N is taken into account, the global amount of N is consistently conserved by the model also for an open system.
 
 \begin{figure}[ht!]
 \includegraphics[width=12cm,trim=0cm 18mm 0.0cm 15mm, clip]{figures/2022-05-06c_Ldvar_Tvar_ThatVar_PARext_Dvar_sdet01_IA_vs_DA/0D-Highlat_wconst_lext_Ldvar_Tvar_DIN015_2P_Dmax1_sdet01_CbasedIA_modular_24h_vs_0D-Highlat_wconst_lext_Ldvar_Tvar_DIN015_2P_Dmax1_sdet01_CbasedDA_modular_24h_cont_abio1_2y.png}
 \caption{T4: Annual variations of global C and N ($\text{total C} + \text{Ext}_{\text{C}}$ and $\text{total N} + \text{Ext}_{\text{N}}$, see Eq.~\ref{eq:Xext}), total C and N ($\sum\text{Phy}_{\text{C}}^j + \text{DIC} + \text{DOC} + \text{Det}_{\text{C}}$ and $\sum\text{Phy}_{\text{N}}^j + \text{DIN} + \text{DON} + \text{Det}_{\text{N}}$) and other state variables that trace individual C and N pools for a seasonally varying mixing regime in an open system.
-%\markus{I would suggest to remove the panels for global and total C, since the mass-balance for C is trivial also for the IA variant.  This would make the caption much easier to read. \onur{I feel like showing the global C/N is needed as a proof of concept and implementation. I agree however that the caption is not easy. I tried improving it now, but it's still not too easy I guess. I suggest to see what the reviewers think about this.}}
 \label{f.T4res}}
 \end{figure}
 
-
-%\include{res1D}
 
 \FloatBarrier%
 % DISCUSSION
@@ -551,17 +453,11 @@ In this study, we present FABM-NflexPD 2.0, a FABM implementation of the FlexPFT
 
 \subsection{Re-establishing the Mass Balance}
 
-Two variants of the model are elaborated here. The `Dynamic Acclimation' (DA) variant is fully explicit in its treatment of the C and N content of phytoplankton, as in the model by \citet{Fernandez-Castro2016}. 
-%\markus{(We only show steady-state solutions in \citet{Pahlowetal13}, so this is a better reference here)}\onur{ok, thanks.} 
-The `Instantaneous Acclimation' (IA) variant aims to track the phytoplankton dynamics with a single state variable, based on a balanced growth approximation \citep{Burmaster1979}, that is, assuming that cells reach the equilibrium state instantaneously.
+Two variants of the model are elaborated here. The `Dynamic Acclimation' (DA) variant is fully explicit in its treatment of the C and N content of phytoplankton, as in the model by \citet{Fernandez-Castro2016}. The `Instantaneous Acclimation' (IA) variant aims to track the phytoplankton dynamics with a single state variable, based on a balanced growth approximation \citep{Burmaster1979}, that is, assuming that cells reach the equilibrium state instantaneously.
 
 Owing to the lack of a state variable $\text{Phy}_{\text{N}}$, Eqs.~\eqref{eq:sPhyC} --~\eqref{eq:dim} do not preserve mass (total N) because they ignore the contribution of the rate of change of $Q$ to the rate of change of $\text{Phy}_{\text{N}}$.  It is impossible to maintain mass balance mechanistically without adding a state variable $\text{Phy}_{\text{N}}$.  However, we can re-establish mass balance to a large extent, by assigning the missing N flux to the DIN compartment in Eq.~\eqref{eq:sdin3}.  While this may be a rather arbitrary measure for achieving N mass balance and also violates the assumptions behind the model by assigning part of $\text{Phy}_{\text{N}}$ to DIN, the resulting differences compared to explicitly resolving $\text{Phy}_{\text{N}}$ are relatively small, as was also shown previously \citep{Ward2017}.
 
-Through detailed tests, we show that N is conserved 
-%\markus{this is trivial for C because IA and DA are identical with respect to the C mass balance}\onur{ok, let's not mention C} 
-to a very large degree (for all tests we conducted, max. error was $0.0063\%$, which was for T1). 
-%\markus{but we quote 0.0003\% above for PAR:N}\onur{true, in fact for PAR:N, the error corresponds to 0.006%}
-We also show that the predictions of the IA and DA variants are mostly indistinguishable. Finally, with a simulation of 10 phytoplankton size classes with our two model variants, we demonstrate that the model is well aligned with the modular coupling philosophy of FABM \citep{Bruggeman2014}.
+Through detailed tests, we show that N is conserved  to a very large degree (for all tests we conducted, max. error was $0.0063\%$, which was for T1). We also show that the predictions of the IA and DA variants are mostly indistinguishable. Finally, with a simulation of 10 phytoplankton size classes with our two model variants, we demonstrate that the model is well aligned with the modular coupling philosophy of FABM \citep{Bruggeman2014}.
 
 As explained in Section~\ref{S:DescFlux}, reducing the errors in mass balance for N requires explicitly calculating the changes in N quota over time, i.e., $\textrm{d}Q/\textrm{d}t$, which in turn requires calculation of individual components of this change driven by different environmental factors, namely, DIN, $\bar{I}$, T and $\textrm{L}_{\textrm{D}}$.  Under the idealized setup of T2, changes in DIN are clearly the dominant source of variation in Q.  However, contributions by other factors are non-negligible (Fig.~\ref{f.T2dQdt}). In other setups, the relative importance of various environmental factors may be different. Relevance of these secondary factors to the elemental stoichiometry of phytoplankton is an often neglected aspect. We expect our mathematically explicit treatment of this issue to inspire and contribute to future endeavors to establish an analytical framework for investigating the mechanistic underpinnings of plankton physiology.
 
@@ -570,32 +466,17 @@ As explained in Section~\ref{S:DescFlux}, reducing the errors in mass balance fo
 \caption{T2: Total $\textrm{d}Q/\textrm{d}t$ and its components as contributed by the changes in DIN, $\bar{I}$, $\textrm{L}_{\textrm{D}}$ and T.\label{f.T2dQdt}}
 \end{figure}
 
- Moreover, although the model, as of its current state, is not ready to be used in a spatial setup (see below), we believe that this study can provide the basis for extension of the model for spatially explicit frameworks.
+Moreover, although the model, as of its current state, is not ready to be used in a spatial setup (see below), we believe that this study can provide the basis for extension of the model for spatially explicit frameworks.
 
 \FloatBarrier
 \subsection{Computational Efficiency and Application Potential}
 
-Our results demonstrate that a state variable that tracks the elemental content of plankton can be effectively removed, without leading to major issues in mass balance, in a 0D setup. In comparison to a fully explicit dynamic variant, removing a state variable does not seem to result in clear advantages in computational efficiency in such a spatially truncated setup that does not require calculation of spatial transport.
-%, at least not for simulating a low number of phytoplankton groups.  However, when simulating 50 groups, IA is $10.2 \%$ faster (Fig.~\ref{f.speed}).
-%For simulations with a small number of groups, 
-Any potential reduction in computational costs owing to one less state variable in the IA variant is apparently compensated by the additional calculations required for the derivatives in Eq.~\eqref{eq:sdin3} (see Appendix-\ref{S:Sol}).
-%However, for a larger number of groups, requirements for allocating memory to trace a greater number of state variables probably outweighs the additional costs associated with the flux calculations. % \onur{these were some quick thoughts, if anyone knows something more about this, or a reference, please let me know}.
+Our results demonstrate that a state variable that tracks the elemental content of plankton can be effectively removed, without leading to major issues in mass balance, in a 0D setup. In comparison to a fully explicit dynamic variant, removing a state variable does not seem to result in clear advantages in computational efficiency in such a spatially truncated setup that does not require calculation of spatial transport. Any potential reduction in computational costs owing to one less state variable in the IA variant is apparently compensated by the additional calculations required for the derivatives in Eq.~\eqref{eq:sdin3} (see Appendix-\ref{S:Sol}).
 
-%\begin{figure}[ht!]
-%\includegraphics[width=8cm,trim=15mm 20mm 25mm 27mm, clip]{figures/time_of_run_barplot.png}
-%\caption{Simulation times for different numbers of phytoplankton groups.\label{f.speed}}
-%\end{figure}
-
-The modelling framework FABM, in which the model is implemented, allows seamless coupling of models with various hydrodynamical hosts \citep{Bruggeman2014}. We have also attempted an application in a 1D setup using GOTM \citep{Burchard2006} as the hydrodynamical host, and found out that N is not conserved. This is to be expected, because the spatial transport calculations do not account for spatial gradients in $Q$, which introduces errors analogous to the difference between Eqs.~\eqref{eq:sdin} and~\eqref{eq:sdin3}.  It may be possible to develop a mass conservative IA approach for spatially explicit models, by accounting for spatial variations of Q, in addition to its temporal variations. For FABM implementation, this would require additional spatial flux terms to be communicated with the hydrodynamical driver. It is not clear whether the resulting model would be faster than the fully explicit variant: On one hand, in a spatially explicit setup, reducing the number of state variables would also reduce the size of the necessary transport matrices.  On the other hand, fluxes associated with spatial changes in $Q$ would require additional logic and calculations. As mentioned above, 
-%performance advantages of the instantaneous acclimation approach emerge only for a large number of phytoplankton groups in our 0D setup. 
-we have not found evidence for performance advantages of the IA approach in a 0D setup. However, in spatially explicit setups, transport calculations can become computationally more demanding than calculating the right-hand sides of a biogeochemical model.  Therefore, reducing the number of state variables might offer computational advantages.
-%even for simulating fewer phytoplankton groups.
+The modelling framework FABM, in which the model is implemented, allows seamless coupling of models with various hydrodynamical hosts \citep{Bruggeman2014}. We have also attempted an application in a 1D setup using GOTM \citep{Burchard2006} as the hydrodynamical host, and found out that N is not conserved. This is to be expected, because the spatial transport calculations do not account for spatial gradients in $Q$, which introduces errors analogous to the difference between Eqs.~\eqref{eq:sdin} and~\eqref{eq:sdin3}.  It may be possible to develop a mass conservative IA approach for spatially explicit models, by accounting for spatial variations of Q, in addition to its temporal variations. For FABM implementation, this would require additional spatial flux terms to be communicated with the hydrodynamical driver. It is not clear whether the resulting model would be faster than the fully explicit variant: On one hand, in a spatially explicit setup, reducing the number of state variables would also reduce the size of the necessary transport matrices.  On the other hand, fluxes associated with spatial changes in $Q$ would require additional logic and calculations. As mentioned above, we have not found evidence for performance advantages of the IA approach in a 0D setup. However, in spatially explicit setups, transport calculations can become computationally more demanding than calculating the right-hand sides of a biogeochemical model.  Therefore, reducing the number of state variables might offer computational advantages.
 
 %CONCLUSION
 \section{Conclusion}
-%Take home messages 
-%What was achieved, what is left for future work.\\
-%Remaining challanges to achieve an efficient model that can mimic the expensive full quota model.
 Accounting for the variability in phytoplankton cellular composition is required for a realistic representation of nutrient cycling.  Variable cellular composition is usually described by a Dynamic Acclimation (DA) approach, which requires additional state variables for the cellular constituents, thereby increasing computational costs. \citet{Smith2016} proposed the Instantaneous Acclimation (IA) approach, which approximates the variability in cellular composition without the need for additional state variables. As long as only one of carbon (C) or nitrogen (N) is resolved (i.e., the mass balance is closed globally), the IA approach is fully conservative and can be applied, e.g., for ecologically oriented questions \citep[e.g.][]{Kerimoglu2021}. Here we provide a formally consistent and complete explanation of how the mass balance can be nearly re-established for when both N and C are resolved by an IA model. Through several tests in 0D setups, we demonstrate that under stable environmental conditions, the fully explicit model can be closely reproduced, but that transient differences between the IA and DA variants can emerge and mass balance can be slightly compromised. A generalization of the IA approach to account also for spatial variability will require extending our (0D) IA framework towards spatially explicit setups. In our 0D setup, we did not find evidence for improved computational efficiency.  However, gains in spatially explicit setups may be possible, given that the number of state variables to be transported is known to significantly affect the computational costs.
 
 
@@ -664,19 +545,12 @@ $\partial Z/ \partial \bar{I}$ can then be derived by canonical application of t
  \qquad  (\text{because}~ \frac{\partial{\hat{\mu}_{\text{net}}}}{\partial \hat{\theta}} = 0 ~ \text{by definition}) \\
  \frac{\partial Z}{\partial \hat{\mu}_{\text{net}}} &= \frac{Q_{0}}{2 \cdot \hat{V}_{\text{N}}} \\
  \frac{\partial \hat{\mu}_{\text{net}}}{\partial\bar{I}} &= L_{\text{D}} \cdot (1-\hat{\theta} \cdot \zeta_{\text{Chl}})  \cdot \alpha \cdot \hat{\theta} \cdot (1-L_{\text{I}}) \\
-% \frac{\partial \hat{\mu}_{\text{net}}}{\partial\hat{\theta}} &= L_{\text{D}} \cdot [ \alpha \cdot \bar{I} \cdot ( 1 - L_{\text{I}} ) \cdot (1 - \zeta_{\text{Chl}} \cdot \hat{\theta}) - L_{\text{I}} \cdot \zeta_{\text{Chl}} \cdot \hat{\mu}_{0} ] - R_{\text{M}}^{\text{Chl}} \cdot \zeta_{\text{Chl}} \\
-% \frac{\mathrm{d}\, \hat{\theta}}{\mathrm{d}\, \bar{I}} &= -\frac{\hat{\mu}_{0}}{\alpha\cdot \bar{I}^{2}} (1 - W) - \frac{W}{1 + W} \frac{1}{\bar{I}\cdot \zeta_{\text{Chl}}}
  \intertext{The day-length derivatives are}
  \frac{\partial Z}{\partial L_{\text{D}}} &= \frac{\partial Z}{\partial \hat{\mu}_{\text{net}}} \left( \frac{\partial \hat{\mu}_{\text{net}}}{\partial L_{\text{D}}}
    + \frac{\partial \hat{\mu}_{\text{net}}}{\partial\hat{\theta}} \frac{\mathrm{d}\, \hat{\theta}}{\mathrm{d}\,\bar{I}} \right)
  = \frac{\partial Z}{\partial \hat{\mu}_{\text{net}}} \frac{\partial \hat{\mu}_{\text{net}}}{\partial L_{\text{D}}} \\
  \frac{\partial \hat{\mu}_{\text{net}}}{\partial L_{\text{D}}} &= \hat{\mu}_{0} \cdot L_{\text{I}} \cdot (1 - \zeta_{\text{Chl}} \hat{\theta})
 \end{flalign}
-%The partial derivatives of $T$ Eq.~\eqref{eq:sdin3} are approximated numerically, as the analytical solution of $\partial Q/\partial T$ is unwieldy, given the temperature dependence of $\hat{\mu}_0$,  $\hat{V}_0$ and $R_{\text{M}}^{\text{Chl}}$, and numerous occurrence of these terms in intermediate quantities $\hat{\theta}$ and $L_{\text{I}}$ when $Q$ (Eq.~\ref{eq:Qopt}) is fully expanded. The numerical difference approximation is achieved by storing the value of $T$ in the previous integration step ($t=i-1$), calculating $Q$ based on this previous value of $T$ (but the values of DIN, $\bar{I}$ and $L_{\text{D}}$ in the current time step ($t=i$)), and subtracting this from the current value of $Q$, i.e.,
-%\begin{align}
-% \frac{\partial Q}{\partial T} & \approx
-% \frac{Q(\text{DIN}_{i},\ \bar{I}_{i},\ L_{\text{D}_i},\ T_{i}) - Q(\text{DIN}_{i},\ \bar{I}_{i},\ L_{\text{D}_i},T_{i-1})} {T_{i} - T_{i-1}}
-%\end{align}
 The temperature-derivative of $Z$ is obtained via the derivatives with respect to $\hat{\mu}_{0}$, $\hat{V}_{0}$ and $R^{\text{Chl}}$:
 \begin{flalign}
   \begin{split}
@@ -702,29 +576,6 @@ We would like to clarify that
 (1) replacement of $\hat{\mu}_g$ (in S16, $\hat{\mu}^I$) with $\hat{\mu}_{\text{net}}$ in our model (see K21) results in the appearance of $(1-\hat{\theta} \cdot \zeta_{\text{Chl}})$ when computing $\partial \hat{\mu}_{\text{net}} / \partial \bar{I}$;
 (2) $L_{\text{D}}$ used to be implicit in S16, now it's explicit (K21 Eq.~21) therefore it appears for $\partial\hat{\mu}_{\text{net}} / \partial \bar{I}$ unlike in S16; (3) Changes in $Q$ due to T were not accounted for by \citet{Smith2016}.
 
-% \section{Relevance of changes in quota for the loss processes}\label{S:appQ4loss}  %% Appendix-A
-% \onur{Not sure whether we want to keep this}
-% %In our model, we considered a single loss process for phytoplankton.
-% %Recalling from K21 (Table 1) that the associated N flux term was expressed as
-% %\begin{flalign}
-% % F_{\text{Phy}_{\text{N}}-\text{Det}_{\text{N}}} &= m \cdot \text{Phy}_{\text{N}}^2 &&
-% %\end{flalign}
-% %and considering that $\text{Phy}_{\text{N}}=\text{Phy}_{\text{C}} \cdot Q$, it can be thought that the changes in $Q$ needs to be taken into account for calculating the flux between phytoplankton and detrital N due to mortality.
-% Potential links between cellular quotas and loss processes can be assessed by analyzing the components of the changes in $\text{Phy}_{\text{N}}$ occurring due to loss terms, as was previously done for the case of growth (Eq.~\eqref{eq:dphyNdt}). Observing that the only loss process we considered here is mortality:
-% \begin{flalign}
-%   \frac{\text{d}\,\text{Phy}_{\text{N}}}{\text{d}\,t} \bigg\rvert_L
-%   &=\frac{\text{d}\,\text{Phy}_{\text{C}} Q}{\text{d}\,t} \bigg\rvert_M
-%   = Q \frac{\text{d}\,\text{Phy}_{\text{C}}}{\text{d}\,t} \bigg\rvert_M + \text{Phy}_{\text{N}}\frac{\text{d}\,\text{Q}_{\text{N}}}{\text{d}\,t} \bigg\rvert_M
-% \end{flalign}
-% Here, in the first term, $\frac{\text{d}\,\text{Phy}_{\text{C}}}{\text{d}\,t} \rvert_M$ represents the C-based mortality rate ($=m \cdot \text{Phy}_{\text{C}}^2$, Eq.~\eqref{eq:mortC}). In the second term, $\frac{\text{d}\,\text{Q}_{\text{N}}}{\text{d}\,t} \rvert_M$ represents the changes occurring in $Q$, however, due to mortality only. As in our model, we did not consider any effect of mortality on quota (assuming that when a cell dies, it dies altogether and all of its contents become detritus), this term collapses to 0, therefore reducing the associated flux term to:
-% \begin{flalign}
-% F_{\text{Phy}_{\text{N}}-\text{Det}_{\text{N}}} &=
-% Q \frac{\text{d}\,\text{Phy}_{\text{C}}}{\text{d}\,t} \bigg\rvert_M = Q \cdot m \cdot \text{Phy}_{\text{C}}^2
-% \end{flalign}
-% However, in any other model that may consider processes that may affect the cellular quotas, such as excretion of C-rich, N-poor substances, associated consequences on various elemental fluxes can be taken into account following this framework.
-
-% \section{On the differences between the IA and DA variants}\label{S:appIADA}  %% Appendix-B
-% \onur{Markus, would you like to draft this section?}
 
 \noappendix%% use this to mark the end of the appendix section. Otherwise the figures might be numbered incorrectly (e.g., 10 instead of 1).
 
@@ -743,10 +594,9 @@ We would like to clarify that
 %% Please add \clearpage between each table and/or figure. Further guidelines on figures and tables can be found below.
 
 \authorcontribution{OK and SLS conceived and designed the study with contributions from MP; OK and MP extended the model with fluxes required to satisfy the mass balance; OK implemented the model in FABM\@; PA configured and performed the runs with multiple PFTs; OK drafted the manuscript; MP and SLS contributed to writing and revision of the text.
-%\onur{anything I might have missed?}
 } %% this section is mandatory
 
-%\competinginterests{No competing interests are present.} %% this section is mandatory even if you declare that no competing interests are present
+\competinginterests{No competing interests are present.} %% this section is mandatory even if you declare that no competing interests are present
 
 %\disclaimer{TEXT} %% optional section
 
